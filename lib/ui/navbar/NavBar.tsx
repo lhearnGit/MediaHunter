@@ -11,6 +11,7 @@ import {
   Burger,
   rem,
   useMantineTheme,
+  Space,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -27,6 +28,7 @@ import {
 import { MantineLogo } from "@mantinex/mantine-logo";
 import classes from "./NavBar.module.css";
 import Link from "../Link/Link";
+import SearchWithButton from "../Search/SearchWithButton";
 
 const user = {
   name: "Jane Spoonfighter",
@@ -48,6 +50,7 @@ const NavBar = () => {
 
   return (
     <div className={classes.header}>
+      <Space h={"md"} />
       <Container className={classes.mainSection} size="md">
         <Group justify="space-between">
           <MantineLogo size={28} />
@@ -181,12 +184,16 @@ const NavBar = () => {
         </Group>
       </Container>
       <Container size="md">
-        <Group gap={5} visibleFrom="xs">
-          {links.map((link) => (
-            <Link key={link.label} href={link.href} label={link.label} />
-          ))}
+        <Group gap={2} visibleFrom="xs" justify="space-between">
+          <Group>
+            {links.map((link) => (
+              <Link key={link.label} href={link.href} label={link.label} />
+            ))}
+          </Group>
+          <SearchWithButton />
         </Group>
       </Container>
+      <Space h="md" />
     </div>
   );
 };
