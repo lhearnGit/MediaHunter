@@ -1,4 +1,3 @@
-import { postNewGame } from "@/apiFunctions/games/postNewGame";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
@@ -25,4 +24,28 @@ export async function POST(req: NextRequest) {
 
   //check for game & create game if it does not exist in DB
   await postNewGame(id, name);
+  return NextResponse.json({ status: 200 });
+}
+
+async function postNewGame(id: number, name: string, url?: string) {
+  console.log("post new game");
+  const game = await prisma.igdb_Games.findUnique({
+    where: { id: id },
+    select: { pid: true },
+  });
+  console.log(game);
+  //if the game entry is not saved, create it.
+  if (!game) {
+    const newGame = await prisma.igdb_Games.create({
+      data: {
+        id: id,
+        name: name,
+        url: url,
+      },
+      select: {
+        pid: true,
+      },
+    });
+    return newGame;
+  } else return game;
 }
