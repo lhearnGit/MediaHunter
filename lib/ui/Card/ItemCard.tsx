@@ -1,26 +1,24 @@
 "use client";
-import { Card, Image, Text, Group } from "@mantine/core";
-import NavLink from "../Link/Link";
-import { usePathname } from "next/navigation";
+import { Card, Image } from "@mantine/core";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function ItemCard({
   image,
   title,
-  details,
   id,
 }: {
   id: number;
-  image: string;
-  title: string;
-  details: string;
+  image?: string;
+  title?: string;
 }) {
   const pathname = usePathname();
   return (
     <Link href={`${pathname}/${id}`}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
-          <Image src={image} height={"244"} alt="Norway" />
+          <Image src={image} height={"300"} alt={title} />
         </Card.Section>
       </Card>
     </Link>

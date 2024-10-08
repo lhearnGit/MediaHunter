@@ -1,195 +1,15 @@
-import ItemGrid from "@/lib/ui/Card/CardGrid";
-import FilterForms from "@/lib/ui/forms/SearchForm/SearchForm";
-import React from "react";
-
-const Items: CardData[] = [
-  {
-    id: 1,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 11,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 111,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 21,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 311,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 3151,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1215,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1412315,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 551,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 123152,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 41,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1231,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 511,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 12419,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13475,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 4351,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 135654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1562436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1347555,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 43521,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1353654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 15621436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-];
-
-interface Item {
-  label: string;
-  value: string;
-}
-interface CardData {
-  id: number;
-  title: string;
-  image: string;
-  details: string;
-}
+import { Game_Cover } from "@/lib/entities/IGDB/Games";
+import { Movie } from "@/lib/entities/TMDB";
+import PageHandler from "@/lib/ui/Buttons/PageHandler";
+import ItemCard from "@/lib/ui/Card/ItemCard";
+import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
+import { TMDB_Api_Client } from "@/services/tmdb-api-client";
+import Resize_Image from "@/utils/helpers/Resize_IGDB";
+import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
+import { SimpleGrid } from "@mantine/core";
+import { notFound } from "next/navigation";
+const numPages = 20;
+const currPage = 9;
 
 const genres = [
   { label: "G1", value: "G1" },
@@ -201,11 +21,48 @@ const genres = [
   { label: "T3", value: "T3" },
   { label: "T4", value: "T4" },
 ];
+interface Poster {
+  id: number;
+  title: string;
+  image?: string;
+}
+export async function fetchPosters(endpoint: string) {
+  const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
+  const { results: shows } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
+    endpoint: endpoint,
+  });
+  if (!shows) throw notFound();
 
-const MoviesHome = () => {
+  console.log(shows);
+  const posters: Poster[] = shows.map((movie: Movie) => {
+    const poster: Poster = {
+      id: movie.id,
+      title: movie.title,
+      image: movie.poster_path,
+    };
+
+    return poster;
+  });
+
+  return posters;
+}
+
+const MoviesHome = async () => {
+  const posters: Poster[] = await fetchPosters("discover/movie");
   return (
     <div>
-      <ItemGrid items={Items} />
+      <SearchForm formHeader="Games" items={genres} />
+      <SimpleGrid cols={5}>
+        {posters.map(({ id, title, image }) => (
+          <ItemCard
+            key={id}
+            id={id}
+            title={title}
+            image={image && TMDB_Image_Helper(image)}
+          />
+        ))}
+      </SimpleGrid>
+      <PageHandler numPages={numPages} currPage={currPage} />
     </div>
   );
 };

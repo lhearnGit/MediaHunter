@@ -1,213 +1,47 @@
-import ItemGrid from "@/lib/ui/Card/CardGrid";
-import FilterForms from "@/lib/ui/forms/SearchForm/SearchForm";
-import React from "react";
+import ItemCard from "@/lib/ui/Card/ItemCard";
+import { TopFive } from "@/utils/fetches/TMDB/fetchTopFive";
+import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
+import { SimpleGrid, Space, Stack, Text } from "@mantine/core";
 
-const Items: CardData[] = [
-  {
-    id: 1,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 11,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 111,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 21,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 311,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 3151,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1215,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1412315,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 551,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 123152,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 41,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1231,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 511,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 12419,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13475,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 4351,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 135654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1562436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1347555,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 43521,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1353654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 15621436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-];
-
-interface Item {
-  label: string;
-  value: string;
-}
-interface CardData {
+interface Poster {
   id: number;
   title: string;
-  image: string;
-  details: string;
+  image?: string;
 }
-
-const genres = [
-  { label: "G1", value: "G1" },
-  { label: "G2", value: "G2" },
-  { label: "G3", value: "G3" },
-  { label: "G4", value: "G4" },
-  { label: "T1", value: "T1" },
-  { label: "T2", value: "T2" },
-  { label: "T3", value: "T3" },
-  { label: "T4", value: "T4" },
-];
-
-const ShowsHome = () => {
+const ShowsHome = async () => {
   return (
     <div>
-      <ItemGrid items={Items} />
+      <Text>Grouping Heading</Text>
+      <Space h="md" />
+      <ShowsContent items={await TopFive("movie/top_rated")} />
+      <ShowsContent items={await TopFive("movie/popular")} />
+
+      <Text>Grouping Heading</Text>
+      <Space h="md" />
+      <ShowsContent items={await TopFive("tv/top_rated")} />
+      <ShowsContent items={await TopFive("tv/popular")} />
     </div>
   );
 };
 
 export default ShowsHome;
+
+const ShowsContent = ({ items }: { items: Poster[] }) => {
+  return (
+    <>
+      <Text>Section Heading</Text>
+      <Space h="md" />
+      <SimpleGrid cols={5}>
+        {items.map(({ id, title, image }) => (
+          <ItemCard
+            key={id}
+            id={id}
+            title={title}
+            image={image && TMDB_Image_Helper(image)}
+          />
+        ))}
+      </SimpleGrid>
+      <Space h="md" />
+    </>
+  );
+};

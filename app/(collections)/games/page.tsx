@@ -1,197 +1,14 @@
+import { Game } from "@/lib/entities/IGDB";
 import PageHandler from "@/lib/ui/Buttons/PageHandler";
-import ItemGrid from "@/lib/ui/Card/CardGrid";
+import ItemCard from "@/lib/ui/Card/ItemCard";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
+import Resize_Image from "@/utils/helpers/Resize_IGDB";
+import { SimpleGrid } from "@mantine/core";
 import React from "react";
 
-const Items: CardData[] = [
-  {
-    id: 1,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 11,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 111,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 21,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 311,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 3151,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1215,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1412315,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 551,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 123152,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 41,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1231,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 511,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 12419,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13475,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 4351,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 135654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1562436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1347555,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 43521,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 13435,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 1353654,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-  {
-    id: 15621436,
-    title: "Norway",
-    image:
-      "https://raw.githubusercontent.com/mantinedev/mantine/master/.demo/images/bg-8.png",
-    details: "Some Details",
-  },
-];
 const numPages = 20;
 const currPage = 9;
-interface Item {
-  label: string;
-  value: string;
-}
-interface CardData {
-  id: number;
-  title: string;
-  image: string;
-  details: string;
-}
 
 const genres = [
   { label: "G1", value: "G1" },
@@ -204,11 +21,44 @@ const genres = [
   { label: "T4", value: "T4" },
 ];
 
-const GamesHome = () => {
+interface Game_Cover {
+  id: number;
+  name: string;
+  cover: { url: string };
+}
+
+async function fetchGames() {
+  const request: IGDB_Request = {
+    endpoint: "games",
+    query: `
+    fields name,cover.url; 
+    sort rating_count desc;
+    limit:20;
+    `,
+  };
+  const response: Game_Cover[] = await IGDB_Fetch({
+    ...request,
+  });
+  return response;
+}
+
+const GamesHome = async () => {
+  const games = await fetchGames();
+
+  console.log(games);
   return (
     <div>
       <SearchForm formHeader="Games" items={genres} />
-      <ItemGrid items={Items} />
+      <SimpleGrid cols={5}>
+        {games.map(({ id, name, cover }) => (
+          <ItemCard
+            key={id}
+            id={id}
+            title={name}
+            image={Resize_Image(cover.url, "cover_big")}
+          />
+        ))}
+      </SimpleGrid>
       <PageHandler numPages={numPages} currPage={currPage} />
     </div>
   );
