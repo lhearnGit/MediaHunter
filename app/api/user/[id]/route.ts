@@ -1,0 +1,61 @@
+import prisma from "@/prisma/client";
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
+
+import { NextRequest, NextResponse } from "next/server";
+//get one user
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const user = await prisma.user.findUnique({
+    where: { id: params.id },
+    select: {
+      id: true,
+      name: true,
+      tvShows: { select: { id: true, name: true, imageUrl: true } },
+      movies: { select: { id: true, name: true, imageUrl: true } },
+
+      games: { select: { id: true, name: true } },
+    },
+  });
+
+  if (!user) return NextResponse.json({ status: 404 });
+
+  let ids = "";
+  user?.games.forEach((game, index) => {
+    if (index + 1 == user.games.length) {
+      ids = ids + game.id;
+    } else {
+      ids = ids + game.id + ",";
+    }
+  });
+
+  if (!user)
+    return NextResponse.json({
+      message: "Error, Requested Information does not exist",
+      status: 404,
+    });
+  else {
+    const request: IGDB_Request = {
+      endpoint: "games",
+      query: `fields 
+      id,name,summary,
+      rating,rating_count,
+      first_release_date,
+      cover.url,
+      genres.slug,genres.name,
+      themes.slug,themes.name,
+      platforms.id, platforms.name, platforms.slug, platforms.platform_family.id;
+      
+      
+      where id=(${ids});`,
+    };
+
+    const games = await IGDB_Fetch(request);
+
+    return NextResponse.json(
+      { movies: user.movies, shows: user.tvShows, games: games },
+      { status: 200 }
+    );
+  }
+}
