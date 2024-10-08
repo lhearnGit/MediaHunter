@@ -7,6 +7,7 @@ import NavBar from "@/lib/ui/navbar/NavBar";
 import { theme } from "@/lib/theme";
 import { Footer } from "@/lib/ui/Sections/Footer/Footer";
 import AuthProvider from "./auth/Provider";
+import TanStackProvider from "@/providers/QueryClientProvider";
 
 export const metadata = {
   title: "My Mantine app",
@@ -24,13 +25,15 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body>
-        <AuthProvider>
-          <MantineProvider defaultColorScheme="dark" theme={theme}>
-            <NavBar />
-            <Container size={"responsive"}>{children}</Container>
-            <Footer />
-          </MantineProvider>
-        </AuthProvider>
+        <TanStackProvider>
+          <AuthProvider>
+            <MantineProvider defaultColorScheme="dark" theme={theme}>
+              <NavBar />
+              <Container size={"responsive"}>{children}</Container>
+              <Footer />
+            </MantineProvider>
+          </AuthProvider>
+        </TanStackProvider>
       </body>
     </html>
   );
