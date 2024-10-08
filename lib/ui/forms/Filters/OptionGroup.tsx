@@ -1,17 +1,28 @@
-import { SimpleGrid } from "@mantine/core";
+import { Flex, SimpleGrid, Stack, Text } from "@mantine/core";
 import React from "react";
 import CheckBox from "../../Buttons/checkbox/Checkbox";
 interface Item {
   label: string;
   value: string;
 }
-const OptionGroup = ({ items }: { items: Item[] }) => {
+const OptionGroup = ({
+  items,
+  heading,
+}: {
+  items: Item[];
+  heading: string;
+}) => {
   return (
-    <SimpleGrid cols={5}>
-      {items.map((item) => (
-        <CheckBox key={item.value} label={item.label} value={item.value} />
-      ))}
-    </SimpleGrid>
+    <Stack>
+      <Flex>
+        {" "}
+        <SimpleGrid cols={5}>
+          {items.map((item) => (
+            <CheckBox key={item.value} label={item.label} value={item.value} />
+          ))}
+        </SimpleGrid>
+      </Flex>
+    </Stack>
   );
 };
 

@@ -1,3 +1,4 @@
+import PageHandler from "@/lib/ui/Buttons/PageHandler";
 import ItemGrid from "@/lib/ui/Card/CardGrid";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import React from "react";
@@ -179,7 +180,8 @@ const Items: CardData[] = [
     details: "Some Details",
   },
 ];
-
+const numPages = 20;
+const currPage = 9;
 interface Item {
   label: string;
   value: string;
@@ -207,6 +209,7 @@ const GamesHome = () => {
     <div>
       <SearchForm formHeader="Games" items={genres} />
       <ItemGrid items={Items} />
+      <PageHandler numPages={numPages} currPage={currPage} />
     </div>
   );
 };

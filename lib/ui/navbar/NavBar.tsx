@@ -51,7 +51,7 @@ const NavBar = () => {
   return (
     <div className={classes.header}>
       <Space h={"md"} />
-      <Container className={classes.mainSection} size="md">
+      <Container className={classes.mainSection} size="xl">
         <Group justify="space-between">
           <MantineLogo size={28} />
 
@@ -183,7 +183,7 @@ const NavBar = () => {
           </Menu>
         </Group>
       </Container>
-      <Container size="md">
+      <Container size="lg">
         <Group gap={2} visibleFrom="xs" justify="space-between">
           <Group>
             {links.map((link) => (

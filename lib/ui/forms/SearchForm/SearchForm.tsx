@@ -11,9 +11,9 @@ import {
   useMantineTheme,
 } from "@mantine/core";
 import React from "react";
-import CheckBox from "../../Buttons/checkbox/Checkbox";
 import classes from "./searchForm.module.css";
 import OptionGroup from "../Filters/OptionGroup";
+import Expander from "../../Buttons/Expander";
 
 interface Item {
   label: string;
@@ -30,14 +30,21 @@ const SearchForm = ({
   formHeader: string;
   items: Item[];
 }) => {
-  const theme = useMantineTheme();
   return (
     <Container size={"xl"} className={classes.secondary}>
       <Text> Search for {formHeader} </Text>
       <Space h="md" />
-      <Flex gap={"sm"}>
-        <OptionGroup items={items} />
-      </Flex>
+      <Group justify="space-evenly">
+        <Expander triggerLabel="Group 1">
+          <OptionGroup items={items} heading="Group 1" />
+        </Expander>
+        <Expander triggerLabel="Group 2">
+          <OptionGroup items={items} heading="Group 2" />
+        </Expander>
+        <Expander triggerLabel="Group 3">
+          <OptionGroup items={items} heading="Group 3" />
+        </Expander>
+      </Group>
       <Space h="md" />
       <Button type="submit" onClick={() => console.log("submitted")}>
         Submit
