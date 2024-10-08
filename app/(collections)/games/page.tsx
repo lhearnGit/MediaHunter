@@ -1,15 +1,14 @@
-import { Game } from "@/lib/entities/IGDB";
-import PageHandler from "@/lib/ui/Buttons/PageHandler";
 import ItemCard from "@/lib/ui/Card/ItemCard";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
+import PageHandler from "@/lib/ui/PageHandler";
+
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
 import Resize_Image from "@/utils/helpers/Resize_IGDB";
 import { SimpleGrid } from "@mantine/core";
-import React from "react";
+import _ from "lodash";
 
-const numPages = 20;
-const currPage = 9;
-
+const limit = 20;
+const numPages = 500 / limit;
 const genres = [
   { label: "G1", value: "G1" },
   { label: "G2", value: "G2" },
@@ -27,13 +26,14 @@ interface Game_Cover {
   cover: { url: string };
 }
 
-async function fetchGames() {
+async function fetchGames(page_number: number) {
   const request: IGDB_Request = {
     endpoint: "games",
     query: `
     fields name,cover.url; 
+    limit ${limit};
+    offset ${limit * (page_number - 1)};
     sort rating_count desc;
-    limit:20;
     `,
   };
   const response: Game_Cover[] = await IGDB_Fetch({
@@ -42,10 +42,24 @@ async function fetchGames() {
   return response;
 }
 
-const GamesHome = async () => {
-  const games = await fetchGames();
+const GamesHome = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const query = new URLSearchParams();
+  if (searchParams) {
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (!value) return;
+      else query.append(key, value);
+    }
+  }
 
-  console.log(games);
+  const page_number = query.get("page");
+  const games = await fetchGames(
+    page_number == null ? 0 : parseInt(page_number)
+  );
+
   return (
     <div>
       <SearchForm formHeader="Games" items={genres} />
@@ -59,7 +73,7 @@ const GamesHome = async () => {
           />
         ))}
       </SimpleGrid>
-      <PageHandler numPages={numPages} currPage={currPage} />
+      <PageHandler numPages={numPages} />
     </div>
   );
 };
