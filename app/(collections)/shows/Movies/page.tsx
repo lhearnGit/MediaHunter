@@ -1,6 +1,6 @@
 import { Game_Cover } from "@/lib/entities/IGDB/Games";
 import { Movie } from "@/lib/entities/TMDB";
-import PageHandler from "@/lib/ui/Buttons/PageHandler";
+import PageHandler from "@/lib/ui/PageHandler";
 import ItemCard from "@/lib/ui/Card/ItemCard";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
@@ -28,12 +28,15 @@ interface Poster {
 }
 export async function fetchPosters(endpoint: string) {
   const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
-  const { results: shows } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
+  const {
+    results: shows,
+    total_pages,
+    total_results,
+  } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
     endpoint: endpoint,
   });
   if (!shows) throw notFound();
 
-  console.log(shows);
   const posters: Poster[] = shows.map((movie: Movie) => {
     const poster: Poster = {
       id: movie.id,
@@ -44,11 +47,25 @@ export async function fetchPosters(endpoint: string) {
     return poster;
   });
 
-  return posters;
+  return { posters, total_pages, total_results };
 }
 
-const MoviesHome = async () => {
-  const posters: Poster[] = await fetchPosters("discover/movie");
+const MoviesHome = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const query = new URLSearchParams();
+  if (searchParams) {
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (!value) return;
+      else query.append(key, value);
+    }
+  }
+  const { posters, total_pages, total_results } = await fetchPosters(
+    `discover/movie${query.get("page") ? `?page=${query.get("page")}` : ""}`
+  );
+
   return (
     <div>
       <SearchForm formHeader="Games" items={genres} />
@@ -62,7 +79,7 @@ const MoviesHome = async () => {
           />
         ))}
       </SimpleGrid>
-      <PageHandler numPages={numPages} currPage={currPage} />
+      <PageHandler numPages={total_pages} />
     </div>
   );
 };

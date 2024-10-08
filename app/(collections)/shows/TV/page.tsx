@@ -1,12 +1,11 @@
-import { Game_Cover } from "@/lib/entities/IGDB/Games";
 import { Movie } from "@/lib/entities/TMDB";
-import PageHandler from "@/lib/ui/Buttons/PageHandler";
+import PageHandler from "@/lib/ui/PageHandler";
 import ItemCard from "@/lib/ui/Card/ItemCard";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
-import Resize_Image from "@/utils/helpers/Resize_IGDB";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
-import { SimpleGrid } from "@mantine/core";
+import { Flex, SimpleGrid } from "@mantine/core";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 const numPages = 20;
 const currPage = 9;
@@ -28,7 +27,11 @@ interface Poster {
 }
 export async function fetchPosters(endpoint: string) {
   const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
-  const { results: shows } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
+  const {
+    results: shows,
+    total_pages,
+    total_results,
+  } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
     endpoint: endpoint,
   });
   if (!shows) throw notFound();
@@ -44,11 +47,25 @@ export async function fetchPosters(endpoint: string) {
     return poster;
   });
 
-  return posters;
+  return { total_pages, total_results, posters };
 }
 
-const TVHome = async () => {
-  const posters: Poster[] = await fetchPosters("discover/tv");
+const TVHome = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const query = new URLSearchParams();
+  if (searchParams) {
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (!value) return;
+      else query.append(key, value);
+    }
+  }
+  const { posters, total_pages, total_results } = await fetchPosters(
+    `discover/tv${query.get("page") ? `?page=${query.get("page")}` : ""}`
+  );
+
   return (
     <div>
       <SearchForm formHeader="Games" items={genres} />
@@ -62,7 +79,7 @@ const TVHome = async () => {
           />
         ))}
       </SimpleGrid>
-      <PageHandler numPages={numPages} currPage={currPage} />
+      <PageHandler numPages={numPages} />
     </div>
   );
 };
