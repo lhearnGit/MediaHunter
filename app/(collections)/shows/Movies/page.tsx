@@ -75,7 +75,7 @@ const MoviesHome = async ({
             key={id}
             id={id}
             title={title}
-            image={image && TMDB_Image_Helper(image)}
+            image={image && TMDB_Image_Helper(image, "w780")}
           />
         ))}
       </SimpleGrid>

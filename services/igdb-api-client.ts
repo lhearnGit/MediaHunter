@@ -172,3 +172,35 @@ export async function IGDB_Fetch(request: IGDB_Request) {
 
   return result;
 }
+
+export function IGDB_Raw_Fetch(request: IGDB_Request) {
+  //let access_token = await Fetch_Token();
+  /*if (!access_token) {
+    //upon failure to fetch an access_token, Validation checks
+    access_token = await ValidateToken().then((res) => {
+      return res?.access_token;
+    });
+  }*/
+
+  const access_token = "17et6rpa7ty9y6wjf57gf09nxacu31";
+  if (!process.env.IGDB_CLIENT_ID?.toString())
+    throw Error("Client ID Error during Authorization ");
+  const Client_Id = process.env.IGDB_CLIENT_ID.toString();
+
+  const header = {
+    "Content-Type": "application/json",
+    "Client-ID": Client_Id,
+    Authorization: `Bearer ${access_token}`,
+  };
+
+  const options = {
+    method: "POST",
+    headers: { ...header },
+    body: request.query,
+  };
+
+  return fetch(baseUrl + request.endpoint, {
+    ...options,
+    next: { revalidate: 0 },
+  });
+}

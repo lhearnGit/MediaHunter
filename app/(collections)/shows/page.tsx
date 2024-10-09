@@ -1,7 +1,7 @@
 import ItemCard from "@/lib/ui/Card/ItemCard";
 import { TopFive } from "@/utils/fetches/TMDB/fetchTopFive";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
-import { SimpleGrid, Space, Stack, Text } from "@mantine/core";
+import { SimpleGrid, Space, Text } from "@mantine/core";
 
 interface Poster {
   id: number;

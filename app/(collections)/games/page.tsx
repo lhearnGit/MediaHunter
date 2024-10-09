@@ -1,14 +1,10 @@
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
 import ItemCard from "@/lib/ui/Card/ItemCard";
-import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
+import { SimpleGrid } from "@mantine/core";
+import Resize_Image from "@/utils/helpers/Resize_IGDB";
 import PageHandler from "@/lib/ui/PageHandler";
 
-import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
-import Resize_Image from "@/utils/helpers/Resize_IGDB";
-import { SimpleGrid } from "@mantine/core";
-import _ from "lodash";
-
-const limit = 20;
-const numPages = 500 / limit;
+const offset = 20;
 const genres = [
   { label: "G1", value: "G1" },
   { label: "G2", value: "G2" },
@@ -19,6 +15,9 @@ const genres = [
   { label: "T3", value: "T3" },
   { label: "T4", value: "T4" },
 ];
+
+const theme = "";
+const genre = "";
 
 interface Game_Cover {
   id: number;
@@ -31,14 +30,15 @@ async function fetchGames(page_number: number) {
     endpoint: "games",
     query: `
     fields name,cover.url; 
-    limit ${limit};
-    offset ${limit * (page_number - 1)};
+    limit 20;
+    offset ${offset * page_number};
     sort rating_count desc;
     `,
   };
   const response: Game_Cover[] = await IGDB_Fetch({
     ...request,
   });
+  console.log(response);
   return response;
 }
 
@@ -62,18 +62,16 @@ const GamesHome = async ({
 
   return (
     <div>
-      <SearchForm formHeader="Games" items={genres} />
       <SimpleGrid cols={5}>
         {games.map(({ id, name, cover }) => (
           <ItemCard
             key={id}
             id={id}
             title={name}
-            image={Resize_Image(cover.url, "cover_big")}
+            image={cover.url && Resize_Image(cover.url, "cover_big")}
           />
         ))}
       </SimpleGrid>
-      <PageHandler numPages={numPages} />
     </div>
   );
 };

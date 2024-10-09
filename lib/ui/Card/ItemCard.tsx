@@ -18,7 +18,7 @@ export default function ItemCard({
     <Link href={`${pathname}/${id}`}>
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
-          <Image src={image} height={"300"} alt={title} />
+          <Image src={image} alt={title} />
         </Card.Section>
       </Card>
     </Link>
