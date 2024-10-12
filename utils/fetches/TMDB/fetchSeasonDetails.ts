@@ -21,13 +21,11 @@ export async function fetchSeasonDetails({
   seriesId: number;
   season_number?: string;
 }) {
-  const apiClient = new TMDB_Api_Client("", "GET");
+  const apiClient = new TMDB_Api_Client("GET");
   const { credits, episodes, name, posterPath } =
-    await apiClient.TMDB_Fetch_Details<DetailsResponse>({
-      endpoint: `tv/${seriesId}/season/${
-        season_number ? season_number : 1
-      }?${append}`,
-    });
+    await apiClient.TMDB_Fetch_Details<DetailsResponse>(
+      `tv/${seriesId}/season/${season_number ? season_number : 1}?${append}`
+    );
 
   const { cast } = credits;
 

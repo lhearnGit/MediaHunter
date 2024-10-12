@@ -1,13 +1,14 @@
 import { Game_Cover } from "@/lib/entities/IGDB/Games";
 import { Movie } from "@/lib/entities/TMDB";
 import PageHandler from "@/lib/ui/PageHandler";
-import ItemCard from "@/lib/ui/Card/ItemCard";
+import ItemCard from "@/lib/ui/Card/CardLink";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
 import Resize_Image from "@/utils/helpers/Resize_IGDB";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { SimpleGrid } from "@mantine/core";
 import { notFound } from "next/navigation";
+import CardLink from "@/lib/ui/Card/CardLink";
 const numPages = 20;
 const currPage = 9;
 
@@ -27,7 +28,7 @@ interface Poster {
   image?: string;
 }
 export async function fetchPosters(endpoint: string) {
-  const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
+  const tmdb_Api_Client = new TMDB_Api_Client("GET");
   const {
     results: shows,
     total_pages,
@@ -71,7 +72,7 @@ const MoviesHome = async ({
       <SearchForm formHeader="Games" items={genres} />
       <SimpleGrid cols={5}>
         {posters.map(({ id, title, image }) => (
-          <ItemCard
+          <CardLink
             key={id}
             id={id}
             title={title}

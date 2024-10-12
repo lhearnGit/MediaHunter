@@ -1,5 +1,5 @@
 import { SimpleGrid } from "@mantine/core";
-import ItemCard from "./ItemCard";
+import ItemCard from "./CardLink";
 interface CardData {
   id: number;
   title: string;

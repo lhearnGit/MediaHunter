@@ -9,10 +9,10 @@ export async function fetchDetails<T>({
   id: number;
   append?: string;
 }) {
-  const api_client = new TMDB_Api_Client("", "GET");
+  const api_client = new TMDB_Api_Client("GET");
 
-  const details = await api_client.TMDB_Fetch_Details<T>({
-    endpoint: `${endpoint}/${id}?${append}`,
-  });
+  const details = await api_client.TMDB_Fetch_Details<T>(
+    `${endpoint}/${id}?${append}`
+  );
   return details;
 }

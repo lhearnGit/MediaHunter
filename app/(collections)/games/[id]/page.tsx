@@ -1,7 +1,7 @@
 import React from "react";
 import { GameContent } from "../../_components/GameContent";
 import { Container, Text, Space, Skeleton, Grid } from "@mantine/core";
-import ItemCard from "@/lib/ui/Card/ItemCard";
+import ItemCard from "@/lib/ui/Card/CardLink";
 interface CardData {
   id: number;
   title: string;

@@ -9,7 +9,7 @@ interface Poster {
   image?: string;
 }
 export async function TopFive(endpoint: string) {
-  const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
+  const tmdb_Api_Client = new TMDB_Api_Client("GET");
   const { results: top_rated } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
     endpoint: endpoint,
   });

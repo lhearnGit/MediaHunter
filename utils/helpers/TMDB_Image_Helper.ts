@@ -12,7 +12,7 @@ const poster_sizes = [
 
 export const TMDB_Image_Helper = (
   url: string,
-  option?: "original" | "w780"
+  option?: "original" | "w780" | "w500" | "w185" | "h632" | "w45" | "w92"
 ) => {
   const size = "w500";
 

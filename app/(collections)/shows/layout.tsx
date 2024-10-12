@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
 
-import { Flex } from "@mantine/core";
+import { Box, Group, Space } from "@mantine/core";
 import Link from "next/link";
 
 export default function CollectionsLayout({
@@ -9,12 +9,13 @@ export default function CollectionsLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div>
-      <Flex justify={"space-evenly"}>
+    <Box>
+      <Group justify={"space-evenly"}>
         <Link href={"/shows/movies"}>Movies</Link>
         <Link href={"/shows/tv"}>TV Shows</Link>
-      </Flex>
+      </Group>
+      <Space h={"xl"} />
       {children}
-    </div>
+    </Box>
   );
 }

@@ -16,7 +16,7 @@ export class TMDB_Api_Client {
   readonly token: string;
   private isValid: boolean;
 
-  constructor(endPoint: string, method: `GET` | `DELETE` | `POST`) {
+  constructor(method: `GET` | `DELETE` | `POST`) {
     const token = process.env.TMDB_READ_TOKEN?.toString();
     if (!token) throw console.log("Error creating api-client, missing token"); //check token is valid
     this.isValid = false; //assume client is always invalid by default
@@ -52,7 +52,7 @@ export class TMDB_Api_Client {
   }
 
   //fetch singular details
-  async TMDB_Fetch_Details<T>({ endpoint }: { endpoint: string }) {
+  async TMDB_Fetch_Details<T>(endpoint: string) {
     const options = {
       method: this.method,
       headers: {

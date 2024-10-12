@@ -1,6 +1,6 @@
 import { Movie } from "@/lib/entities/TMDB";
 import PageHandler from "@/lib/ui/PageHandler";
-import ItemCard from "@/lib/ui/Card/ItemCard";
+import CardLink from "@/lib/ui/Card/CardLink";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
@@ -26,7 +26,7 @@ interface Poster {
   image?: string;
 }
 export async function fetchPosters(endpoint: string) {
-  const tmdb_Api_Client = new TMDB_Api_Client("", "GET");
+  const tmdb_Api_Client = new TMDB_Api_Client("GET");
   const {
     results: shows,
     total_pages,
@@ -71,7 +71,7 @@ const TVHome = async ({
       <SearchForm formHeader="Games" items={genres} />
       <SimpleGrid cols={5}>
         {posters.map(({ id, title, image }) => (
-          <ItemCard
+          <CardLink
             key={id}
             id={id}
             title={title}

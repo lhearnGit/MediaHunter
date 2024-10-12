@@ -1,4 +1,4 @@
-import ItemCard from "@/lib/ui/Card/ItemCard";
+import ItemCard from "@/lib/ui/Card/CardLink";
 import { TopFive } from "@/utils/fetches/TMDB/fetchTopFive";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { SimpleGrid, Space, Text } from "@mantine/core";
@@ -13,20 +13,29 @@ const ShowsHome = async () => {
     <div>
       <Text>Grouping Heading</Text>
       <Space h="md" />
-      <ShowsContent items={await TopFive("movie/top_rated")} />
-      <ShowsContent items={await TopFive("movie/popular")} />
+      <ShowsContent
+        mediaType="movies"
+        items={await TopFive("movie/top_rated")}
+      />
+      <ShowsContent mediaType="movies" items={await TopFive("movie/popular")} />
 
       <Text>Grouping Heading</Text>
       <Space h="md" />
-      <ShowsContent items={await TopFive("tv/top_rated")} />
-      <ShowsContent items={await TopFive("tv/popular")} />
+      <ShowsContent mediaType="tv" items={await TopFive("tv/top_rated")} />
+      <ShowsContent mediaType="tv" items={await TopFive("tv/popular")} />
     </div>
   );
 };
 
 export default ShowsHome;
 
-const ShowsContent = ({ items }: { items: Poster[] }) => {
+const ShowsContent = ({
+  items,
+  mediaType,
+}: {
+  items: Poster[];
+  mediaType: "movies" | "tv" | "game";
+}) => {
   return (
     <>
       <Text>Section Heading</Text>
@@ -37,6 +46,7 @@ const ShowsContent = ({ items }: { items: Poster[] }) => {
             key={id}
             id={id}
             title={title}
+            mediaType={mediaType}
             image={image && TMDB_Image_Helper(image)}
           />
         ))}
