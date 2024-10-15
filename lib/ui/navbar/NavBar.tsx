@@ -99,7 +99,7 @@ const NavBar = () => {
                     />
                   }
                 >
-                  <Link href={"/user/games"} label="games" />
+                  <Link href={"/user/games"} label="Games" />
                 </Menu.Item>
                 <Menu.Item
                   leftSection={
@@ -110,7 +110,7 @@ const NavBar = () => {
                     />
                   }
                 >
-                  <Link href={"/user/TV"} label="TV" />
+                  <Link href={"/user/shows"} label="Shows" />
                 </Menu.Item>
                 <Menu.Item
                   leftSection={
@@ -121,7 +121,7 @@ const NavBar = () => {
                     />
                   }
                 >
-                  <Link href={"/user/movies"} label="Movies" />
+                  <Link href={"/user/books"} label="Books" />
                 </Menu.Item>
 
                 <Menu.Label>Settings</Menu.Label>
