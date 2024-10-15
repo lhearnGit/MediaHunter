@@ -42,6 +42,7 @@ const links = [
   { href: "/games", label: "Games" },
   { href: "/books", label: "Books" },
   { href: "/shows", label: "Shows" },
+  { href: "/user", label: "dashboard" },
 ];
 const NavBar = () => {
   const theme = useMantineTheme();

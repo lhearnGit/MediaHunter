@@ -15,7 +15,7 @@ import {
 } from "./Season";
 import { Review, ReviewResponse } from "./Reviews";
 import { ProductionCompany } from "./ProductionCompany";
-
+import { WatchProvider, JustWatchProviders } from "./JustWatch";
 export type {
   TV,
   TMDB_Genre,
@@ -33,4 +33,6 @@ export type {
   ShowStatus,
   ShowDetails,
   TvNetwork,
+  WatchProvider,
+  JustWatchProviders,
 };

@@ -3,7 +3,13 @@ import { useState } from "react";
 import { FloatingIndicator, UnstyledButton } from "@mantine/core";
 import classes from "./floating.module.css";
 
-export default function FloatingSelector({ data }: { data: string[] }) {
+export default function FloatingSelector({
+  data,
+  onClick,
+}: {
+  data: string[];
+  onClick: (seasonNumber: number) => void;
+}) {
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
   const [controlsRefs, setControlsRefs] = useState<
     Record<string, HTMLButtonElement | null>
@@ -15,12 +21,16 @@ export default function FloatingSelector({ data }: { data: string[] }) {
     setControlsRefs(controlsRefs);
   };
 
+  function handleClick(index: number) {
+    setActive(index);
+    onClick(index);
+  }
   const controls = data.map((item, index) => (
     <UnstyledButton
       key={item}
       className={classes.control}
       ref={setControlRef(index)}
-      onClick={() => setActive(index)}
+      onClick={() => handleClick(index)}
       mod={{ active: active === index }}
     >
       <span className={classes.controlLabel}>{item}</span>

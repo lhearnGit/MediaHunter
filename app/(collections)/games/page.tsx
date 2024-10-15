@@ -1,7 +1,7 @@
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
 import ItemCard from "@/lib/ui/Card/CardLink";
 import { SimpleGrid } from "@mantine/core";
-import Resize_Image from "@/utils/helpers/Resize_IGDB";
+import Resize_Image from "@/utils/helpers/IGDB_Image_Helper";
 import PageHandler from "@/lib/ui/PageHandler";
 
 const offset = 20;

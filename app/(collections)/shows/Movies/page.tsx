@@ -4,7 +4,7 @@ import PageHandler from "@/lib/ui/PageHandler";
 import ItemCard from "@/lib/ui/Card/CardLink";
 import SearchForm from "@/lib/ui/forms/SearchForm/SearchForm";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
-import Resize_Image from "@/utils/helpers/Resize_IGDB";
+import Resize_Image from "@/utils/helpers/IGDB_Image_Helper";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { SimpleGrid } from "@mantine/core";
 import { notFound } from "next/navigation";

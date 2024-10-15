@@ -15,7 +15,6 @@ export async function GET(
       name: true,
       tvShows: { select: { id: true, name: true, imageUrl: true } },
       movies: { select: { id: true, name: true, imageUrl: true } },
-
       games: { select: { id: true, name: true } },
     },
   });

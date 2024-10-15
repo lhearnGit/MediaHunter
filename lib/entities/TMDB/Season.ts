@@ -41,6 +41,7 @@ export type TvNetwork = {
   logo_path: string;
   name: string;
 };
+
 export type ShowStatus = {
   currentStatus: string;
   first_air_date: string;

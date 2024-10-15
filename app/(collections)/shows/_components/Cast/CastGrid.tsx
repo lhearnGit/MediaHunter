@@ -1,16 +1,16 @@
 "use client";
 import { Cast } from "@/lib/entities/TMDB";
-import { Button, Grid, GridCol, Title, Space } from "@mantine/core";
-import React, { useState } from "react";
+import { Button, Grid, GridCol } from "@mantine/core";
+import { useState } from "react";
 import CastCard from "./CastCard";
 
-const CastGrid = ({ cast }: { cast: Cast[] }) => {
+const CastGrid = ({ cast, cols }: { cast: Cast[]; cols?: number }) => {
   const [limit, setLimit] = useState<number>(12);
   return (
     <>
-      <Grid columns={6}>
+      <Grid columns={cols ? cols : 6}>
         {cast.slice(0, limit).map((castMember: Cast) => (
-          <GridCol span={1}>
+          <GridCol span={1} key={castMember.id}>
             <CastCard castMember={castMember} />
           </GridCol>
         ))}

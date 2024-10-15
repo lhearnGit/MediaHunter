@@ -1,7 +1,7 @@
-const Resize_Image = (
+const IGDB_Image_Helper = (
   url: string,
   size: "720p" | "1080p" | "micro" | "thumb" | "logo_med" | "cover_big"
 ) => {
   return url.replace("t_thumb", `t_${size}`);
 };
-export default Resize_Image;
+export default IGDB_Image_Helper;

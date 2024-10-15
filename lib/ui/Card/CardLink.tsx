@@ -10,7 +10,7 @@ export default function CardLink({
   id,
   mediaType,
 }: {
-  id: number;
+  id: number | string;
   image?: string;
   title?: string;
   mediaType?: "movies" | "tv" | "game";

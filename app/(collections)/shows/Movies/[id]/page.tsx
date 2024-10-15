@@ -18,13 +18,14 @@ import {
   Box,
   SimpleGrid,
 } from "@mantine/core";
-import ProfileActions from "../../_components/ProfileActions";
+import ProfileActions from "../../../_components/ProfileActions";
 import Reviews from "../../_components/Reviews";
 
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import CastGrid from "../../_components/Cast/CastGrid";
 import MovieDetails from "../../_components/MovieDetails";
 import StyledBadges from "@/lib/ui/StyledBadges";
+import DetailsSection from "../_components/DetailsSection";
 
 const append = "append_to_response=credits,reviews";
 interface MovieDetails {
@@ -87,6 +88,8 @@ const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
           companies={production_companies}
         />
         <DetailsSection
+          id={params.id}
+          title={title}
           budget={budget}
           release_date={release_date}
           revenue={revenue}
@@ -144,48 +147,7 @@ function MainSection({
     </GridCol>
   );
 }
-function DetailsSection({
-  budget,
-  release_date,
-  revenue,
-  genres,
-  poster_path,
-  runtime,
-}: {
-  genres: TMDB_Genre[];
-  poster_path: string;
-  budget: number;
-  release_date: string | undefined;
-  revenue: number;
-  runtime: number;
-}) {
-  return (
-    <GridCol span={4}>
-      <Stack bg={"dark"} px={5} py={10}>
-        <Image
-          radius="sm"
-          src={TMDB_Image_Helper(poster_path, "w780")}
-          alt="no img"
-        />
-        <ProfileActions />
-        <Box>
-          <Text size="lg">Genres</Text>
-          <Group>
-            {genres.map((genre: TMDB_Genre) => (
-              <StyledBadges key={genre.id} label={genre.name} color="blue" />
-            ))}
-          </Group>
-        </Box>
-        <MovieDetails
-          budget={budget}
-          release_date={release_date}
-          revenue={revenue}
-          runtime={runtime}
-        />
-      </Stack>
-    </GridCol>
-  );
-}
+
 function ReviewsSection({ reviews }: { reviews: ReviewResponse }) {
   return (
     <GridCol span={12}>
