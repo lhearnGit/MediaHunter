@@ -6,7 +6,7 @@ import { ColorSchemeScript, MantineProvider, Container } from "@mantine/core";
 import NavBar from "@/lib/ui/navbar/NavBar";
 import { theme } from "@/lib/theme";
 import { Footer } from "@/lib/ui/Sections/Footer/Footer";
-import AuthProvider from "./auth/Provider";
+import AuthProvider from "../providers/Provider";
 import Providers from "@/providers/QueryClientProvider";
 
 export const metadata = {
