@@ -22,7 +22,7 @@ export default function CardLink({
     >
       <Card shadow="sm" padding="lg" radius="md" withBorder>
         <Card.Section>
-          <Image src={image} alt={title} />
+          <Image src={image && image} alt={title} />
         </Card.Section>
       </Card>
     </Link>
