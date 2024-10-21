@@ -1,7 +1,12 @@
+import { IGDB_Genre } from "@/lib/entities/IGDB";
 import CardLink from "@/lib/ui/Card/CardLink";
+import SearchParamButton from "@/lib/ui/SearchParamButton/SearchParamButton";
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
 import Resize_Image from "@/utils/helpers/IGDB_Image_Helper";
-import { SimpleGrid } from "@mantine/core";
+import { Group, SimpleGrid } from "@mantine/core";
+import GenreParams from "./_component/GameParamSection";
+import ParamSection from "./_component/GameParamSection";
+import GameParamSection from "./_component/GameParamSection";
 
 interface Game_Cover {
   id: number;
@@ -65,6 +70,10 @@ const GamesHome = async ({
 
   return (
     <div>
+      <GameParamSection />
+      <br />
+      <br />
+      <br />
       <SimpleGrid cols={5}>
         {games.map(({ id, name, cover }) => (
           <CardLink
