@@ -1,4 +1,5 @@
 "use client";
+import { signIn } from "@/auth";
 import { useProfileList } from "@/lib/hooks/profile/useProfileList";
 import {
   Card,
@@ -9,6 +10,7 @@ import {
   Stack,
   Title,
 } from "@mantine/core";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 interface ShowResponse {
   name: string;
@@ -17,8 +19,10 @@ interface ShowResponse {
 }
 
 const UserShowsPage = () => {
+  const { data, status } = useSession();
+  if (!data) return signIn();
   const { profile, isLoading, isFetching, error } = useProfileList(
-    "66d73678a5ae02f237ead4d9"
+    data?.user.id
   );
 
   console.log(profile);
