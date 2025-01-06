@@ -20,9 +20,6 @@ import {
   IconStar,
   IconMessage,
   IconSettings,
-  IconPlayerPause,
-  IconTrash,
-  IconSwitchHorizontal,
   IconChevronDown,
 } from "@tabler/icons-react";
 import { MantineLogo } from "@mantinex/mantine-logo";
@@ -37,9 +34,8 @@ import { usePathname } from "next/navigation";
 const links = [
   { href: "/", label: "Home" },
   { href: "/games", label: "Games" },
-  { href: "/books", label: "Books" },
   { href: "/shows", label: "Shows" },
-  { href: "/user", label: "dashboard" },
+  { href: "/user", label: "Profile" },
 ];
 const NavBar = () => {
   const { data, status } = useSession();
