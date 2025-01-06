@@ -1,9 +1,10 @@
 import { Country, TMDB_Genre } from "@/lib/entities/TMDB/index";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
+import { sortBy } from "lodash";
 
 const primaries = ["US", "AU", "BR", "CA", "CN", "DE", "FR", "GB", "KR", "JP"];
-export async function CountryConfig() {
-  const api_client = new TMDB_Api_Client("configuration/", "GET");
+export async function fetch_TMDB_Countries() {
+  const api_client = new TMDB_Api_Client("GET");
   const response = await api_client.fetchList("configuration/countries");
   const countries: Country[] = [];
 
@@ -14,11 +15,12 @@ export async function CountryConfig() {
     if (country) countries.push(country);
   });
 
-  return { countries: countries };
+  return countries;
 }
-export async function TMDB_Genres(endpoint: "movie" | "tv") {
-  const api_client = new TMDB_Api_Client("", "GET");
-  const { genres } = await api_client.fetchList(`genre/${endpoint}/list`);
+export async function fetch_TMDB_Genres(endpoint: "movie" | "tv") {
+  const api_client = new TMDB_Api_Client("GET");
+  const response = await api_client.fetchList(`genre/${endpoint}/list`);
+  const genres: TMDB_Genre[] = response.genres;
 
-  return genres;
+  return sortBy(genres, ["name"]);
 }
