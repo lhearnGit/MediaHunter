@@ -1,5 +1,5 @@
 import { Theme } from "@/lib/entities/IGDB";
-import { IGDB_Fetch } from "@/services/igdb-api-client";
+import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
 import { sortBy } from "lodash";
 
 export async function fetchThemes() {
