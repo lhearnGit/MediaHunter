@@ -47,10 +47,10 @@ model User {
   
   
   tvShowIDs     String[] @db.ObjectId
-  tvShows Shows[]  @relation(fields: [tvShowIDs], references: [pid])//use pid, check comment @ Igdb_Games model for explaination
+  tvShows Shows[]  @relation(fields: [tvShowIDs], references: [pid])//use pid, check comment @ TMDB_TV model for explaination
   
   movieIDs     String[] @db.ObjectId
-  movies Movies[]  @relation(fields: [movieIDs], references: [pid])//use pid, check comment @ Igdb_Games model for explaination
+  movies Movies[]  @relation(fields: [movieIDs], references: [pid])//use pid, check comment @ TMDB_Movies model for explaination
 
 
   //collection of recently viewed games

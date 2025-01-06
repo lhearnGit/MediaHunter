@@ -16,6 +16,8 @@ import {
 import { Review, ReviewResponse } from "./Reviews";
 import { ProductionCompany } from "./ProductionCompany";
 import { WatchProvider, JustWatchProviders } from "./JustWatch";
+
+import { Poster } from "./Poster";
 export type {
   TV,
   TMDB_Genre,
@@ -35,4 +37,5 @@ export type {
   TvNetwork,
   WatchProvider,
   JustWatchProviders,
+  Poster,
 };

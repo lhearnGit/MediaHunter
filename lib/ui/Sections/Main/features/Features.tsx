@@ -9,7 +9,8 @@ import {
 } from "@mantine/core";
 import { IconGauge, IconUser, IconLock } from "@tabler/icons-react";
 import classes from "./features.module.css";
-export const MOCKDATA = [
+
+export const FeatureData = [
   {
     icon: IconGauge,
     title: "Games",
@@ -36,7 +37,7 @@ export const MOCKDATA = [
     icon: IconLock,
     title: "Authentication & Authorization",
     description:
-      "Using OAuth via AuthJs quick make and maintain your account using google",
+      "Using OAuth via AuthJs quickly make and maintain your account using your gmail account",
   },
 ];
 
@@ -63,7 +64,7 @@ export function Feature({ icon: Icon, title, description }: FeatureProps) {
 }
 
 export function Features() {
-  const features = MOCKDATA.map((feature, index) => (
+  const features = FeatureData.map((feature, index) => (
     <Feature {...feature} key={index} />
   ));
 
