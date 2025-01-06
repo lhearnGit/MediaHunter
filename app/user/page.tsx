@@ -1,15 +1,15 @@
 "use client";
 import { useProfileList } from "@/lib/hooks/profile/useProfileList";
 import { Space, Title, Container, Grid } from "@mantine/core";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import React from "react";
 
 const UserDashboard = () => {
-  const { profile, isLoading, error } = useProfileList(
-    "66d73678a5ae02f237ead4d9"
-  );
+  const { data, status } = useSession();
+  if (status == "unauthenticated") signIn();
+  const { profile, isLoading, error } = useProfileList(data?.user.id!);
 
-  console.log(profile);
   return (
     <>
       <Title>Dashboard</Title>
@@ -17,9 +17,6 @@ const UserDashboard = () => {
       <Grid grow gutter={"lg"}>
         <Grid.Col span={5} offset={2}>
           <Link href={"/user/account"}>Account</Link>
-        </Grid.Col>
-        <Grid.Col span={5}>
-          <Link href={"/user/books"}>Books</Link>
         </Grid.Col>
         <Grid.Col span={5} offset={2}>
           <Link href={"/user/games"}>Games</Link>
