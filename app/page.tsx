@@ -18,12 +18,6 @@ const banners: Banner[] = [
     collectionType: "Games",
   },
   {
-    title: "Looking for something to Read?",
-    description: "By using [API] find your new literacy obsession",
-    href: "/books",
-    collectionType: "Books",
-  },
-  {
     title: "Dont know what to watch? ",
     description:
       "Cant Keep up with all those streaming serivces? by using TMDBs API you can find out about all kinds of new releases and get reviews from real people!",
