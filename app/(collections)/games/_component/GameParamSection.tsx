@@ -2,14 +2,16 @@ import { IGDB_Genre, Theme } from "@/lib/entities/IGDB";
 import SearchParamButton from "@/lib/ui/SearchParamButton/SearchParamButton";
 import { fetchGenres } from "@/utils/fetches/IGDB/fetchGenres";
 import { fetchThemes } from "@/utils/fetches/IGDB/fetchThemes";
-import { Container, Grid, GridCol, Group, Stack, Text } from "@mantine/core";
-import React from "react";
+import { Grid, GridCol, Text } from "@mantine/core";
+import ParamContainer from "./ParamContainer";
 
 const GameParamSection = async () => {
   const genres = await fetchGenres();
   const themes = await fetchThemes();
+
+  console.log(themes);
   return (
-    <Group>
+    <ParamContainer triggerLabel="Search Options">
       <Grid>
         <GridCol span={12}>
           <Text size="lg">Genres</Text>
@@ -36,7 +38,7 @@ const GameParamSection = async () => {
           />
         ))}
       </Grid>
-    </Group>
+    </ParamContainer>
   );
 };
 

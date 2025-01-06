@@ -13,13 +13,13 @@ export default function ParamContainer({
   const [opened, { toggle }] = useDisclosure(false);
 
   return (
-    <Box maw={400}>
+    <div>
       <button className="w-full" onClick={toggle}>
         {triggerLabel}
       </button>
       <Space h="lg" />
       <Collapse in={opened}>{children}</Collapse>
       <Space h="lg" />
-    </Box>
+    </div>
   );
 }
