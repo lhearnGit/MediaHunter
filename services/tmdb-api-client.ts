@@ -2,14 +2,6 @@ import { TMDB_Request, TMDB_Response } from "@/lib/entities/TMDB/index";
 
 const authUrl = "https://api.themoviedb.org/3/authentication";
 
-/*
-Endpoints
-
-discover/movie
-discover/tv
-
-*/
-
 export class TMDB_Api_Client {
   readonly baseUrl = "https://api.themoviedb.org/3/";
   method: `GET` | `DELETE` | `POST`;
@@ -73,7 +65,6 @@ export class TMDB_Api_Client {
   //fetch from endpoints that return paginated data
 
   async TMDB_Fetch_Pages<T>(request: TMDB_Request) {
-    console.log("Fetching.... " + request.endpoint);
     const options = {
       method: this.method,
       headers: {
@@ -82,6 +73,8 @@ export class TMDB_Api_Client {
       },
       next: { revalidate: 0 },
     };
+    console.log(this.baseUrl + request.endpoint);
+
     const response: TMDB_Response<T> = await fetch(
       this.baseUrl + request.endpoint,
       options
@@ -98,10 +91,9 @@ export class TMDB_Api_Client {
         accept: "application/json",
         Authorization: this.token,
       },
-      next: { revalidate: 0 },
+      next: { revalidate: 3600 },
     };
 
-    console.log(this.baseUrl + endpoint);
     const response = await fetch(this.baseUrl + endpoint, options).then((res) =>
       res.json()
     );
