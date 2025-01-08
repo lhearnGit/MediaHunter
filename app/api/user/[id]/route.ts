@@ -5,10 +5,7 @@ import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 import { NextRequest, NextResponse } from "next/server";
 import { Game } from "@/lib/entities/IGDB";
 //get one user
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET({ params }: { params: { id: string } }) {
   const user = await prisma.user.findUnique({
     where: { id: params.id },
     select: {

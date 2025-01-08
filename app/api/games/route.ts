@@ -1,20 +1,28 @@
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
 
-//Populate Games from an Array of Args
-//Bulk Fetch Operation
+export async function GET(req: NextRequest) {
+  console.log(req.nextUrl.searchParams.toString());
+  const params = req.nextUrl.searchParams;
 
-export async function GET(req: NextRequest, params: { id: number }) {
-  const id = params.id;
+  let page: number | null | string = params.get("page");
+  if (!page) page = 1;
+  else page = parseInt(page);
+  const request: IGDB_Request = {
+    endpoint: "games",
+    query: `
+  fields name,cover.url; 
+  limit 5; 
+  offset ${5 * (page - 1)};
+  sort rating_count desc;
+  where (themes=[1] & genres=[31]);`,
+  };
 
-  const game = await prisma.igdb_Games.findFirst({
-    where: { id: id },
-    select: { id: true, name: true, url: true },
-  });
-
-  if (!game) return NextResponse.json({ messsage: "Not Found", status: 404 });
-  return NextResponse.json({ game, status: 200 });
+  const games = await IGDB_Fetch(request);
+  console.log(request.query);
+  return NextResponse.json({ games, status: 200 });
 }
 
 //post new game - id & Game Object
@@ -28,12 +36,11 @@ export async function POST(req: NextRequest) {
 }
 
 async function postNewGame(id: number, name: string, url?: string) {
-  console.log("post new game");
   const game = await prisma.igdb_Games.findUnique({
     where: { id: id },
     select: { pid: true },
   });
-  console.log(game);
+  //  console.log(game);
   //if the game entry is not saved, create it.
   if (!game) {
     const newGame = await prisma.igdb_Games.create({

@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
 
 //get all users
-export async function GET(request: NextRequest) {
+export async function GET() {
   const user = await prisma.user.findMany();
 
   if (!user) return NextResponse.json({ status: 404 });
