@@ -22,7 +22,6 @@ import {
   IconSettings,
   IconChevronDown,
 } from "@tabler/icons-react";
-import { MantineLogo } from "@mantinex/mantine-logo";
 import classes from "./NavBar.module.css";
 import SearchWithButton from "../Search/SearchWithButton";
 import { useSession } from "next-auth/react";
@@ -48,11 +47,8 @@ const NavBar = () => {
     <div className={classes.header}>
       <Space h={"md"} />
       <Container className={classes.mainSection} size="xl">
-        <Group justify="space-between">
-          <MantineLogo size={28} />
-
+        <Group justify="right" my={"md"} mx={"lg"}>
           <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
-
           {status == "authenticated" ? (
             <Menu
               width={260}
@@ -73,9 +69,9 @@ const NavBar = () => {
                       src={data?.user.image}
                       alt={data?.user.name}
                       radius="xl"
-                      size={20}
+                      size={"sm"}
                     />
-                    <Text fw={500} size="sm" lh={1} mr={3}>
+                    <Text fw={500} size="lg" lh={1} mr={3}>
                       {data?.user.name}
                     </Text>
                     <IconChevronDown
