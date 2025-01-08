@@ -1,18 +1,9 @@
-import { IGDB_Genre } from "@/lib/entities/IGDB";
 import CardLink from "@/lib/ui/Card/CardLink";
-import SearchParamButton from "@/lib/ui/SearchParamButton/SearchParamButton";
-import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 import Resize_Image from "@/utils/helpers/IGDB_Image_Helper";
-import { Group, SimpleGrid } from "@mantine/core";
-import GenreParams from "./_component/GameParamSection";
-import ParamSection from "./_component/GameParamSection";
+import { SimpleGrid } from "@mantine/core";
 import GameParamSection from "./_component/GameParamSection";
-
-interface Game_Cover {
-  id: number;
-  name: string;
-  cover: { url: string };
-}
+import { Game_Cover } from "@/lib/entities/IGDB/Games";
 
 async function fetchGames(page_number: number, igdb_query_string: string) {
   const request: IGDB_Request = {
@@ -55,7 +46,7 @@ const GamesHome = async ({
     fields: fields,
     sort: sort,
     where: IGDBWhereStringBuilder({
-      condition: "or",
+      condition: "and",
       whereValue1: themes,
       whereValue2: genres,
     }),
@@ -107,6 +98,7 @@ interface Where_Key_Value {
   key: string;
   values: string;
 }
+
 function IGDBWhereStringBuilder({
   condition,
   whereValue1,
