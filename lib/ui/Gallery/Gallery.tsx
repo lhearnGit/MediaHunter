@@ -8,8 +8,11 @@ const Gallery = ({ images }: { images: { id: number; url: string }[] }) => {
   return (
     <Carousel loop>
       {images.map(({ id, url }: { id: number; url: string }) => (
-        <Carousel.Slide>
-          <Image src={IGDB_Image_Helper(url, "720p")} />
+        <Carousel.Slide key={id}>
+          <Image
+            src={IGDB_Image_Helper(url, "720p")}
+            alt={"no image available"}
+          />
         </Carousel.Slide>
       ))}
     </Carousel>
