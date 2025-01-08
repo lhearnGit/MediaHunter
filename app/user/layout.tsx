@@ -5,9 +5,8 @@ import React, { ReactNode } from "react";
 import { signIn, useSession } from "next-auth/react";
 
 const ProfileLayout = ({ children }: { children: ReactNode }) => {
-  const { status } = useSession();
-
-  if (status == "unauthenticated") return signIn();
+  const { data, status } = useSession();
+  if (status == "unauthenticated" || !data) return signIn();
   return <Container size="xl">{children} </Container>;
 };
 
