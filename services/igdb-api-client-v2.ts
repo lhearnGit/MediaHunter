@@ -1,5 +1,4 @@
-import { PrismaClient } from "@prisma/client";
-import { CLIENT_PUBLIC_FILES_PATH } from "next/dist/shared/lib/constants";
+import { notFound } from "next/navigation";
 
 export interface IGDB_Request {
   endpoint: string;
@@ -10,7 +9,6 @@ interface Auth_Token {
   expires_in: number;
   token_type: "bearer";
 }
-const prisma = new PrismaClient();
 
 const baseUrl = "https://api.igdb.com/v4/";
 
@@ -55,8 +53,6 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
     const client_id = process.env.IGDB_CLIENT_ID?.toString();
 
     const token = await Generate_Token();
-    console.log("TOKEN---------");
-    console.log(token);
 
     const options = {
       method: "POST",
@@ -67,8 +63,6 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
       },
       body: request.query,
     };
-
-    console.log(options);
 
     const response: T[] = await fetch(baseUrl + request.endpoint, {
       ...options,
@@ -84,7 +78,7 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
     return response[0]; //IGDB always returns an array.
   } catch (error) {
     console.error(error);
-    return undefined;
+    return notFound();
   }
 }
 
