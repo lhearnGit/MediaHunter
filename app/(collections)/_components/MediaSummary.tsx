@@ -2,7 +2,6 @@
 import { IGDB_Genre, Theme } from "@/lib/entities/IGDB";
 import StyledBadges from "@/lib/ui/StyledBadges";
 
-import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
 import { Grid, GridCol, Group, Text } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,6 +12,7 @@ interface SummaryProps {
   genres: IGDB_Genre[];
   themes: Theme[];
   rating: number;
+  rating_count: number;
   pagePath: string;
   summary: string;
 }
@@ -25,6 +25,7 @@ export const MediaSummary = ({
   summary,
   pagePath,
   rating,
+  rating_count,
 }: SummaryProps) => {
   return (
     <Grid columns={9} gutter={"md"} mx={"sm"} m={"md"}>
@@ -35,10 +36,6 @@ export const MediaSummary = ({
               {title}
             </Link>
           </Text>
-          <StyledBadges
-            label={`Player Score ${rating}`}
-            color={rating > 75 ? "green" : "red"}
-          />
         </Group>
       </GridCol>
       <GridCol span={4} />
@@ -62,6 +59,16 @@ export const MediaSummary = ({
       </GridCol>
       <GridCol span={6}>
         <Group justify="flex-end">
+          <Group>
+            <StyledBadges
+              label={`ratings ${rating_count}`}
+              color={rating > 75 ? "green" : "red"}
+            />
+            <StyledBadges
+              label={`Player Score ${rating}`}
+              color={rating > 75 ? "green" : "red"}
+            />
+          </Group>
           <Link href={`${pagePath}/${id}`} className="underline-offset-1">
             Read More
           </Link>
