@@ -9,7 +9,6 @@ const GameParamSection = async () => {
   const genres = await fetchGenres();
   const themes = await fetchThemes();
 
-  console.log(themes);
   return (
     <ParamContainer triggerLabel="Search Options">
       <Grid>
