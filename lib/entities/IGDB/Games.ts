@@ -14,7 +14,7 @@ export interface Game {
   name: string;
   summary: string;
   storyline?: string;
-  cover: { url: string };
+  cover?: { url: string };
   screenshots?: ScreenShot[];
   videos?: Video[];
   genres: IGDB_Genre[];
