@@ -1,19 +1,36 @@
-import CardLink from "@/lib/ui/Card/CardLink";
+import { Game } from "@/lib/entities/IGDB/Games";
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
-import Resize_Image from "@/utils/helpers/IGDB_Image_Helper";
-import { SimpleGrid } from "@mantine/core";
+import BrowseGames from "./_component/BrowseGames";
 import GameParamSection from "./_component/GameParamSection";
-import { Game_Cover } from "@/lib/entities/IGDB/Games";
 
-async function fetchGames(page_number: number, igdb_query_string: string) {
+async function fetchGames(
+  page: number,
+  page_size: number,
+  genre: string | null,
+  theme: string | null
+) {
+  let where = WhereFilter(genre, theme);
+  console.log(where);
   const request: IGDB_Request = {
     endpoint: "games",
-    query: igdb_query_string,
+    query: `
+  fields name,cover.url, themes.name, genres.id, themes.id, themes.name, summary, rating, rating_count; 
+  limit ${page_size}; 
+  offset ${page > 1 ? page * page_size : 0};
+  sort rating_count desc;
+  ${where}`,
   };
-  const response: Game_Cover[] = await IGDB_Fetch({
+  const games: Game[] = await IGDB_Fetch<Game>({
     ...request,
   });
-  return response;
+  console.log(games);
+  return games;
+}
+function WhereFilter(genre: string | null, theme: string | null): string {
+  if (genre && theme) return `where genres = ${genre} & themes = ${theme};`;
+  if (genre) return `where genres = ${genre};`;
+  if (theme) return `where themes = ${theme};`;
+  return "";
 }
 
 const GamesHome = async ({
@@ -21,60 +38,30 @@ const GamesHome = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
-  const query = new URLSearchParams();
+  const params = new URLSearchParams();
   if (searchParams) {
     for (const [key, value] of Object.entries(searchParams)) {
       if (!value) return;
-      else query.append(key, value);
+      else params.append(key, value);
     }
   }
-
-  const gValues = nullChecker(query.get("genres"));
-  const tValues = nullChecker(query.get("themes"));
-
-  function nullChecker(value: string | null) {
-    if (value == null) return "";
-    else return value;
+  if (!params.has("page")) {
+    params.append("page", "1");
   }
 
-  const genres: Where_Key_Value = { key: "genres", values: gValues };
-  const themes: Where_Key_Value = { key: "themes", values: tValues };
-  const fields = "name, cover.url";
-  const sort: IGDB_Sort_Option = { value: `release_dates.date`, order: `desc` };
-
-  const igdb_query_string = IGDBQueryStringBuilder({
-    fields: fields,
-    sort: sort,
-    where: IGDBWhereStringBuilder({
-      condition: "and",
-      whereValue1: themes,
-      whereValue2: genres,
-    }),
-  });
-
-  console.log(igdb_query_string);
-  const page_number = query.get("page");
-  const games = await fetchGames(
-    page_number == null ? 0 : parseInt(page_number),
-    igdb_query_string
-  );
-
+  const theme = params.get("themes");
+  const genre = params.get("genres");
+  const page = 1;
+  const page_size = 10;
+  const games = await fetchGames(page, page_size, genre, theme);
   return (
     <div>
       <GameParamSection />
       <br />
       <br />
       <br />
-      <SimpleGrid cols={5}>
-        {games.map(({ id, name, cover }) => (
-          <CardLink
-            key={id}
-            id={id}
-            title={name}
-            image={cover?.url && Resize_Image(cover.url, "cover_big")}
-          />
-        ))}
-      </SimpleGrid>
+
+      <BrowseGames games={games} />
     </div>
   );
 };
@@ -85,8 +72,7 @@ interface Query_Schema {
   fields: string;
   where: string | "";
   sort: IGDB_Sort_Option;
-  offset?: number;
-  limit?: number;
+  page_size: number;
 }
 
 interface IGDB_Sort_Option {
@@ -134,10 +120,15 @@ function IGDBWhereStringBuilder({
   }
 }
 
-function IGDBQueryStringBuilder({ fields, where, sort }: Query_Schema) {
+function IGDBQueryStringBuilder({
+  fields,
+  where,
+  sort,
+  page_size,
+}: Query_Schema) {
   return `
   fields ${fields};
-  limit 40;
+  limit 10;
   sort rating_count ${sort.order};
    ${where}
   `;
