@@ -1,18 +1,13 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
-import usePaginatedGames from "@/lib/hooks/paginatedGames/usePaginatedGames";
-import { round } from "lodash";
-import {
-  notFound,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
-import { MediaSummary } from "../../_components/MediaSummary";
 import { Group } from "@mantine/core";
+import { round } from "lodash";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
+import { MediaSummary } from "../../_components/MediaSummary";
+import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
 
-const BrowseGames = () => {
+const BrowseGames = ({ games }: { games: Game[] }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -22,7 +17,6 @@ const BrowseGames = () => {
   if (query.get("page") == null) query.set("page", "1");
   const page = parseInt(query.get("page")!);
   const page_length = 10;
-  const { data, error, isLoading } = usePaginatedGames();
 
   const changePage = (key: string, value: string) => {
     query.set(key, value);
@@ -31,12 +25,8 @@ const BrowseGames = () => {
 
   useEffect(() => {}, [searchParams]);
 
-  if (isLoading) return <p>is Loading...</p>;
-  if (!data) return notFound();
-  if (error) return notFound();
   return (
     <div>
-      {isLoading && <p>is Loading...</p>}
       <Group>
         <button
           disabled={query.get("page") == "1" ? true : false}
@@ -48,7 +38,7 @@ const BrowseGames = () => {
           prev page
         </button>
         <button
-          disabled={data.length < page_length ? true : false} //basic end checking, if there are less than the page lengths results there are no more pages
+          disabled={games.length < page_length ? true : false} //basic end checking, if there are less than the page lengths results there are no more pages
           onClick={() => {
             console.log("next page");
             changePage("page", (page + 1).toString());
@@ -57,12 +47,16 @@ const BrowseGames = () => {
           next page
         </button>
       </Group>
-      {data.map(
+      {games.map(
         ({ id, name, cover, genres, themes, summary, rating }: Game) => (
           <MediaSummary
             key={id}
             id={id}
-            image={cover.url}
+            image={
+              cover?.url
+                ? "https:" + IGDB_Image_Helper(cover?.url, "cover_big")
+                : "/images/notFound.jpg"
+            }
             title={name}
             genres={genres}
             themes={themes}
