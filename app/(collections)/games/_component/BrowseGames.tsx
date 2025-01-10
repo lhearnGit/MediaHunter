@@ -48,7 +48,16 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
         </button>
       </Group>
       {games.map(
-        ({ id, name, cover, genres, themes, summary, rating }: Game) => (
+        ({
+          id,
+          name,
+          cover,
+          genres,
+          themes,
+          summary,
+          rating,
+          rating_count,
+        }: Game) => (
           <MediaSummary
             key={id}
             id={id}
@@ -62,6 +71,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
             themes={themes}
             summary={summary}
             rating={round(rating, 1)}
+            rating_count={rating_count}
             pagePath="games"
           />
         )
