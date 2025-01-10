@@ -5,7 +5,7 @@ import classes from "./episodes.module.css";
 import { Episode } from "@/lib/entities/TMDB";
 import EpisodeDetails from "./EpisodeDetails";
 
-export default function episodesMenu({ episodes }: { episodes: Episode[] }) {
+export default function EpisodesMenu({ episodes }: { episodes: Episode[] }) {
   const [rootRef, setRootRef] = useState<HTMLDivElement | null>(null);
   const [controlsRefs, setControlsRefs] = useState<
     Record<string, HTMLButtonElement | null>
