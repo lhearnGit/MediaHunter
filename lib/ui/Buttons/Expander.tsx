@@ -1,5 +1,5 @@
 "use client";
-import { Button, Group, Text, Collapse, Box, Space } from "@mantine/core";
+import { Box, Button, Collapse, Group } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ReactNode } from "react";
 
