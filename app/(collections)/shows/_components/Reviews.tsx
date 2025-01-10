@@ -32,9 +32,8 @@ function OrderReviews(
       (review: Review) => review.author_details.rating != null
     );
   else filteredReviews = reviews;
-  let order: "asc" | "desc" = selectedOrder ? "asc" : "desc";
+  const order: "asc" | "desc" = selectedOrder ? "asc" : "desc";
 
-  console.log(filteredReviews);
   if (option == "date") {
     return OrderReviewsByDate(filteredReviews, order);
   } else {
