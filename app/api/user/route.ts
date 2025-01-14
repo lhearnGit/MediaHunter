@@ -3,15 +3,6 @@ const prisma = new PrismaClient();
 
 import { NextRequest, NextResponse } from "next/server";
 
-//get all users
-export async function GET() {
-  const user = await prisma.user.findMany();
-
-  if (!user) return NextResponse.json({ status: 404 });
-
-  return NextResponse.json(user, { status: 200 });
-}
-
 export async function POST(request: NextRequest) {
   const body = await request.json();
   //validate body
