@@ -1,6 +1,6 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
-import { Group } from "@mantine/core";
+import { Button, Group } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -28,7 +28,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
   return (
     <div>
       <Group>
-        <button
+        <Button
           disabled={query.get("page") == "1" ? true : false}
           onClick={() => {
             console.log("prev page");
@@ -36,8 +36,8 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
           }}
         >
           prev page
-        </button>
-        <button
+        </Button>
+        <Button
           disabled={games.length < page_length ? true : false} //basic end checking, if there are less than the page lengths results there are no more pages
           onClick={() => {
             console.log("next page");
@@ -45,7 +45,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
           }}
         >
           next page
-        </button>
+        </Button>
       </Group>
       {games.map(
         ({

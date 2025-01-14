@@ -51,7 +51,7 @@ export const MediaSummary = ({
           alt="no image found"
         />
       </GridCol>
-      <GridCol span={5}>
+      <GridCol span={7}>
         <Group pb={10}>
           {themes &&
             themes.map((theme: Theme) => (
