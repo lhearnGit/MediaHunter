@@ -25,7 +25,7 @@ export async function fetchGameDetails(id: number) {
       
       involved_companies.company.url,involved_companies.company.logo.url, involved_companies.developer, involved_companies.publisher, involved_companies.company.name,
       
-      
+      artworks.id,artworks.height,artworks.width,artworks.url,
       dlcs.id, dlcs.name,dlcs.cover.url, dlcs.slug, dlcs.total_rating, dlcs.total_rating_count,
       similar_games.id, similar_games.cover.url;
       where id=${id};`,
@@ -50,7 +50,6 @@ export async function fetchGameDetails(id: number) {
     dlcs,
   } = await IGDB_Fetch_Details<Game>(request);
 
-  console.log(dlcs);
   return {
     cover,
     name,

@@ -195,7 +195,7 @@ const ReleaseDates = ({}: {}) => {
       <Text size="lg">Releases</Text>
       <Group justify="space-between">
         {releases.map((release: number) => (
-          <p>{release}</p>
+          <p key={release}>{release}</p>
         ))}
       </Group>
     </Stack>
