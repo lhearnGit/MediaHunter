@@ -14,14 +14,7 @@ datasource db {
   url      = env("MONGO_URI")
 }
 
-
-
-
-
-
 //ACCOUNTS
-
-
 
 model User {
   id            String          @id @default(auto()) @map("_id") @db.ObjectId
@@ -39,28 +32,18 @@ model User {
 
   //User Content 
 
-  bookIDs     String[] @db.ObjectId
-  readingList Book[]   @relation(fields: [bookIDs], references: [id])
+  gameIDs String[]     @db.ObjectId
+  games   Igdb_Games[] @relation(fields: [gameIDs], references: [pid]) //use pid, check comment @ Igdb_Games model for explaination
 
-  gameIDs     String[] @db.ObjectId
-  games Igdb_Games[]  @relation(fields: [gameIDs], references: [pid])//use pid, check comment @ Igdb_Games model for explaination
-  
-  
-  tvShowIDs     String[] @db.ObjectId
-  tvShows Shows[]  @relation(fields: [tvShowIDs], references: [pid])//use pid, check comment @ TMDB_TV model for explaination
-  
-  movieIDs     String[] @db.ObjectId
-  movies Movies[]  @relation(fields: [movieIDs], references: [pid])//use pid, check comment @ TMDB_Movies model for explaination
+  tvShowIDs String[] @db.ObjectId
+  tvShows   Shows[]  @relation(fields: [tvShowIDs], references: [pid]) //use pid, check comment @ TMDB_TV model for explaination
 
+  movieIDs String[] @db.ObjectId
+  movies   Movies[] @relation(fields: [movieIDs], references: [pid]) //use pid, check comment @ TMDB_Movies model for explaination
 
   //collection of recently viewed games
-  recent_GameIDs Int[] 
-
+  recent_GameIDs Int[]
 }
-
-
-
-
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -120,25 +103,7 @@ model Authenticator {
   @@unique([userId, credentialID])
 }
 
-
-model Igdb_Token {
-
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  access_token String @unique
-  expires_in Int
-  token_type String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-}
-
-
-
-
-
-
 //DATA MODELS
-
 
 //******************* IGDB Models ***********************
 
@@ -148,66 +113,23 @@ model Igdb_Token {
 //pid is ONLY used for QUERYABLE fields that interact with a 3rd Party api that uses an id field for fetching data
 //------------------------------------------------------------------------
 
-
-
 //-----------------------Igdb_Games Model Description ------ 8 / 28 / 2024 ----------------------------
 //Many To Many Games belong to Many Games_Library
 //Many Games_Library  - > Many Games
 //To keep size small, initially only the pid and name of a game will be stored in the DB
 //When the Data is fetched, during User Authentication, the data required will be populated via a bulk GET Request to IGDB
 
-
-
-
-
 //---------------------------------------------------------
 
 model Igdb_Games {
-
-
-  pid String @id @default(auto()) @map("_id") @db.ObjectId
-  id Int @unique //any stored game is unique
+  pid  String  @id @default(auto()) @map("_id") @db.ObjectId
+  id   Int     @unique //any stored game is unique
   name String
-  url String?  //urls can only reference one Object
+  url  String? //urls can only reference one Object
 
   userIds String[] @db.ObjectId
-  users    User[]   @relation(fields: [userIds], references: [id])
-
-
+  users   User[]   @relation(fields: [userIds], references: [id])
 }
-
-
-//Many To Many M Themes - > M Games, M Games - > M Themes
-model Igdb_Theme {
-
- pid String @id @default(auto()) @map("_id") @db.ObjectId 
- id Int @unique
- name String
- slug String
-
-}
-
-//Many To Many M Genres - > M Games, M Games - > M Genres
-model Igdb_Genre {
-
- pid String @id @default(auto()) @map("_id") @db.ObjectId
- id Int @unique 
- name String
- slug String
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 //******************* Shows Models ***********************
 //
@@ -219,115 +141,22 @@ model Igdb_Genre {
 //
 //*******************************************************
 
-
-model Shows{
-
-
-  pid String @id @default(auto()) @map("_id") @db.ObjectId //interalID
-  id Int @unique //any stored TV Show is unique, references TMDB Id
-  name String
+model Shows {
+  pid      String  @id @default(auto()) @map("_id") @db.ObjectId //interalID
+  id       Int     @unique //any stored TV Show is unique, references TMDB Id
+  name     String
   imageUrl String?
 
   userIds String[] @db.ObjectId
-  users    User[]   @relation(fields: [userIds], references: [id])
-
-
+  users   User[]   @relation(fields: [userIds], references: [id])
 }
 
 model Movies {
-
-
-  pid String @id @default(auto()) @map("_id") @db.ObjectId //interalID
-  id Int @unique //any stored Movie is unique, references TMDB Id
+  pid  String @id @default(auto()) @map("_id") @db.ObjectId //interalID
+  id   Int    @unique //any stored Movie is unique, references TMDB Id
   name String
 
   imageUrl String?
-  userIds String[] @db.ObjectId
+  userIds  String[] @db.ObjectId
   users    User[]   @relation(fields: [userIds], references: [id])
-
-
 }
-
-
-
-//******************* Books Models ***********************
-//
-//
-//
-//
-//
-//
-//
-//*******************************************************
-model Book {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  title       String
-  description String
-
-
-  chapters Int?
-
-  authorIds String[] @db.ObjectId
-  authors   Author[] @relation(fields: [authorIds], references: [id]) //Educational Text Books can have more than one Author 
-
-  category categoryType 
-
-  tagIds String[] @db.ObjectId
-
-  tags   Tag[]    @relation(fields: [tagIds], references: [id]) //1 Book can have many tags
-
-  genreIds String[] @db.ObjectId
-  genres   Genre[]  @relation(fields: [genreIds], references: [id]) // 1 Book can have Many Genres
-
-  //many users can read many novels
-  readersIDs String[] @db.ObjectId
-  readers    User[]   @relation(fields: [readersIDs], references: [id])
-}
-
-
-
-
-
-//Many Books, can have Many Genres
-model Genre {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  genre String @unique
-
-  bookIds String[] @db.ObjectId
-  books   Book[]   @relation(fields: [bookIds], references: [id])
-}
-
-
-
-enum categoryType {
-  Book
-  Comic
-  Manga
-  Manhwa
-  Manhua
-}
-
-
-//Many Tags may belong to Many books, Many books may have Many Tags
-model Tag {
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
-  tag String
-
-  bookIds String[] @db.ObjectId
-  books   Book[]   @relation(fields: [bookIds], references: [id])
-}
-
-//While Rare, a Book may have multiple Authors, an author may write multiple Books
-model Author {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-
-  bookIds String[] @db.ObjectId
-  books   Book[]   @relation(fields: [bookIds], references: [id])
-}
-
-
-
-
-
