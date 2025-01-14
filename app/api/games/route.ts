@@ -1,4 +1,5 @@
-import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
+import { Game } from "@/lib/entities/IGDB";
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
@@ -20,7 +21,7 @@ export async function GET(req: NextRequest) {
   where (themes=[1] & genres=[31]);`,
   };
 
-  const games = await IGDB_Fetch(request);
+  const games: Game[] = await IGDB_Fetch(request);
   console.log(request.query);
   return NextResponse.json({ games, status: 200 });
 }

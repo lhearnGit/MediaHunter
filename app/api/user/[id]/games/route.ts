@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client";
+import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 
 import { NextRequest, NextResponse } from "next/server";
+import { Game } from "@/lib/entities/IGDB";
 
 //Get all the game ids for a user, then fetch them from IGDB
 export async function GET({ params }: { params: { id: string } }) {
@@ -44,7 +45,7 @@ export async function GET({ params }: { params: { id: string } }) {
       where id=(${ids});`,
     };
 
-    const games = await IGDB_Fetch(request);
+    const games: Game[] = await IGDB_Fetch(request);
     return NextResponse.json(
       { games: games, recents: user?.recent_GameIDs },
       { status: 200 }
