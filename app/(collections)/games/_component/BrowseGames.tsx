@@ -63,7 +63,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
             id={id}
             image={
               cover?.url
-                ? "https:" + IGDB_Image_Helper(cover?.url, "cover_big")
+                ? IGDB_Image_Helper(cover?.url, "cover_big")
                 : "/images/notFound.jpg"
             }
             title={name}
