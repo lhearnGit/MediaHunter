@@ -9,6 +9,25 @@ export interface Game_Cover {
   cover: { url: string };
 }
 
+export interface DLC {
+  id: number;
+  cover?: { url: string };
+  name: string;
+  total_rating: number;
+  total_rating_count: number;
+}
+export interface Involved_Company {
+  id: number;
+  company: {
+    id: number;
+    name: string;
+    url: string;
+    logo: { url: string };
+  };
+  publisher: boolean;
+  developer: boolean;
+}
+
 export interface Game {
   id: number;
   name: string;
@@ -23,6 +42,11 @@ export interface Game {
   first_release_date: number; //unix date time
   rating: number;
   rating_count: number;
+  aggregated_rating: number;
+  aggregated_rating_count: number;
+  similar_games: Game_Cover[];
+  dlcs: DLC[];
+  involved_companies: Involved_Company[];
 }
 
 export interface Game_Details {
