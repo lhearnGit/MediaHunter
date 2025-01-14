@@ -40,7 +40,16 @@ export const MediaSummary = ({
       </GridCol>
       <GridCol span={4} />
       <GridCol span={1} mr={"xl"}>
-        <Image width={140} height={200} src={image} alt="no image found" />
+        <Image
+          style={{
+            borderRadius: 5,
+            boxShadow: "2px 2px 2px black",
+          }}
+          width={140}
+          height={200}
+          src={image}
+          alt="no image found"
+        />
       </GridCol>
       <GridCol span={5}>
         <Group pb={10}>
