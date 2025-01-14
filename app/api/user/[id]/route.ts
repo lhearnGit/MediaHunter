@@ -5,7 +5,11 @@ import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 import { NextRequest, NextResponse } from "next/server";
 import { Game } from "@/lib/entities/IGDB";
 //get one user
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  console.log(params.id);
   const user = await prisma.user.findUnique({
     where: { id: params.id },
     select: {
@@ -37,14 +41,7 @@ export async function GET({ params }: { params: { id: string } }) {
     const request: IGDB_Request = {
       endpoint: "games",
       query: `fields 
-      id,name,summary,
-      rating,rating_count,
-      first_release_date,
-      cover.url,
-      genres.slug,genres.name,
-      themes.slug,themes.name,
-      platforms.id, platforms.name, platforms.slug, platforms.platform_family.id;
-      
+      id,name,cover.url;
       
       where id=(${ids});`,
     };

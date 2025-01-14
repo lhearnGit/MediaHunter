@@ -1,5 +1,5 @@
+"use client";
 import { Game } from "@/lib/entities/IGDB";
-import { TV } from "@/lib/entities/TMDB";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
@@ -14,15 +14,18 @@ interface ShowResponse {
   imageUrl: string;
 }
 
-async function getUserList(id: string) {
-  return await axios.get("/api/user/" + id);
-}
 export function useProfileList(id: string) {
-  const { data, error, isFetching, isLoading } = useQuery({
+  const {
+    data: profileData,
+    error,
+    isFetching,
+    isLoading,
+  } = useQuery({
     queryKey: [`profileList`],
-    queryFn: () => getUserList(id),
+    queryFn: async () =>
+      await axios.get("/api/user/" + "66d73678a5ae02f237ead4d9"),
   });
-  const profile: UserCollections = data?.data;
+  const profile: UserCollections = profileData?.data;
 
   return { profile, error, isFetching, isLoading };
 }

@@ -17,11 +17,9 @@ export default function ProfileContentGrid({
   path: "tv" | "game" | "movies";
   items: ShowResponse[];
 }) {
-  const { data, status } = useSession();
+  const { data } = useSession();
   if (data == null) return signIn();
-  const { profile, isLoading, isFetching, error } = useProfileList(
-    data.user.id
-  );
+  const { profile, isLoading, isFetching } = useProfileList(data.user.id);
 
   console.log(profile);
   if (isLoading) return <Skeleton />;
