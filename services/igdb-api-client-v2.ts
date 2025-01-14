@@ -34,8 +34,8 @@ export async function IGDB_Fetch<T>(request: IGDB_Request) {
       ...options,
       next: { revalidate: 300 }, //5minute cache
     }).then((res) => {
-      if (res.status == 401) {
-        throw new Error(`${res.status} : ${res.statusText}`);
+      if (!res.ok) {
+        throw new Error(`${res.status} : ${res.statusText} `);
       } else return res.json();
     });
 
@@ -54,6 +54,7 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
 
     const token = await Generate_Token();
 
+    console.log(token.access_token);
     const options = {
       method: "POST",
       headers: {
@@ -68,7 +69,7 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
       ...options,
       next: { revalidate: 300 }, //5minute cache
     }).then((res) => {
-      if (res.status == 401) {
+      if (!res.ok) {
         throw new Error(`${res.status} : ${res.statusText}`);
       } else {
         return res.json();
@@ -92,12 +93,6 @@ async function Generate_Token() {
   if (!process.env.IGDB_CLIENT_SECRET?.toString())
     throw Error("Client ID Error during Authorization ");
   const Client_Secret = process.env.IGDB_CLIENT_SECRET.toString();
-
-  const headers = {
-    client_id: "eazv8jh64u2brqq6uu8wpud0q88hrp",
-    client_secret: Client_Secret,
-    grant_type: `client_credentials`,
-  };
 
   const response: Auth_Token = await fetch(
     `https://id.twitch.tv/oauth2/token?client_id=${Client_Id}&client_secret=${Client_Secret}&grant_type=client_credentials`,
