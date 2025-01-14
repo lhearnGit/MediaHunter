@@ -12,7 +12,10 @@ interface Auth_Token {
 
 const baseUrl = "https://api.igdb.com/v4/";
 
-export async function IGDB_Fetch<T>(request: IGDB_Request) {
+export async function IGDB_Fetch<T>(
+  request: IGDB_Request,
+  cache_timer?: number
+) {
   try {
     if (!process.env.IGDB_CLIENT_ID?.toString())
       throw new Error("Client ID Error during Authorization - Check ENV ");
@@ -32,7 +35,7 @@ export async function IGDB_Fetch<T>(request: IGDB_Request) {
 
     const response: T[] = await fetch(baseUrl + request.endpoint, {
       ...options,
-      next: { revalidate: 300 }, //5minute cache
+      next: { revalidate: cache_timer ? cache_timer : 3600 }, // default 1 hour cache on searches
     }).then((res) => {
       if (!res.ok) {
         throw new Error(`${res.status} : ${res.statusText} `);
