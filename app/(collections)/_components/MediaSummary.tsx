@@ -1,10 +1,8 @@
 "use client";
 import { IGDB_Genre, Theme } from "@/lib/entities/IGDB";
-import addToCollection from "@/lib/hooks/profile/addToCollection";
+import useUpdateCollection from "@/lib/hooks/profile/useUpdateCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { Grid, GridCol, Group, Text } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 interface SummaryProps {
@@ -36,14 +34,10 @@ const MediaSummary = ({
   rating,
   rating_count,
 }: SummaryProps) => {
-  const addToCollection = useMutation({
-    mutationFn: ({ userId, endpoint, data, addTo }: ProfileData) => {
-      return axios.patch("/api/user/" + userId + `/${endpoint}`, {
-        data,
-        addTo,
-      });
-    },
-  });
+  const updateCollection = useUpdateCollection(
+    "66d73678a5ae02f237ead4d9",
+    "games"
+  );
 
   return (
     <Grid columns={9} gutter={"md"} mx={"sm"} m={"md"}>
@@ -89,10 +83,8 @@ const MediaSummary = ({
           <Group>
             <button
               onClick={() => {
-                addToCollection.mutate({
-                  addTo: true,
-                  endpoint: "games",
-                  userId: "66d73678a5ae02f237ead4d9",
+                updateCollection.mutate({
+                  addTo: false,
                   data: { id: id, url: image, name: title },
                 });
               }}
