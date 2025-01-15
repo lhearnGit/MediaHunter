@@ -1,11 +1,10 @@
 "use client";
 import { TMDB_Genre } from "@/lib/entities/TMDB";
+import useUpdateCollection from "@/lib/hooks/profile/useUpdateCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
-import { GridCol, Stack, Box, Group, Image, Text } from "@mantine/core";
+import { Box, GridCol, Group, Image, Stack, Text } from "@mantine/core";
 import MovieDetails from "../../_components/MovieDetails";
-import ProfileActions from "../../../_components/ProfileActions";
-import { Profile_Object_Payload } from "@/lib/entities/DBStorage/Collection_Payload";
 
 export default function DetailsSection({
   budget,
@@ -26,21 +25,26 @@ export default function DetailsSection({
   runtime: number;
   title: string;
 }) {
-  const userId = "66d73678a5ae02f237ead4d9";
-  const endpoint = "movies";
+  const updateCollection = useUpdateCollection(
+    "66d73678a5ae02f237ead4d9",
+    "movies"
+  );
   const image = TMDB_Image_Helper(poster_path, "w780");
-
-  const payload: Profile_Object_Payload = {
-    itemId: id,
-    imageUrl: image,
-    name: title,
-  };
 
   return (
     <GridCol span={4}>
       <Stack bg={"dark"} px={5} py={10}>
         <Image radius="sm" src={image} alt="no img" />
-        <ProfileActions endpoint={endpoint} userId={userId} payload={payload} />
+        <button
+          onClick={() => {
+            updateCollection.mutate({
+              addTo: false,
+              data: { id: Number(id), url: image, name: title },
+            });
+          }}
+        >
+          Add To Collection
+        </button>
         <Box>
           <Text size="lg">Genres</Text>
           <Group>
