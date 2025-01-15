@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, User } from "@prisma/client";
 const prisma = new PrismaClient();
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
 
@@ -6,7 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { Game } from "@/lib/entities/IGDB";
 
 //Get all the game ids for a user, then fetch them from IGDB
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const user = await prisma.user.findUnique({
     where: { id: params.id },
     select: {
@@ -17,6 +20,7 @@ export async function GET({ params }: { params: { id: string } }) {
 
   let ids = "";
   user?.games.forEach((game, index) => {
+    //used to format querystring
     if (index + 1 == user.games.length) {
       ids = ids + game.id;
     } else {
@@ -32,16 +36,11 @@ export async function GET({ params }: { params: { id: string } }) {
   else {
     const request: IGDB_Request = {
       endpoint: "games",
-      query: `fields 
-      id,name,summary,
-      rating,rating_count,
-      first_release_date,
-      cover.url,
-      genres.slug,genres.name,
-      themes.slug,themes.name,
-      platforms.id, platforms.name, platforms.slug, platforms.platform_family.id;
-      
-      
+      query: `
+      fields 
+        id,
+        name,
+        cover.url;
       where id=(${ids});`,
     };
 
@@ -72,93 +71,94 @@ the component that triggers this action will not be generated
 
 
 
-  RETURNS UPDATED LIST
 
 
 
 */
 
 export async function PATCH(
-  request: NextRequest,
+  req: NextRequest,
   { params }: { params: { id: string } } //validate ID Params in middleware
 ) {
-  const body = await request.json();
-  const { game, options } = body;
+  const body = await req.json();
+  const { data: game, addTo } = body; //aliasing data:game for clarity
+  console.log(addTo);
 
-  const exists = await prisma.user.findFirst({ where: { id: params.id } });
-  if (!exists) return NextResponse.json({ status: 404 });
-  if (options) {
+  const user = await prisma.user.findFirst({
+    where: { id: params.id },
+    select: { recent_GameIDs: true, id: true },
+  });
+  if (!user) return NextResponse.json({ status: 404 });
+  if (!addTo) {
+    //if addTo is false, remove the game from the list
+    console.log("removing...");
     //removes a game
-    const user = await prisma.user.update({
+    await prisma.user.update({
       where: { id: params.id },
       data: {
         games: {
           disconnect: { id: game.id },
         },
       },
-      select: {
-        name: true,
-        games: true,
-      },
     });
 
     return NextResponse.json({
-      user,
+      status: 200,
     });
-  }
-
-  const user = await prisma.user
-    .update({
-      where: {
-        id: params.id,
-      },
-      data: {
-        games: {
-          connectOrCreate: {
-            where: { id: game.id }, //connect to this game
-            create: {
-              //or create this game
-              id: game.id,
-              name: game.name,
-              url: game.url,
+  } else {
+    await prisma.user
+      .update({
+        where: {
+          id: params.id,
+        },
+        data: {
+          games: {
+            connectOrCreate: {
+              where: { id: game.id }, //connect to this game
+              create: {
+                //or create this game if not stored
+                id: game.id,
+                name: game.name,
+                url: game.url,
+              },
             },
           },
         },
-      },
-
-      select: {
-        games: { select: { name: true, id: true } },
-      },
-    })
-    .then(async () => {
-      //after a game is connected OR created, update the recent list.
-      await updateRecents(params.id, game.id);
-    });
-
-  return NextResponse.json({ user }, { status: 200 });
+      })
+      .then(async () => {
+        //after a game is connected OR created, update the recent list.
+        await updateRecents({
+          userId: user.id,
+          recent_GameIDs: user.recent_GameIDs,
+          gameId: game.id,
+        });
+      });
+    return NextResponse.json({ status: 200 });
+  }
 }
 
-async function updateRecents(userId: string, gameId: number) {
-  const user = await prisma.user.findFirst({
-    where: { id: userId },
-    select: { recent_GameIDs: true },
-  });
-  const recent_Games = user?.recent_GameIDs;
+async function updateRecents({
+  userId,
+  recent_GameIDs,
+  gameId,
+}: {
+  userId: string;
+  recent_GameIDs: number[];
+  gameId: number;
+}) {
+  const recent_Games = recent_GameIDs;
   console.log(recent_Games);
 
   //if id is NOT in array, add it
 
   if (!recent_Games?.find((id) => id == gameId)) {
     //prevent duplicates
-    //recent_Games?.push(gameId);
 
     //if length > 5 remove first, push
     if (recent_Games?.length == 5) {
-      console.log("max length");
       const newRecent = recent_Games.slice(1, 5);
-      console.log(" sliced " + newRecent);
+
       newRecent.push(gameId);
-      console.log(" Pushed " + newRecent);
 
       await prisma.user.update({
         where: { id: userId },
@@ -180,6 +180,4 @@ async function updateRecents(userId: string, gameId: number) {
       return recent_Games; //assume success
     }
   }
-
-  console.log(recent_Games);
 }

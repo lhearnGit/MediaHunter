@@ -1,12 +1,14 @@
 "use client";
 import { IGDB_Genre, Theme } from "@/lib/entities/IGDB";
+import addToCollection from "@/lib/hooks/profile/addToCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
-
 import { Grid, GridCol, Group, Text } from "@mantine/core";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 interface SummaryProps {
-  id: number | string;
+  id: number;
   title: string;
   image: string;
   genres: IGDB_Genre[];
@@ -16,7 +18,14 @@ interface SummaryProps {
   pagePath: string;
   summary: string;
 }
-export const MediaSummary = ({
+interface ProfileData {
+  userId: string;
+  endpoint: "games" | "movies" | "shows";
+  data: { id: number; name: string; url: string };
+  addTo: boolean;
+}
+
+const MediaSummary = ({
   id,
   title,
   image,
@@ -27,6 +36,15 @@ export const MediaSummary = ({
   rating,
   rating_count,
 }: SummaryProps) => {
+  const addToCollection = useMutation({
+    mutationFn: ({ userId, endpoint, data, addTo }: ProfileData) => {
+      return axios.patch("/api/user/" + userId + `/${endpoint}`, {
+        data,
+        addTo,
+      });
+    },
+  });
+
   return (
     <Grid columns={9} gutter={"md"} mx={"sm"} m={"md"}>
       <GridCol span={5}>
@@ -69,6 +87,18 @@ export const MediaSummary = ({
       <GridCol span={6}>
         <Group justify="flex-end">
           <Group>
+            <button
+              onClick={() => {
+                addToCollection.mutate({
+                  addTo: true,
+                  endpoint: "games",
+                  userId: "66d73678a5ae02f237ead4d9",
+                  data: { id: id, url: image, name: title },
+                });
+              }}
+            >
+              Add To Collection
+            </button>
             <StyledBadges
               label={`ratings ${rating_count}`}
               color={rating > 75 ? "green" : "red"}
@@ -86,3 +116,5 @@ export const MediaSummary = ({
     </Grid>
   );
 };
+
+export default MediaSummary;

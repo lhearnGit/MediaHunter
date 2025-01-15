@@ -4,8 +4,8 @@ import { Button, Group, Text } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import { MediaSummary } from "../../_components/MediaSummary";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
+import MediaSummary from "../../_components/MediaSummary";
 
 const BrowseGames = ({ games }: { games: Game[] }) => {
   const searchParams = useSearchParams();
