@@ -16,12 +16,6 @@ interface SummaryProps {
   pagePath: string;
   summary: string;
 }
-interface ProfileData {
-  userId: string;
-  endpoint: "games" | "movies" | "shows";
-  data: { id: number; name: string; url: string };
-  addTo: boolean;
-}
 
 const MediaSummary = ({
   id,
