@@ -1,4 +1,4 @@
-import { Poster } from "@/lib/entities/TMDB";
+import Poster from "@/lib/entities/Poster";
 import { Movie } from "@/lib/entities/TMDB/Movie";
 import { TMDB_Api_Client } from "@/services/tmdb-api-client";
 import _ from "lodash";
@@ -16,8 +16,8 @@ export async function TopFive(endpoint: string) {
     .map((movie: Movie) => {
       const poster: Poster = {
         id: movie.id,
-        title: movie.title,
-        image: movie.poster_path,
+        name: movie.title,
+        imageUrl: movie.poster_path,
       };
 
       return poster;
