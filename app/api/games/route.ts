@@ -37,18 +37,18 @@ export async function POST(req: NextRequest) {
 }
 
 async function postNewGame(id: number, name: string, url?: string) {
-  const game = await prisma.igdb_Games.findUnique({
+  const game = await prisma.games.findUnique({
     where: { id: id },
     select: { pid: true },
   });
   //  console.log(game);
   //if the game entry is not saved, create it.
   if (!game) {
-    const newGame = await prisma.igdb_Games.create({
+    const newGame = await prisma.games.create({
       data: {
         id: id,
         name: name,
-        url: url,
+        imageUrl: url,
       },
       select: {
         pid: true,

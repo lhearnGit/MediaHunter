@@ -33,7 +33,7 @@ model User {
   //User Content 
 
   gameIDs String[]     @db.ObjectId
-  games   Igdb_Games[] @relation(fields: [gameIDs], references: [pid]) //use pid, check comment @ Igdb_Games model for explaination
+  games   Games[] @relation(fields: [gameIDs], references: [pid]) //use pid, check comment @ Igdb_Games model for explaination
 
   tvShowIDs String[] @db.ObjectId
   tvShows   Shows[]  @relation(fields: [tvShowIDs], references: [pid]) //use pid, check comment @ TMDB_TV model for explaination
@@ -113,7 +113,7 @@ model Authenticator {
 //pid is ONLY used for QUERYABLE fields that interact with a 3rd Party api that uses an id field for fetching data
 //------------------------------------------------------------------------
 
-//-----------------------Igdb_Games Model Description ------ 8 / 28 / 2024 ----------------------------
+//-----------------------Games Model Description ------ 8 / 28 / 2024 ----------------------------
 //Many To Many Games belong to Many Games_Library
 //Many Games_Library  - > Many Games
 //To keep size small, initially only the pid and name of a game will be stored in the DB
@@ -121,11 +121,11 @@ model Authenticator {
 
 //---------------------------------------------------------
 
-model Igdb_Games {
+model Games {
   pid  String  @id @default(auto()) @map("_id") @db.ObjectId
   id   Int     @unique //any stored game is unique
   name String
-  url  String? //urls can only reference one Object
+  imageUrl  String? //urls can only reference one Object
 
   userIds String[] @db.ObjectId
   users   User[]   @relation(fields: [userIds], references: [id])

@@ -1,9 +1,9 @@
-import { PrismaClient, User } from "@prisma/client";
-const prisma = new PrismaClient();
 import { IGDB_Fetch, IGDB_Request } from "@/services/igdb-api-client-v2";
+import { PrismaClient } from "@prisma/client";
+const prisma = new PrismaClient();
 
-import { NextRequest, NextResponse } from "next/server";
 import { Game } from "@/lib/entities/IGDB";
+import { NextRequest, NextResponse } from "next/server";
 
 //Get all the game ids for a user, then fetch them from IGDB
 export async function GET(
@@ -119,7 +119,7 @@ export async function PATCH(
                 //or create this game if not stored
                 id: game.id,
                 name: game.name,
-                url: game.url,
+                imageUrl: game.url,
               },
             },
           },
