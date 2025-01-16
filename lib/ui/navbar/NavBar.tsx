@@ -34,6 +34,8 @@ const links = [
   { href: "/", label: "Home" },
   { href: "/games", label: "Games" },
   { href: "/shows", label: "Shows" },
+  { href: "/tv", label: "TV" },
+  { href: "/movies", label: "Movies" },
   { href: "/user", label: "Profile" },
 ];
 const NavBar = () => {
