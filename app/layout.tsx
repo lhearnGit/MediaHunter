@@ -8,7 +8,7 @@ import { theme } from "@/lib/theme";
 import { Footer } from "@/lib/ui/Sections/Footer/Footer";
 import AuthProvider from "../providers/Provider";
 import Providers from "@/providers/QueryClientProvider";
-
+import classes from "./layout.module.css";
 export const metadata = {
   title: "My Mantine app",
   description: "I have followed setup instructions carefully",
@@ -28,9 +28,11 @@ export default function RootLayout({
         <Providers>
           <AuthProvider>
             <MantineProvider defaultColorScheme="dark" theme={theme}>
-              <NavBar />
-              <Container size={"responsive"}>{children}</Container>
-              <Footer />
+              <div className={classes.container}>
+                <NavBar />
+                {children}
+                <Footer />
+              </div>
             </MantineProvider>
           </AuthProvider>
         </Providers>

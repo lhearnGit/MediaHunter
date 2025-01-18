@@ -6,8 +6,11 @@ import {
   Container,
   SimpleGrid,
   rem,
+  Group,
+  Stack,
+  Grid,
 } from "@mantine/core";
-import { IconGauge, IconUser, IconLock } from "@tabler/icons-react";
+import { IconGauge, IconUser, IconLock, Icon123 } from "@tabler/icons-react";
 import classes from "./features.module.css";
 
 export const FeatureData = [
@@ -26,6 +29,9 @@ export const FeatureData = [
     title: "Shows",
     description: "Shows Description",
   },
+];
+
+export const AppFeatureData = [
   {
     icon: IconUser,
     title: "Profiles",
@@ -38,6 +44,12 @@ export const FeatureData = [
     title: "Authentication & Authorization",
     description:
       "Using OAuth via AuthJs quickly make and maintain your account using your gmail account",
+  },
+  {
+    icon: Icon123,
+    title: "Using NextJS",
+    description:
+      "using NextJS to efficiently handle images and fetching on the server",
   },
 ];
 
@@ -67,21 +79,48 @@ export function Features() {
   const features = FeatureData.map((feature, index) => (
     <Feature {...feature} key={index} />
   ));
+  const appFeatures = AppFeatureData.map((feature, index) => (
+    <Feature {...feature} key={index} />
+  ));
 
   return (
-    <Container className={classes.wrapper}>
-      <Title className={classes.title}>Discover Media</Title>
-
-      <Container size={560} p={0}></Container>
-
-      <SimpleGrid
-        mt={60}
-        cols={{ base: 1, sm: 2, md: 3 }}
-        spacing={{ base: "xl", md: 50 }}
-        verticalSpacing={{ base: "xl", md: 50 }}
-      >
-        {features}
-      </SimpleGrid>
-    </Container>
+    <div className={classes.wrapper}>
+      <Grid columns={12}>
+        <Grid.Col className={classes.featureWrapper} offset={1} span={5}>
+          <Title className={classes.title}>Discover Media</Title>
+          <SimpleGrid
+            mt={60}
+            cols={{ base: 1 }}
+            spacing={{ base: "xl", md: 50 }}
+            verticalSpacing={{ base: "xl", md: 50 }}
+          >
+            {features}
+          </SimpleGrid>
+        </Grid.Col>
+        <Grid.Col className={classes.featureWrapper} span={5}>
+          <Title className={classes.title}>Application Features</Title>
+          <SimpleGrid
+            mt={60}
+            cols={{ base: 1 }}
+            spacing={{ base: "xl", md: 50 }}
+            verticalSpacing={{ base: "xl", md: 50 }}
+          >
+            {appFeatures}
+          </SimpleGrid>
+        </Grid.Col>
+      </Grid>
+    </div>
   );
 }
+/*
+
+
+ <SimpleGrid
+          mt={60}
+          cols={{ base: 1, sm: 2, md: 3 }}
+          spacing={{ base: "xl", md: 50 }}
+          verticalSpacing={{ base: "xl", md: 50 }}
+        >
+          {features}
+        </SimpleGrid>
+*/
