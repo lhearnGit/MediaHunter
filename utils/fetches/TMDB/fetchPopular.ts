@@ -1,27 +1,22 @@
 import Poster from "@/lib/entities/Poster";
-import { Movie } from "@/lib/entities/TMDB";
-import { TMDB_Api_Client } from "@/services/tmdb-api-client";
+import { TMDB_Fetch_Pages } from "@/services/tmdb-api-client-v2";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { notFound } from "next/navigation";
 
 export async function fetchPopular(endpoint: "tv" | "movie") {
-  const tmdb_Api_Client = new TMDB_Api_Client("GET");
-  const {
-    results: shows,
-    total_pages,
-    total_results,
-  } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
-    endpoint: `${endpoint}/popular`,
-  });
+  const { results, total_pages, total_results } =
+    await TMDB_Fetch_Pages<Poster>({
+      endpoint: `${endpoint}/popular`,
+    });
 
-  if (!shows) throw notFound();
+  if (!results) throw notFound();
 
-  const posters: Poster[] = shows.map((movie: Movie) => {
+  const posters: Poster[] = results.map((result: Poster) => {
     const poster: Poster = {
-      id: movie.id,
-      name: movie.title,
-      imageUrl: movie.poster_path
-        ? TMDB_Image_Helper(movie.poster_path, "original")
+      id: result.id,
+      name: result.name,
+      imageUrl: result.imageUrl
+        ? TMDB_Image_Helper(result.imageUrl, "original")
         : "/images/notfound.jpg",
     };
 

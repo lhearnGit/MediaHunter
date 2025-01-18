@@ -1,12 +1,11 @@
 import Poster from "@/lib/entities/Poster";
 import { Movie } from "@/lib/entities/TMDB/Movie";
-import { TMDB_Api_Client } from "@/services/tmdb-api-client";
+import { TMDB_Fetch_Pages } from "@/services/tmdb-api-client-v2";
 import _ from "lodash";
 import { notFound } from "next/navigation";
 
 export async function TopFive(endpoint: string) {
-  const tmdb_Api_Client = new TMDB_Api_Client("GET");
-  const { results: top_rated } = await tmdb_Api_Client.TMDB_Fetch_Pages<Movie>({
+  const { results: top_rated } = await TMDB_Fetch_Pages<Movie>({
     endpoint: endpoint,
   });
   if (!top_rated) throw notFound();
