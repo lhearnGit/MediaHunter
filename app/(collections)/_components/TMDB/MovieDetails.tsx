@@ -1,5 +1,4 @@
-import { Box, Group, Stack, Title, Text } from "@mantine/core";
-import React from "react";
+import { Box, Stack, Text } from "@mantine/core";
 
 const MovieDetails = ({
   release_date,

@@ -8,7 +8,7 @@ import {
   MainSection,
   CastSection,
   DetailsSection,
-} from "../../shows/tv/_components/Sections";
+} from "../_components/Sections";
 
 interface TVSeriesDetails {
   id: number;

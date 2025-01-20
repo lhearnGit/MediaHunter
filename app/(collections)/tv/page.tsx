@@ -1,5 +1,5 @@
 import Poster from "@/lib/entities/Poster";
-import ImageLink from "@/lib/ui/Card/ImageLink";
+import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import PageHandler from "@/lib/ui/PageHandler";
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";

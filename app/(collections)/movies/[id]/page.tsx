@@ -18,8 +18,8 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import CastGrid from "../../shows/_components/Cast/CastGrid";
-import Reviews from "../../shows/_components/Reviews";
+import CastGrid from "../../_components/TMDB/Cast/CastGrid";
+import Reviews from "../../_components/TMDB/Reviews";
 import DetailsSection from "../../shows/movies/_components/DetailsSection";
 
 const append = "append_to_response=credits,reviews";
