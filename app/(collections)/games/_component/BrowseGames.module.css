@@ -1,0 +1,7 @@
+.wrapper {
+  max-width: 90%;
+  margin: auto;
+  padding-bottom: calc(var(--mantine-spacing-xl));
+  padding-top: calc(var(--mantine-spacing-xl));
+  border-radius: 8px;
+}

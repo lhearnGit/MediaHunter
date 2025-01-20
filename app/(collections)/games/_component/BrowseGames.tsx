@@ -1,12 +1,13 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
-import { Button, Group, Text } from "@mantine/core";
+import { Button, Grid, Group, SimpleGrid, Text } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
 import MediaSummary from "../../_components/MediaSummary";
 
+import classes from "./BrowseGames.module.css";
 const BrowseGames = ({ games }: { games: Game[] }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -26,36 +27,37 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
   useEffect(() => {}, [searchParams]);
 
   return (
-    <div>
-      {games.map(
-        ({
-          id,
-          name,
-          cover,
-          genres,
-          themes,
-          summary,
-          rating,
-          rating_count,
-        }: Game) => (
-          <MediaSummary
-            key={id}
-            id={id}
-            image={
-              cover?.url
-                ? IGDB_Image_Helper(cover?.url, "cover_big")
-                : "/images/notFound.jpg"
-            }
-            title={name}
-            genres={genres}
-            themes={themes}
-            summary={summary}
-            rating={round(rating, 1)}
-            rating_count={rating_count}
-            pagePath="games"
-          />
-        )
-      )}
+    <div className={classes.wrapper}>
+      <SimpleGrid cols={{ base: 1, xl: 3 }}>
+        {games.map(
+          ({
+            id,
+            name,
+            cover,
+            genres,
+            themes,
+            summary,
+            rating,
+            rating_count,
+          }: Game) => (
+            <MediaSummary
+              key={id}
+              id={id}
+              image={
+                cover?.url
+                  ? IGDB_Image_Helper(cover?.url, "cover_big")
+                  : "/images/notFound.jpg"
+              }
+              title={name}
+              genres={genres}
+              themes={themes}
+              summary={summary}
+              rating={round(rating, 1)}
+              rating_count={rating_count}
+            />
+          )
+        )}
+      </SimpleGrid>
       <Group justify="center">
         <Button
           disabled={query.get("page") == "1" ? true : false}
