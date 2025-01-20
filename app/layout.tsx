@@ -28,11 +28,9 @@ export default function RootLayout({
         <Providers>
           <AuthProvider>
             <MantineProvider defaultColorScheme="dark" theme={theme}>
-              <div className={classes.container}>
-                <NavBar />
-                {children}
-                <Footer />
-              </div>
+              <NavBar />
+              <div className={classes.container}>{children}</div>
+              <Footer />
             </MantineProvider>
           </AuthProvider>
         </Providers>
