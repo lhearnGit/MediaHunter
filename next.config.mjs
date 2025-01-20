@@ -6,6 +6,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "**.igdb.com/**",
       },
+      {
+        protocol: "https",
+        hostname: "**.tmdb.org/**",
+      },
     ],
   },
 };
