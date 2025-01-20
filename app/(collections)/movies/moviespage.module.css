@@ -1,0 +1,11 @@
+.cardContainer {
+  flex-flow: row;
+  text-align: center;
+
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.heading {
+  text-align: center;
+}

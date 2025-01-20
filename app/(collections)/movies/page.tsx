@@ -1,8 +1,13 @@
 import Poster from "@/lib/entities/Poster";
-import ImageLink from "@/lib/ui/Card/ImageLink";
+import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import PageHandler from "@/lib/ui/PageHandler";
+import {
+  fetch_TMDB_Countries,
+  fetch_TMDB_Genres,
+} from "@/utils/fetches/TMDB/fetchConfigs";
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
+import classes from "./moviespage.module.css";
 const MoviesGalleryPage = async ({
   searchParams,
 }: {
@@ -23,18 +28,21 @@ const MoviesGalleryPage = async ({
     country: params.get("country"),
   });
 
+  const genres = await fetch_TMDB_Genres("movie");
+  const countries = await fetch_TMDB_Countries();
   const { total_pages, posters } = await fetchPosters("movie", searchString); //initial data
 
   return (
-    <div>
-      <h1>Movies Gallery Page</h1>
-      <div>
+    <div className={classes.wrapper}>
+      <div>Param Container</div>
+      <h1 className={classes.heading}>Movies Gallery Page</h1>
+      <div className={classes.cardContainer}>
         {posters.map((poster: Poster) => (
           <ImageLink
-            pathname={"movies"}
-            key={poster.id}
+            height={360}
+            pathname="movies"
             poster={poster}
-            height={300}
+            key={poster.id}
           />
         ))}
       </div>
