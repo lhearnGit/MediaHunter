@@ -4,10 +4,17 @@ export interface IGDB_Request {
   endpoint: string;
   query: string;
 }
+
 interface Auth_Token {
   access_token: string;
   expires_in: number;
   token_type: "bearer";
+}
+
+interface IGDB_Error {
+  title: string;
+  status: number;
+  cause?: string;
 }
 
 const baseUrl = "https://api.igdb.com/v4/";
@@ -36,16 +43,21 @@ export async function IGDB_Fetch<T>(
     const response: T[] = await fetch(baseUrl + request.endpoint, {
       ...options,
       next: { revalidate: cache_timer ? cache_timer : 3600 }, // default 1 hour cache on searches
-    }).then((res) => {
+    }).then(async (res) => {
       if (!res.ok) {
-        throw new Error(`${res.status} : ${res.statusText} `);
+        const err: [IGDB_Error] = await res.json();
+        throw new Error(
+          `\r\nStatus : ${err[0].status}  -  \r\nTitle:  \r\nCause:  ${
+            err[0]?.cause ? `Cause - ${err[0].cause}` : `No Cause Returned`
+          }\r\n`
+        );
       } else return res.json();
     });
 
     return response;
   } catch (error) {
     console.error(error);
-    return [];
+    return notFound();
   }
 }
 
@@ -71,12 +83,15 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
     const response: T[] = await fetch(baseUrl + request.endpoint, {
       ...options,
       next: { revalidate: 300 }, //5minute cache
-    }).then((res) => {
+    }).then(async (res) => {
       if (!res.ok) {
-        throw new Error(`${res.status} : ${res.statusText}`);
-      } else {
-        return res.json();
-      }
+        const err: [IGDB_Error] = await res.json();
+        throw new Error(
+          `\r\nStatus : ${err[0].status}  -  \r\nTitle:  \r\nCause:  ${
+            err[0]?.cause ? `Cause - ${err[0].cause}` : `No Cause Returned`
+          }\r\n`
+        );
+      } else return res.json();
     });
 
     return response[0]; //IGDB always returns an array.
