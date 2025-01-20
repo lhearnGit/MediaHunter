@@ -9,6 +9,7 @@ import {
   Group,
   Stack,
   Grid,
+  GridCol,
 } from "@mantine/core";
 import { IconGauge, IconUser, IconLock, Icon123 } from "@tabler/icons-react";
 import classes from "./features.module.css";
@@ -86,7 +87,7 @@ export function Features() {
   return (
     <div className={classes.wrapper}>
       <Grid columns={12}>
-        <Grid.Col className={classes.featureWrapper} offset={1} span={5}>
+        <Grid.Col className={classes.featureWrapper} offset={1} span={4}>
           <Title className={classes.title}>Discover Media</Title>
           <SimpleGrid
             mt={60}
@@ -97,7 +98,8 @@ export function Features() {
             {features}
           </SimpleGrid>
         </Grid.Col>
-        <Grid.Col className={classes.featureWrapper} span={5}>
+        <GridCol span={1} />
+        <Grid.Col className={classes.featureWrapper} offset={1} span={4}>
           <Title className={classes.title}>Application Features</Title>
           <SimpleGrid
             mt={60}
