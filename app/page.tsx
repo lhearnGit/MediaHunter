@@ -1,6 +1,5 @@
 import BannerCarousel from "@/lib/ui/Carousel/BannerCarousel";
 import { Features } from "@/lib/ui/Sections/Main/features/Features";
-import { Container, Space, Stack } from "@mantine/core";
 
 interface Banner {
   title: string;
@@ -28,11 +27,9 @@ const banners: Banner[] = [
 
 export default function Home() {
   return (
-    <Container size={"xl"}>
-      <Stack>
-        <BannerCarousel banners={banners} />
-        <Features />
-      </Stack>
-    </Container>
+    <div>
+      <BannerCarousel banners={banners} />
+      <Features />
+    </div>
   );
 }
