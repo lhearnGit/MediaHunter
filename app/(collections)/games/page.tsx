@@ -1,7 +1,12 @@
-import { searchGames } from "@/utils/fetches/IGDB/searchGames";
+import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
+import { isValidUrlParam } from "@/utils/zodSchemas/UrlSchema";
+import Link from "next/link";
+import SearchParamContainer from "../_components/SearchParamContainer";
 import BrowseGames from "./_component/BrowseGames";
-import GameParamSection from "./_component/GameParamSection";
 
+import { Game } from "@/lib/entities/IGDB";
+import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
+import classes from "./GamesHomePage.module.css";
 const GamesHome = async ({
   searchParams,
 }: {
@@ -10,28 +15,50 @@ const GamesHome = async ({
   const params = new URLSearchParams();
   if (searchParams) {
     for (const [key, value] of Object.entries(searchParams)) {
-      if (!value) return;
-      else params.append(key, value);
+      //validate key
+
+      let validate = isValidUrlParam.safeParse({ key, value });
+      if (value && validate.success)
+        params.append(validate.data.key, validate.data.value.toString());
     }
   }
-  if (!params.has("page") || params.get("page") == null) {
+  let page: number = 1;
+  if (!params.has("page") || params.get("page") == null || NaN) {
     params.append("page", "1");
+  } else {
+    page = parseInt(params.get("page")!); //null and NaN cases are handled above
   }
 
   const theme = params.get("themes");
   const genre = params.get("genres");
+  let option: string | null = params.has("option")
+    ? params.get("option")
+    : "recent";
+  console.log(params);
+  const games = await IGDB_Fetch<Game>({
+    endpoint: "games",
+    query: setQuery(page, option, genre, theme),
+  });
 
-  const page = parseInt(params.get("page")!); //wont return null, as if the page doesn't have a number it will be set above, does not handle NaN errors - >1a - > failure
-  const page_size = 10;
-
-  const games = await searchGames(page, page_size, genre, theme);
   return (
     <div>
-      <GameParamSection />
-      <br />
-      <br />
-      <br />
-
+      <div className={classes.navbar}>
+        <Link className={classes.navlink} href={`games?option=recent`} replace>
+          Recent Releases
+        </Link>
+        <Link
+          className={classes.navlink}
+          href={`games?option=upcoming`}
+          replace
+        >
+          Upcoming Releases
+        </Link>
+        <Link className={classes.navlink} href={`games`} replace>
+          Clear
+        </Link>
+      </div>
+      <h1>{option} Games</h1>
+      <SearchParamContainer />
       <BrowseGames games={games} />
     </div>
   );

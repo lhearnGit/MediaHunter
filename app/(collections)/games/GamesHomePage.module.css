@@ -1,0 +1,15 @@
+.wrapper {
+  max-width: 90%;
+  margin: auto;
+  padding-bottom: calc(var(--mantine-spacing-xl) * 3);
+}
+
+.navbar {
+  display: flex;
+  background-color: black;
+}
+
+.navlink {
+  margin-right: calc(var(--mantine-spacing-xl) * 3);
+  margin-left: calc(var(--mantine-spacing-xl) * left);
+}
