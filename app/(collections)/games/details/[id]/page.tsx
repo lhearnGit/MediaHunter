@@ -1,5 +1,6 @@
 import { IGDB_Genre, Platform, Theme } from "@/lib/entities/IGDB";
 import { DLC, Game_Cover, Involved_Company } from "@/lib/entities/IGDB/Games";
+import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { fetchGameDetails } from "@/utils/fetches/IGDB/fetchGameDetails";
@@ -86,19 +87,16 @@ const DLCContent = ({ content }: { content: DLC[] }) => {
         {content.map(({ id, name, total_rating, cover }: DLC) => (
           <GridCol key={id} span={1}>
             <Stack>
-              <Image
-                style={{
-                  borderRadius: 5,
-                  boxShadow: "2px 2px 2px black",
-                }}
+              <ImageLink
                 height={160}
-                width={120}
-                src={
-                  cover?.url
+                poster={{
+                  id: id,
+                  name: name,
+                  imageUrl: cover?.url
                     ? IGDB_Image_Helper(cover?.url, "720p")
-                    : "/images/notfound.jpg"
-                }
-                alt="No Image found"
+                    : "images/notfound.jpg",
+                }}
+                pathname="games/details"
               />
               {total_rating ? (
                 <StyledBadges
@@ -206,17 +204,18 @@ const SimilarGames = ({ games }: { games: Game_Cover[] }) => {
     <>
       <Title mb={"lg"}>Similar Games</Title>
       <Group>
-        {games.map(({ id, cover }: Game_Cover) => (
+        {games.map(({ id, cover, name }: Game_Cover) => (
           <Link key={id} href={`/games/${id}`}>
-            <Image
-              style={{
-                borderRadius: 5,
-                boxShadow: "2px 2px 2px black",
-              }}
+            <ImageLink
               height={160}
-              width={120}
-              src={IGDB_Image_Helper(cover.url, "720p")}
-              alt="no image"
+              poster={{
+                id: id,
+                name: name,
+                imageUrl: cover?.url
+                  ? IGDB_Image_Helper(cover?.url, "720p")
+                  : "images/notfound.jpg",
+              }}
+              pathname="games/details"
             />
           </Link>
         ))}
