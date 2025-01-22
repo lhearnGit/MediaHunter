@@ -2,7 +2,6 @@ import Poster from "@/lib/entities/Poster";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
-import Image_Helper from "@/utils/helpers/Image_Helper";
 import classes from "./ImageLink.module.css";
 const ImageLink = ({
   height,
@@ -11,7 +10,7 @@ const ImageLink = ({
 }: {
   height: 160 | 360 | number;
   poster: Poster;
-  pathname: "games" | "movies" | "tv";
+  pathname: "games/details" | "movies" | "tv";
 }) => {
   return (
     <div className={classes.wrapper}>
@@ -24,12 +23,8 @@ const ImageLink = ({
           className={classes.image}
           height={height}
           width={height * (2 / 3)}
-          src={
-            poster.imageUrl
-              ? Image_Helper({ type: "TMDB", url: poster.imageUrl })
-              : "/images/notfound.jpg"
-          }
-          alt="no image"
+          src={poster.imageUrl ? poster.imageUrl : "/images/notfound.jpg"}
+          alt="/images/notfound.jpg"
         />
       </Link>
     </div>
