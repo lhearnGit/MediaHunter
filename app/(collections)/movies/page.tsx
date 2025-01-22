@@ -8,6 +8,7 @@ import {
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
 import classes from "./moviespage.module.css";
+import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 const MoviesGalleryPage = async ({
   searchParams,
 }: {
@@ -41,7 +42,12 @@ const MoviesGalleryPage = async ({
           <ImageLink
             height={360}
             pathname="movies"
-            poster={poster}
+            poster={{
+              ...poster,
+              imageUrl: poster.imageUrl
+                ? TMDB_Image_Helper(poster.imageUrl, "original")
+                : "/images/notfound.jpg",
+            }}
             key={poster.id}
           />
         ))}

@@ -2,6 +2,7 @@ import Poster from "@/lib/entities/Poster";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import PageHandler from "@/lib/ui/PageHandler";
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
+import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
 const TVGalleryPage = async ({
   searchParams,
@@ -31,10 +32,15 @@ const TVGalleryPage = async ({
       <div>
         {posters.map((poster: Poster) => (
           <ImageLink
-            pathname={"tv"}
+            height={360}
+            pathname="tv"
+            poster={{
+              ...poster,
+              imageUrl: poster.imageUrl
+                ? TMDB_Image_Helper(poster.imageUrl, "original")
+                : "/images/notfound.jpg",
+            }}
             key={poster.id}
-            poster={poster}
-            height={300}
           />
         ))}
       </div>
