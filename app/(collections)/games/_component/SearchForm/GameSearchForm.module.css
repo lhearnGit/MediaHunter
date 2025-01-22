@@ -1,0 +1,33 @@
+.wrapper {
+  display: block;
+  flex-grow: 1;
+  background-color: black;
+}
+.formWrapper {
+  background-color: black;
+}
+.grid {
+  background-color: black;
+}
+
+.stack {
+  padding: 10px;
+}
+.subGrid {
+  padding: 10px;
+  margin: 10px;
+  background-color: gray;
+}
+
+.checkBox {
+  align-self: stretch;
+}
+.simpleGrid {
+  justify-content: center;
+  margin: 5px 10px 10px 5px;
+}
+.submit {
+  border-radius: 5px;
+  margin: 10px;
+  float: right;
+}
