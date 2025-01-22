@@ -4,7 +4,7 @@ import useUpdateCollection from "@/lib/hooks/profile/useUpdateCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { Box, GridCol, Group, Image, Stack, Text } from "@mantine/core";
-import MovieDetails from "../../_components/MovieDetails";
+import MovieDetails from "../../_components/TMDB/MovieDetails";
 
 export default function DetailsSection({
   budget,
