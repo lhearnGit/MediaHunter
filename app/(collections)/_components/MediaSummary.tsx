@@ -30,7 +30,7 @@ const MediaSummary = ({
     <Group className={classes.wrapper}>
       <ImageLink
         height={300}
-        pathname="games"
+        pathname="games/details"
         poster={{ id: id, imageUrl: image, name: title }}
       />
       <Stack className={classes.details}>
