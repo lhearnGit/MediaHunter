@@ -1,14 +1,10 @@
 import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
 import { isValidUrlParam } from "@/utils/zodSchemas/UrlSchema";
-import Link from "next/link";
 
 import { Game } from "@/lib/entities/IGDB";
 import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
-import SearchParamContainer from "../../_components/SearchParamContainer";
+import GameSearchContainer from "../../_components/GameSearchContainer";
 import BrowseGames from "../_component/BrowseGames";
-import classes from "../GamesHomePage.module.css";
-import SearchWithButton from "@/lib/ui/Search/SearchWithButton";
-import { Group, Container } from "@mantine/core";
 
 const GameSearchPage = async ({
   searchParams,
@@ -42,42 +38,10 @@ const GameSearchPage = async ({
 
   return (
     <div>
-      <SearchParamContainer />
+      <GameSearchContainer />
       <BrowseGames games={games} />
     </div>
   );
 };
 
 export default GameSearchPage;
-
-type PagePath = {
-  href: string;
-  label: string;
-};
-const links: PagePath[] = [
-  { href: "/games", label: "Games Home" },
-  { href: "/games?option=recent", label: "Recent Releases" },
-  { href: "/games?option=upcoming", label: "Upcoming Releases" },
-  { href: "/games/search", label: "Search" },
-];
-
-interface Props {
-  links: PagePath[];
-}
-const LinkBar = ({ links }: Props) => {
-  "use client";
-
-  return (
-    <Container size="lg">
-      <Group gap={2} visibleFrom="xs" justify="space-between">
-        <Group>
-          {links.map(({ href, label }: PagePath) => (
-            <Link key={label} href={href}>
-              {label}
-            </Link>
-          ))}
-        </Group>
-      </Group>
-    </Container>
-  );
-};
