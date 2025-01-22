@@ -4,12 +4,9 @@
   padding-bottom: calc(var(--mantine-spacing-xl) * 3);
 }
 
-.navbar {
-  display: flex;
-  background-color: black;
-}
-
-.navlink {
-  margin-right: calc(var(--mantine-spacing-xl) * 3);
-  margin-left: calc(var(--mantine-spacing-xl) * left);
+.header {
+  display: block;
+  padding-top: 10px;
+  text-align: left;
+  text-indent: 10%;
 }
