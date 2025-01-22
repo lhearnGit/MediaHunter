@@ -6,7 +6,6 @@
   );
   border-bottom: rem(1px) solid
     light-dark(var(--mantine-color-gray-2), transparent);
-  margin-bottom: rem(60px);
 }
 
 .mainSection {
@@ -87,6 +86,7 @@
     color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
     font-size: var(--mantine-font-size-sm);
     font-weight: 500;
+    transition: background-color 100ms ease;
 
     @mixin hover {
       background-color: light-dark(
@@ -94,5 +94,52 @@
         var(--mantine-color-dark-6)
       );
     }
+  }
+}
+
+.link {
+  display: block;
+  line-height: 1;
+  padding: rem(8px) rem(12px);
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+  transition: background-color 100ms ease;
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-9)
+    );
+  }
+}
+
+.subNav {
+  display: block;
+  flex-grow: 1;
+  max-width: 60%;
+  margin: auto;
+  padding: 10px;
+  align-self: center;
+  justify-content: space-evenly;
+  align-content: center;
+}
+.subNavLink {
+  display: block;
+  line-height: 1;
+  padding: rem(8px) rem(12px);
+  border-radius: var(--mantine-radius-sm);
+  text-decoration: none;
+  color: light-dark(var(--mantine-color-gray-7), var(--mantine-color-dark-0));
+  font-size: var(--mantine-font-size-sm);
+  font-weight: 500;
+
+  @mixin hover {
+    background-color: light-dark(
+      var(--mantine-color-gray-0),
+      var(--mantine-color-dark-6)
+    );
   }
 }

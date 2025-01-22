@@ -1,165 +1,213 @@
 "use client";
-import cx from "clsx";
-import { useState } from "react";
+import { SignIn } from "@/lib/auth/SignIn";
 import {
-  Container,
   Avatar,
-  UnstyledButton,
-  Group,
-  Text,
-  Menu,
   Burger,
+  Container,
+  Group,
+  Menu,
   rem,
-  useMantineTheme,
   Space,
+  Text,
+  UnstyledButton,
+  useMantineTheme,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
-  IconLogout,
-  IconHeart,
-  IconStar,
-  IconMessage,
-  IconSettings,
   IconChevronDown,
+  IconDeviceGamepad2,
+  IconDeviceTv,
+  IconLogout,
+  IconMovie,
+  IconSettings,
 } from "@tabler/icons-react";
+import cx from "clsx";
+import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import classes from "./NavBar.module.css";
-import SearchWithButton from "../Search/SearchWithButton";
-import { useSession } from "next-auth/react";
-import { SignOut } from "@/lib/auth/SignOut";
-import Link from "../Link/Link";
-import { SignIn } from "@/lib/auth/SignIn";
-import { usePathname } from "next/navigation";
+import { gameSubLinks, mainPages, movieSubLinks, PagePath } from "./SiteLinks";
 
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/games", label: "Games" },
-  { href: "/shows", label: "Shows" },
-  { href: "/tv", label: "TV" },
-  { href: "/movies", label: "Movies" },
-  { href: "/user", label: "Profile" },
-];
 const NavBar = () => {
   const { data, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const theme = useMantineTheme();
+  const [subNavLinks, setSubNavLinks] = useState<PagePath[]>();
+
   const [opened, { toggle }] = useDisclosure(false);
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+  useEffect(() => {
+    //prevents subpages from re-rendering on every state change
+
+    switch (pathname) {
+      case "/games": {
+        gameSubLinks.forEach(({ href }: PagePath) => {
+          if (href == pathname) console.log("equal");
+        });
+        return setSubNavLinks(gameSubLinks);
+      }
+      case "/games/search": {
+        return setSubNavLinks(gameSubLinks);
+      }
+      case "/movies": {
+        return setSubNavLinks(movieSubLinks);
+      }
+      default: {
+        return setSubNavLinks(undefined);
+      }
+    }
+  }, [pathname]);
 
   return (
     <div className={classes.header}>
       <Space h={"md"} />
       <Container className={classes.mainSection} size="xl">
-        <Group justify="right" my={"md"} mx={"lg"}>
-          <Burger opened={opened} onClick={toggle} hiddenFrom="xs" size="sm" />
-          {status == "authenticated" ? (
-            <Menu
-              width={260}
-              position="bottom-end"
-              transitionProps={{ transition: "pop-top-right" }}
-              onClose={() => setUserMenuOpened(false)}
-              onOpen={() => setUserMenuOpened(true)}
-              withinPortal
-            >
-              <Menu.Target>
-                <UnstyledButton
-                  className={cx(classes.user, {
-                    [classes.userActive]: userMenuOpened,
-                  })}
-                >
-                  <Group gap={7}>
-                    <Avatar
-                      src={data?.user.image}
-                      alt={data?.user.name}
-                      radius="xl"
-                      size={"sm"}
-                    />
-                    <Text fw={500} size="lg" lh={1} mr={3}>
-                      {data?.user.name}
-                    </Text>
-                    <IconChevronDown
-                      style={{ width: rem(12), height: rem(12) }}
-                      stroke={1.5}
-                    />
-                  </Group>
-                </UnstyledButton>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  leftSection={
-                    <IconHeart
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.red[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  <Link href={"/user/games"} label="Games" />
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconStar
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.yellow[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  <Link href={"/user/shows"} label="Shows" />
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconMessage
-                      style={{ width: rem(16), height: rem(16) }}
-                      color={theme.colors.blue[6]}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  <Link href={"/user/books"} label="Books" />
-                </Menu.Item>
+        <Group gap={2} visibleFrom="xs" justify="space-between">
+          {mainPages.map(({ href, label }: PagePath) => (
+            <Link className={classes.link} key={label} href={href}>
+              {label}
+            </Link>
+          ))}
+          <div />
+          <Group justify="right" my={"md"} mx={"lg"}>
+            <Burger
+              opened={opened}
+              onClick={toggle}
+              hiddenFrom="xs"
+              size="sm"
+            />
+            {status == "authenticated" ? (
+              <Menu
+                width={260}
+                position="bottom-end"
+                transitionProps={{ transition: "pop-top-right" }}
+                onClose={() => setUserMenuOpened(false)}
+                onOpen={() => setUserMenuOpened(true)}
+                withinPortal
+              >
+                <Menu.Target>
+                  <UnstyledButton
+                    className={cx(classes.user, {
+                      [classes.userActive]: userMenuOpened,
+                    })}
+                  >
+                    <Group gap={7}>
+                      <Avatar
+                        src={data?.user.image}
+                        alt={data?.user.name}
+                        radius="xl"
+                        size={"sm"}
+                      />
+                      <Text fw={500} size="lg" lh={1} mr={3}>
+                        {data?.user.name}
+                      </Text>
+                      <IconChevronDown
+                        style={{ width: rem(12), height: rem(12) }}
+                        stroke={1.5}
+                      />
+                    </Group>
+                  </UnstyledButton>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    className={classes.link}
+                    leftSection={
+                      <IconDeviceGamepad2
+                        style={{ width: rem(16), height: rem(16) }}
+                        color={theme.colors.red[6]}
+                        stroke={1.5}
+                      />
+                    }
+                    onClick={() => {
+                      router.replace("/user/games");
+                    }}
+                  >
+                    My Games
+                  </Menu.Item>
+                  <Menu.Item
+                    className={classes.link}
+                    leftSection={
+                      <IconDeviceTv
+                        style={{ width: rem(16), height: rem(16) }}
+                        color={theme.colors.yellow[6]}
+                        stroke={1.5}
+                      />
+                    }
+                    onClick={() => {
+                      router.replace("/user/shows");
+                    }}
+                  >
+                    My TV Shows
+                  </Menu.Item>
+                  <Menu.Item
+                    className={classes.link}
+                    leftSection={
+                      <IconMovie
+                        style={{ width: rem(16), height: rem(16) }}
+                        color={theme.colors.green[6]}
+                        stroke={1.5}
+                      />
+                    }
+                    onClick={() => {
+                      router.replace("/user/movies");
+                    }}
+                  >
+                    My Movies
+                  </Menu.Item>
 
-                <Menu.Label>Settings</Menu.Label>
-                <Menu.Item
-                  leftSection={
-                    <IconSettings
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  <Link href={"/user/profile"} label="Profile Settings" />
-                </Menu.Item>
+                  <Menu.Label>Settings</Menu.Label>
+                  <Menu.Item
+                    className={classes.link}
+                    leftSection={
+                      <IconSettings
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                    onClick={() => router.replace("/user/profile")}
+                  >
+                    Profile Settings
+                  </Menu.Item>
 
-                <Menu.Item
-                  leftSection={
-                    <IconLogout
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  <SignOut />
-                </Menu.Item>
+                  <Menu.Item
+                    className={classes.link}
+                    leftSection={
+                      <IconLogout
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                        color={theme.colors.red[6]}
+                      />
+                    }
+                    onClick={() => signOut()}
+                  >
+                    Sign Out
+                  </Menu.Item>
 
-                <Menu.Divider />
-              </Menu.Dropdown>
-            </Menu>
-          ) : (
-            <SignIn returnPath={pathname} />
-          )}
+                  <Menu.Divider />
+                </Menu.Dropdown>
+              </Menu>
+            ) : (
+              <SignIn returnPath={pathname} />
+            )}
+          </Group>
         </Group>
       </Container>
-      <Container size="lg">
-        <Group gap={2} visibleFrom="xs" justify="space-between">
-          <Group>
-            {links.map((link) => (
-              <Link key={link.label} href={link.href} label={link.label} />
+      {subNavLinks ? (
+        <Container className={classes.mainSection} size="xl">
+          <Space h={"md"} />
+          <Group grow>
+            {subNavLinks.map(({ href, label }: PagePath) => (
+              <Link className={classes.link} key={label} href={href}>
+                {label}
+              </Link>
             ))}
           </Group>
-          <SearchWithButton />
-        </Group>
-      </Container>
-      <Space h="md" />
+        </Container>
+      ) : (
+        <div />
+      )}
     </div>
   );
 };
