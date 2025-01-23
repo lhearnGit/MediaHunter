@@ -52,7 +52,9 @@ const MoviesGalleryPage = async ({
           />
         ))}
       </div>
-      <PageHandler numPages={total_pages} />
+      <PageHandler
+        numPages={total_pages && total_pages > 500 ? 500 : total_pages} //tmdb pages args cannot exceed page 500
+      />
     </div>
   );
 };
