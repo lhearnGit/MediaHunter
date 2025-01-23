@@ -1,18 +1,23 @@
 "use client";
 import {
-  ThemeIcon,
-  Text,
-  Title,
-  Container,
-  SimpleGrid,
-  rem,
-  Group,
-  Stack,
   Grid,
   GridCol,
+  SimpleGrid,
+  Text,
+  ThemeIcon,
+  Title,
+  rem,
 } from "@mantine/core";
-import { IconGauge, IconUser, IconLock, Icon123 } from "@tabler/icons-react";
+import {
+  Icon123,
+  IconGauge,
+  IconLock,
+  IconProps,
+  IconUser,
+  Icon,
+} from "@tabler/icons-react";
 import classes from "./features.module.css";
+import { ForwardRefExoticComponent, RefAttributes } from "react";
 
 export const FeatureData = [
   {
@@ -55,7 +60,7 @@ export const AppFeatureData = [
 ];
 
 interface FeatureProps {
-  icon: React.FC<any>;
+  icon: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
   title: React.ReactNode;
   description: React.ReactNode;
 }
@@ -114,15 +119,3 @@ export function Features() {
     </div>
   );
 }
-/*
-
-
- <SimpleGrid
-          mt={60}
-          cols={{ base: 1, sm: 2, md: 3 }}
-          spacing={{ base: "xl", md: 50 }}
-          verticalSpacing={{ base: "xl", md: 50 }}
-        >
-          {features}
-        </SimpleGrid>
-*/
