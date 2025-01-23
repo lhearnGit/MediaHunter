@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(params: { id: number }) {
+export async function GET(req: NextRequest, params: { id: number }) {
   const id = params.id;
 
   const show = await prisma.shows.findFirst({

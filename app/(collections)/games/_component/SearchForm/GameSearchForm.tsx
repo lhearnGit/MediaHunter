@@ -29,15 +29,10 @@ const GameSearchForm = ({ genres, themes }: FormData) => {
   const pathname = usePathname();
   const [opened, { toggle }] = useDisclosure(false);
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const { register, handleSubmit } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = ({ genres, themes }) => {
-    let params = new URLSearchParams();
+    const params = new URLSearchParams();
     if (Array.isArray(genres)) {
       params.append("genres", ArrayToCSV(genres));
     } else {

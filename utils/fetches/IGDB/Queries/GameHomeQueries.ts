@@ -41,13 +41,15 @@ export function setQuery(
       return RecentQuery;
     case "upcoming":
       return upComingQuery;
-    case null: {
-      if (!genre && !theme) {
+    case "search": {
+      if (genre || theme) {
         let searchQuery = `
         ${fieldsString}
-        sort rating desc;
+        sort rating_count desc;
         ${paginationString}
-        ${WhereFilter(genre, theme)} `;
+        ${WhereFilter(genre, theme)}`;
+
+        console.log(searchQuery);
         return searchQuery;
       } else return RecentQuery;
     }

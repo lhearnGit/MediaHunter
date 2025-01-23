@@ -61,9 +61,9 @@ const TVDetailsPage = async ({
     networks,
     number_of_seasons,
     poster_path,
-    next_episode_to_air,
+    //    next_episode_to_air,
     last_air_date,
-    in_production,
+    //   in_production,
   } = await fetchDetails<TVSeriesDetails>({ endpoint: "tv", id: params.id });
 
   return (

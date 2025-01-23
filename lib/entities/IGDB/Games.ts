@@ -8,6 +8,12 @@ export interface Game_Cover {
   name: string;
   cover: { url: string };
 }
+export interface Artwork {
+  id: number;
+  height: number;
+  width: number;
+  url: string;
+}
 
 export interface DLC {
   id: number;
@@ -35,6 +41,7 @@ export interface Game {
   storyline?: string;
   cover?: { url: string };
   screenshots?: ScreenShot[];
+  artworks: Artwork[];
   videos?: Video[];
   genres: IGDB_Genre[];
   themes: Theme[];

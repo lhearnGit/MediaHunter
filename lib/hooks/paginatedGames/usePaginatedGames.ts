@@ -13,15 +13,9 @@ const usePaginatedGames = () => {
     const res = await fetch(`/api/infinite?${searchParams}`);
     return res.json();
   };
-  const {
-    data,
-    isLoading,
-    isError,
-    error,
-    isFetching,
-    isPending,
-    isPlaceholderData,
-  } = useQuery<Game[]>({
+  const { data, isLoading, isError, error, isFetching, isPending } = useQuery<
+    Game[]
+  >({
     queryKey: [
       "games",
       {

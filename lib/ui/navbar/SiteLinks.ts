@@ -22,5 +22,5 @@ export const mainPages: PagePath[] = [
   { href: "/games", label: "Games" },
   { href: "/movies", label: "Movies" },
   { href: "/tv", label: "TV" },
-  { href: "/profile", label: "Profile" },
+  { href: "/user", label: "Profile" },
 ];

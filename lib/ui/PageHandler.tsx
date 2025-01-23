@@ -1,30 +1,29 @@
 "use client";
 import { Group, Pagination, Space } from "@mantine/core";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const PageHandler = ({ numPages }: { numPages?: number }) => {
-  const [currentPage, setCurrentPage] = useState(1);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
   const query = new URLSearchParams(searchParams);
+  const [currentPage, setCurrentPage] = useState((): number => {
+    const pageParam = query.get("page");
+
+    if (!pageParam) {
+      query.set("page", "1");
+      return 1;
+    } else {
+      return parseInt(query.get("page")!); //use zod to ensure a number is entered
+    }
+  });
 
   const handlePageChange = (value: number) => {
     query.set("page", value.toString());
     router.replace(`${pathname}?${query.toString()}`);
     setCurrentPage(value);
   };
-
-  useEffect(() => {
-    const pageParam = query.get("page");
-    if (!pageParam) {
-      query.set("page", "1");
-      setCurrentPage(1);
-    } else {
-      setCurrentPage(parseInt(query.get("page")!));
-    }
-  }, []);
 
   return (
     <>

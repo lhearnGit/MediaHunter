@@ -9,7 +9,6 @@ const GameSearchContainer = async () => {
 
   return (
     <div className={classses.wrapper}>
-      <h1 className={classses.title}>Search for Games</h1>
       <div className={classses.contentArea}>
         <GameSearchForm genres={genres} themes={themes} />
       </div>

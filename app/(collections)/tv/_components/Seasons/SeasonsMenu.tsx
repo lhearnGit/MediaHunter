@@ -1,5 +1,5 @@
 "use client";
-import { act, useState } from "react";
+import { useState } from "react";
 import { FloatingIndicator, UnstyledButton } from "@mantine/core";
 import classes from "./seasonsfloating.module.css";
 import { Season } from "@/lib/entities/TMDB";

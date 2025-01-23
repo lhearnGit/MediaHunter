@@ -1,7 +1,7 @@
 "use client";
 import { IGDB_Genre, Theme } from "@/lib/entities/IGDB";
 import StyledBadges from "@/lib/ui/StyledBadges";
-import { GridCol, Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import classes from "./MediaSummary.module.css";

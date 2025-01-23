@@ -1,10 +1,10 @@
 import Poster from "@/lib/entities/Poster";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import PageHandler from "@/lib/ui/PageHandler";
-import {
+/*import {
   fetch_TMDB_Countries,
   fetch_TMDB_Genres,
-} from "@/utils/fetches/TMDB/fetchConfigs";
+} from "@/utils/fetches/TMDB/fetchConfigs";*/
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
 import classes from "./moviespage.module.css";
@@ -29,8 +29,8 @@ const MoviesGalleryPage = async ({
     country: params.get("country"),
   });
 
-  const genres = await fetch_TMDB_Genres("movie");
-  const countries = await fetch_TMDB_Countries();
+  //const genres = await fetch_TMDB_Genres("movie");
+  //const countries = await fetch_TMDB_Countries();
   const { total_pages, posters } = await fetchPosters("movie", searchString); //initial data
 
   return (

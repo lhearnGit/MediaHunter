@@ -15,7 +15,6 @@ const SearchParamButton = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
-
   const currentParams = new URLSearchParams(searchParams);
 
   function onClick() {

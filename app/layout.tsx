@@ -2,7 +2,7 @@
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css";
 import "@mantine/carousel/styles.css";
-import { ColorSchemeScript, MantineProvider, Container } from "@mantine/core";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
 import NavBar from "@/lib/ui/navbar/NavBar";
 import { theme } from "@/lib/theme";
 import { Footer } from "@/lib/ui/Sections/Footer/Footer";

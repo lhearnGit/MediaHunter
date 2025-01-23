@@ -21,7 +21,7 @@ export function useProfileList(id: string) {
     queryFn: async () => await axios.get(`/api/user/${id}`),
   });
   const profile: UserCollections = profileData?.data;
-  console.log(profile);
+  //console.log(profile);
 
   return { profile, error, isFetching, isLoading };
 }

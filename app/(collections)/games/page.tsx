@@ -15,7 +15,7 @@ const GamesHome = async ({
     for (const [key, value] of Object.entries(searchParams)) {
       //validate key
 
-      let validate = isValidUrlParam.safeParse({ key, value });
+      const validate = isValidUrlParam.safeParse({ key, value });
       if (value && validate.success)
         params.append(validate.data.key, validate.data.value.toString());
     }
@@ -27,7 +27,7 @@ const GamesHome = async ({
     page = parseInt(params.get("page")!); //null and NaN cases are handled above
   }
 
-  let option: string | null = params.has("option")
+  const option: string | null = params.has("option")
     ? params.get("option")
     : null;
   console.log(params);

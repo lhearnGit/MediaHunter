@@ -13,7 +13,7 @@ export default function DetailsSection({
   number_of_seasons,
   status,
   first_air_date,
-  last_air_date,
+  // last_air_date,
   networks,
   number_of_episodes,
 }: {

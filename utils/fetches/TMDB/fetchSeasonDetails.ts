@@ -1,7 +1,7 @@
 import { Cast, Episode } from "@/lib/entities/TMDB/Season";
-import { TMDB_Api_Client } from "@/services/tmdb-api-client";
+import { TMDB_Fetch_Details } from "@/services/tmdb-api-client-v2";
 
-const append = "append_to_response=credits";
+const append = "append_to_response=credits,episode";
 type DetailsResponse = {
   id: number;
 
@@ -21,11 +21,12 @@ export async function fetchSeasonDetails({
   seriesId: number;
   season_number?: string;
 }) {
-  const apiClient = new TMDB_Api_Client("GET");
   const { credits, episodes, name, posterPath } =
-    await apiClient.TMDB_Fetch_Details<DetailsResponse>(
-      `tv/${seriesId}/season/${season_number ? season_number : 1}?${append}`
-    );
+    await TMDB_Fetch_Details<DetailsResponse>({
+      endpoint: `tv/${seriesId}/season/${
+        season_number ? season_number : 1
+      }?${append}`,
+    });
 
   const { cast } = credits;
 

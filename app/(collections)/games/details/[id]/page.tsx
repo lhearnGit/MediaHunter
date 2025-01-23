@@ -12,7 +12,7 @@ import Link from "next/link";
 
 const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
   const {
-    cover,
+    // cover,
     name,
     genres,
     themes,
@@ -23,8 +23,8 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
     aggregated_rating_count,
     summary,
     storyline,
-    videos,
-    screenshots,
+    // videos,
+    //  screenshots,
     similar_games,
     dlcs,
     companies,
@@ -82,7 +82,7 @@ export default GamesDetailsPage;
 const DLCContent = ({ content }: { content: DLC[] }) => {
   return (
     <Stack>
-      <Text size="lg">DLC's</Text>
+      <Text size="lg">DLC</Text>
       <Grid columns={4}>
         {content.map(({ id, name, total_rating, cover }: DLC) => (
           <GridCol key={id} span={1}>
@@ -186,7 +186,7 @@ const Ratings = ({
   );
 };
 
-const ReleaseDates = ({}: {}) => {
+const ReleaseDates = () => {
   const releases = [1, 2, 3, 4];
   return (
     <Stack>
@@ -228,28 +228,26 @@ const Companies = ({ companies }: { companies: Involved_Company[] }) => {
     <Stack>
       <Text size="lg">Publishing & Developers</Text>
       <Grid columns={4}>
-        {companies.map(
-          ({ id, company, publisher, developer }: Involved_Company) => (
-            <GridCol key={id} span={2}>
-              <Stack>
-                <Text>
-                  {publisher ? "Developer " : " Publisher "} {company.name}
-                </Text>
-                <Image
-                  height={64}
-                  width={64}
-                  src={
-                    company.logo?.url
-                      ? IGDB_Image_Helper(company.logo.url, "1080p")
-                      : "/images/notfound.jpg"
-                  }
-                  className="bg-inherit"
-                  alt="No Image found"
-                />
-              </Stack>
-            </GridCol>
-          )
-        )}
+        {companies.map(({ id, company, publisher }: Involved_Company) => (
+          <GridCol key={id} span={2}>
+            <Stack>
+              <Text>
+                {publisher ? "Developer " : " Publisher "} {company.name}
+              </Text>
+              <Image
+                height={64}
+                width={64}
+                src={
+                  company.logo?.url
+                    ? IGDB_Image_Helper(company.logo.url, "1080p")
+                    : "/images/notfound.jpg"
+                }
+                className="bg-inherit"
+                alt="No Image found"
+              />
+            </Stack>
+          </GridCol>
+        ))}
       </Grid>
     </Stack>
   );

@@ -16,7 +16,7 @@ const GameSearchPage = async ({
     for (const [key, value] of Object.entries(searchParams)) {
       //validate key
 
-      let validate = isValidUrlParam.safeParse({ key, value });
+      const validate = isValidUrlParam.safeParse({ key, value });
       if (value && validate.success)
         params.append(validate.data.key, validate.data.value.toString());
     }

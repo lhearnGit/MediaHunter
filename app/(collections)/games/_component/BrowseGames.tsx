@@ -1,10 +1,10 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
-import { Button, Grid, Group, SimpleGrid, Text } from "@mantine/core";
+import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
+import { Button, Group, SimpleGrid, Text } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
 import MediaSummary from "../../_components/MediaSummary";
 
 import classes from "./BrowseGames.module.css";

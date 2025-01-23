@@ -1,5 +1,5 @@
 "use client";
-import { Box, Collapse, Group, Space, Title } from "@mantine/core";
+import { Collapse, Space } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { ReactNode } from "react";
 
