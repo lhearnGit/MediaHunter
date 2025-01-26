@@ -1,10 +1,14 @@
-export type ScreenShot = {
-  id: number;
-  url: string;
-};
+import { z } from "zod";
 
-export type Video = {
-  id: number;
-  video_id: string; //YouTube Links
-  name: string;
-};
+export const isValidScreenShot = z.object({
+  id: z.number(),
+  url: z.string(),
+});
+
+export const isValidVideo = z.object({
+  id: z.number(),
+  name: z.string(),
+  video_id: z.string(),
+});
+export type Video = z.infer<typeof isValidVideo>;
+export type ScreenShot = z.infer<typeof isValidScreenShot>;

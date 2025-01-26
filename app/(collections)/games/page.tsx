@@ -2,8 +2,8 @@ import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
 import { isValidUrlParam } from "@/utils/zodSchemas/UrlSchema";
 import BrowseGames from "./_component/BrowseGames";
 import classes from "./GamesHomePage.module.css";
-import { Game } from "@/lib/entities/IGDB";
 import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
+import { Game } from "@/lib/entities/IGDB/Games";
 
 const GamesHome = async ({
   searchParams,

@@ -39,6 +39,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
             summary,
             rating,
             rating_count,
+            platforms,
           }: Game) => (
             <MediaSummary
               key={id}
@@ -54,6 +55,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
               summary={summary}
               rating={round(rating, 1)}
               rating_count={rating_count}
+              platforms={platforms}
             />
           )
         )}

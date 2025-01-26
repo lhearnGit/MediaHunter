@@ -17,12 +17,24 @@ import { useDisclosure } from "@mantine/hooks";
 type Inputs = {
   genres: string[];
   themes: string[];
+  platforms: string[];
 };
 
 interface FormData {
   genres: IGDB_Genre[];
   themes: Theme[];
 }
+
+//Multi VS Single Player - player count
+//Platform_Family
+const platformOptions = [
+  { id: 1, name: "Playstation" },
+  { id: 2, name: "Xbox" },
+  { id: 5, name: "Nintendo" },
+  { id: 6, name: "PC" },
+  { id: 16, name: "Mac" },
+];
+
 const GameSearchForm = ({ genres, themes }: FormData) => {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -31,8 +43,14 @@ const GameSearchForm = ({ genres, themes }: FormData) => {
 
   const { register, handleSubmit } = useForm<Inputs>();
 
-  const onSubmit: SubmitHandler<Inputs> = ({ genres, themes }) => {
+  const onSubmit: SubmitHandler<Inputs> = ({ genres, themes, platforms }) => {
     const params = new URLSearchParams();
+
+    if (Array.isArray(platforms)) {
+      params.append("platforms", ArrayToCSV(platforms));
+    } else {
+      params.append("platforms", platforms);
+    }
     if (Array.isArray(genres)) {
       params.append("genres", ArrayToCSV(genres));
     } else {
@@ -62,6 +80,24 @@ const GameSearchForm = ({ genres, themes }: FormData) => {
             className={classes.formWrapper}
             onSubmit={handleSubmit(onSubmit)}
           >
+            <Stack className={classes.stack}>
+              <h1>Platforms</h1>
+              <Group>
+                {platformOptions.map(({ id, name }) => (
+                  <Checkbox
+                    key={id}
+                    {...register("platforms")}
+                    defaultChecked={searchParams.has(
+                      "platforms",
+                      id.toString()
+                    )}
+                    value={id}
+                    label={name}
+                  />
+                ))}
+              </Group>
+            </Stack>
+
             <SimpleGrid className={classes.grid} cols={{ base: 1, xl: 2 }}>
               <Stack className={classes.stack}>
                 <h1>Genres</h1>

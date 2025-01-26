@@ -1,6 +1,7 @@
-export interface Theme {
-  id: number;
-  name: string;
-  slug: string;
-  url: string;
-}
+import { z } from "zod";
+
+export const isValidIGDBTheme = z.object({
+  id: z.number(),
+  name: z.string(),
+});
+export type Theme = z.infer<typeof isValidIGDBTheme>;
