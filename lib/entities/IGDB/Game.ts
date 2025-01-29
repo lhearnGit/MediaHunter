@@ -12,7 +12,7 @@ import { isValidIGDBTheme } from "./Theme";
 export const isValidGame = z.object({
   id: z.number(),
   name: z.string(),
-  summary: z.string(),
+  summary: z.string().or(z.undefined()),
   //storylines are not always included
   storyline: z.string().optional(),
   //cover art may not be available for very old games
@@ -24,7 +24,7 @@ export const isValidGame = z.object({
   aggregated_rating_count: z.number().optional(),
   aggregated_rating: z.number().optional(),
   //end of not released
-  platforms: z.array(isValidPlatform),
+  platforms: z.array(isValidPlatform).or(z.undefined()),
   genres: z.array(isValidIGDBGenre).or(z.undefined()),
   themes: z.array(isValidIGDBTheme).or(z.undefined()),
   //not all games have additional media
@@ -35,6 +35,13 @@ export const isValidGame = z.object({
   //fields that reference other games or content
   similar_games: z.array(isValidSimilarGame).optional(),
   dlcs: z.array(isValidDLC).min(0).or(z.undefined()),
+  websites: z
+    .array(
+      z.object({
+        url: z.string(),
+      })
+    )
+    .or(z.undefined()),
 });
 
 export type Game = z.infer<typeof isValidGame>;

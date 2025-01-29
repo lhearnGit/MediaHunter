@@ -51,6 +51,7 @@ dlcs.total_rating,
 dlcs.total_rating_count,
 
 similar_games.id, 
-similar_games.cover.url
+similar_games.cover.url,
+websites.url
 
 ;`;
