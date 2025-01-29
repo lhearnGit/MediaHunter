@@ -36,6 +36,9 @@ import { notFound } from "next/navigation";
 const VideoPlayer = dynamic(() => import("@/lib/ui/VideoPlayer/VideoPlayer"), {
   ssr: false,
 });
+const Gallery = dynamic(() => import("@/lib/ui/Gallery/Gallery"), {
+  ssr: false,
+});
 async function fetchGameDetails(id: number) {
   const request: IGDB_Request = {
     endpoint: "games",
@@ -62,6 +65,7 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
   const {
     name,
     summary,
+    cover,
     storyline,
     genres,
     themes,
@@ -92,7 +96,12 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
             themes={themes}
           />
           <Stack>
-            {screenshots && <Title>Screenshots</Title>}
+            {screenshots && (
+              <>
+                <Title>Screenshots</Title>
+                <Gallery images={screenshots} />
+              </>
+            )}
             {videos && (
               <>
                 <Title>Video</Title>
@@ -103,7 +112,15 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
         </GridCol>
 
         <GridCol span={4}>
-          <AvailablePlatforms platforms={platforms} />
+          {cover?.url && (
+            <Image
+              height={300}
+              width={200}
+              src={IGDB_Image_Helper(cover.url, "1080p")}
+              alt="?"
+            />
+          )}
+          {platforms && <AvailablePlatforms platforms={platforms} />}
 
           <DeveloperDetails companies={companies} />
           <Ratings
@@ -286,7 +303,7 @@ const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
               name: "similargame",
               imageUrl: cover?.url
                 ? IGDB_Image_Helper(cover?.url, "720p")
-                : "images/notfound.jpg",
+                : "/images/notfound.jpg",
             }}
             pathname="games/details"
           />
