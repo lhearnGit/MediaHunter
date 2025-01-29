@@ -1,19 +1,16 @@
 import {
-  Theme,
-  IGDB_Genre,
-  Platform,
-  Involved_Company,
   DLC,
-  Similar_Game,
   Game,
-  Video,
-  ScreenShot,
+  IGDB_Genre,
+  Involved_Company,
+  Platform,
+  Similar_Game,
+  Theme,
 } from "@/lib/entities/IGDB";
 import { isValidGame } from "@/lib/entities/IGDB/Game";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 
 import StyledBadges from "@/lib/ui/StyledBadges";
-import VideoPlayer from "@/lib/ui/VideoPlayer/VideoPlayer";
 import {
   IGDB_Fetch_Details,
   IGDB_Request,
@@ -31,11 +28,14 @@ import {
   Text,
   Title,
 } from "@mantine/core";
-import { round, sum } from "lodash";
-import { createDynamicallyTrackedSearchParams } from "next/dist/client/components/search-params";
+import { round } from "lodash";
+import dynamic from "next/dynamic";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+
+const VideoPlayer = dynamic(() => import("@/lib/ui/VideoPlayer/VideoPlayer"), {
+  ssr: false,
+});
 async function fetchGameDetails(id: number) {
   const request: IGDB_Request = {
     endpoint: "games",
@@ -91,7 +91,15 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
             genres={genres}
             themes={themes}
           />
-          <Media screenshots={screenshots} videos={videos} />
+          <Stack>
+            {screenshots && <Title>Screenshots</Title>}
+            {videos && (
+              <>
+                <Title>Video</Title>
+                <VideoPlayer videos={videos} />
+              </>
+            )}
+          </Stack>
         </GridCol>
 
         <GridCol span={4}>
@@ -145,23 +153,6 @@ const About = ({ genres, themes, summary, storyline }: AboutProps) => {
       <Text mb={10}>{summary}</Text>
       {storyline != summary && storyline ? <Text>{storyline}</Text> : <></>}
     </>
-  );
-};
-interface MediaProps {
-  screenshots: ScreenShot[] | undefined;
-  videos: Video[] | undefined;
-}
-const Media = ({ screenshots, videos }: MediaProps) => {
-  return (
-    <Stack>
-      {screenshots && <Title>Screenshots</Title>}
-      {videos && (
-        <Stack>
-          <Title>Video</Title>
-          <VideoPlayer videos={videos} />
-        </Stack>
-      )}
-    </Stack>
   );
 };
 
@@ -288,19 +279,17 @@ const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
       <Title mb={"lg"}>Similar Games</Title>
       <Group>
         {games.map(({ id, cover }: Similar_Game) => (
-          <Link key={id} href={`/games/${id}`}>
-            <ImageLink
-              height={160}
-              poster={{
-                id: id,
-                name: "a",
-                imageUrl: cover?.url
-                  ? IGDB_Image_Helper(cover?.url, "720p")
-                  : "images/notfound.jpg",
-              }}
-              pathname="games/details"
-            />
-          </Link>
+          <ImageLink
+            height={160}
+            poster={{
+              id: id,
+              name: "similargame",
+              imageUrl: cover?.url
+                ? IGDB_Image_Helper(cover?.url, "720p")
+                : "images/notfound.jpg",
+            }}
+            pathname="games/details"
+          />
         ))}
       </Group>
     </>
