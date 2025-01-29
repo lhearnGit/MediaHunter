@@ -12,7 +12,7 @@ const Gallery = ({ images }: { images: { id: number; url: string }[] }) => {
           <Image
             height={320}
             width={480}
-            src={"https://" + IGDB_Image_Helper(url, "720p")}
+            src={IGDB_Image_Helper(url, "720p")}
             alt={"no image available"}
           />
         </Carousel.Slide>
