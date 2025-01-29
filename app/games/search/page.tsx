@@ -3,8 +3,8 @@ import { isValidUrlParam } from "@/utils/zodSchemas/UrlSchema";
 
 import { Game } from "@/lib/entities/IGDB";
 import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
-import GameSearchContainer from "../../_components/GameSearchContainer";
 import BrowseGames from "../_component/BrowseGames";
+import GameSearchContainer from "../_component/GameSearchContainer";
 
 const GameSearchPage = async ({
   searchParams,
