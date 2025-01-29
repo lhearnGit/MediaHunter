@@ -1,5 +1,3 @@
-import { RequestInit } from "next/dist/server/web/spec-extension/request";
-
 export interface TMDB_Response<T> {
   page?: number;
   results?: T[];
@@ -56,7 +54,7 @@ export async function TMDB_Fetch_Pages<T>(request: TMDB_Request) {
 export async function TMDB_Fetch_List(endpoint: string) {
   const token = process.env.TMDB_READ_TOKEN?.toString();
   if (!token) throw console.log("Error creating api-client, missing token"); //check token is valid
-  const options: RequestInit = {
+  const options = {
     method: "GET",
     headers: {
       accept: "application/json",
