@@ -1,13 +1,13 @@
 "use client";
 
 import { Video } from "@/lib/entities/IGDB";
-import { Button, SimpleGrid, Space, Stack } from "@mantine/core";
+import { Button, SimpleGrid, Stack } from "@mantine/core";
 import { useState } from "react";
 import ReactPlayer from "react-player";
 import classes from "./videoplayer.module.css";
+
 const VideoPlayer = ({ videos }: { videos: Video[] }) => {
   const [loadedVideo, setLoadedVideo] = useState<Video>(videos[0]);
-  if (!videos) return <p>No Videos</p>;
   return (
     <Stack>
       <div className={classes.playerWrapper}>
