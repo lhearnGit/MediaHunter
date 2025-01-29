@@ -1,105 +1,157 @@
-import { Season, TMDB_Genre, TvNetwork } from "@/lib/entities/TMDB";
-import { BannerImage } from "@/lib/ui/Sections/Headers/BannerImage";
-import { fetchDetails } from "@/utils/fetches/TMDB/fetchDetails";
-import { fetchSeasonDetails } from "@/utils/fetches/TMDB/fetchSeasonDetails";
+import { Season, Show } from "@/lib/entities/TMDB";
+import { Cast } from "@/lib/entities/TMDB/Cast";
+import { TVNetwork } from "@/lib/entities/TMDB/TV";
+import { isValidSeason } from "@/lib/entities/TMDB/TV/Season";
+import { isValidShow } from "@/lib/entities/TMDB/TV/Show";
+import { TMDB_Fetch_Details } from "@/services/tmdb-api-client-v2";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
-import { Container, Grid, GridCol, Space, Title } from "@mantine/core";
 import {
-  MainSection,
-  CastSection,
-  DetailsSection,
-} from "../_components/Sections";
+  Container,
+  Grid,
+  GridCol,
+  Group,
+  Image,
+  Space,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { notFound } from "next/navigation";
+import CastGrid from "../../_components/TMDB/Cast/CastGrid";
+import Reviews from "../../_components/TMDB/Review/Reviews";
+import TMDBDetails from "../../_components/TMDB/TMDBDetails";
 
-interface TVSeriesDetails {
-  id: number;
-  name: string;
-  first_air_date: string;
-  last_air_date: string;
-  in_production: boolean;
-  created_by: { name: string };
-  homepage: string;
-  status: string;
-  networks: TvNetwork[];
-  number_of_seasons: number;
-  number_of_episodes: number;
-  next_episode_to_air: string;
-  overview: string;
-  seasons?: Season[];
-  backdrop_path: string;
-  poster_path: string;
-  genres: TMDB_Genre[];
-}
-const TVDetailsPage = async ({
-  params,
-  searchParams,
-}: {
-  params: { id: number };
-  searchParams: { [key: string]: string | undefined };
-}) => {
-  const query = new URLSearchParams();
-  if (searchParams) {
-    for (const [key, value] of Object.entries(searchParams)) {
-      if (!value) return;
-      else query.append(key, value);
-    }
-  }
-  const { cast, episodes } = await fetchSeasonDetails({
-    seriesId: params.id,
-    season_number: query.get("season")?.toString(),
+const append = "append_to_response=aggregate_credits,reviews";
+async function fetchTVDetails(id: number) {
+  const result: Show = await TMDB_Fetch_Details<Show>({
+    endpoint: `tv/${id}?${append}`,
   });
+  const { success, data, error } = isValidShow.safeParse(result);
+  if (success) {
+    return { ...data };
+  } else {
+    console.log(error);
+    throw notFound();
+  }
+}
 
+const fetchSeason = async (id: number) => {
+  const season: Season = await TMDB_Fetch_Details<Season>({
+    endpoint: `tv/${id}/season/1`,
+  });
+  // console.log(season);
+
+  const { success, data, error } = isValidSeason.safeParse(season);
+  if (success) {
+    //console.log(`success`, data);
+    return data;
+  } else throw notFound();
+};
+const TVDetailsPage = async ({ params }: { params: { id: number } }) => {
   const {
-    id,
     name,
     overview,
-    seasons,
-    genres,
-    backdrop_path,
-    first_air_date,
-    number_of_episodes,
-    status,
-    networks,
-    number_of_seasons,
     poster_path,
-    //    next_episode_to_air,
+    genres,
+    networks,
+    reviews,
+    first_air_date,
     last_air_date,
-    //   in_production,
-  } = await fetchDetails<TVSeriesDetails>({ endpoint: "tv", id: params.id });
+    number_of_episodes,
+    number_of_seasons,
+    backdrop_path,
+    production_company,
+    aggregate_credits: credits,
+  } = await fetchTVDetails(params.id);
+
+  const season = await fetchSeason(params.id);
+  if (credits) console.log(credits.cast[0]);
 
   return (
     <Container size={"xl"}>
-      <BannerImage
-        title={name}
-        url={TMDB_Image_Helper(backdrop_path, "original")}
-      />
-      <Space h="xl" />
-      <Grid>
-        <GridCol span={8}>
-          <MainSection
-            summary={overview}
-            seasons={seasons}
-            episodes={episodes}
-          />
-          <Title>Cast</Title>
-          <CastSection cast={cast} />
+      <Grid columns={12}>
+        <GridCol span={12}>
+          <Title>{name}</Title>
         </GridCol>
-        <DetailsSection
-          id={id}
-          name={name}
-          genres={genres}
-          poster={poster_path}
-          number_of_seasons={number_of_seasons}
-          status={status}
-          networks={networks}
-          first_air_date={first_air_date}
-          last_air_date={last_air_date}
-          number_of_episodes={number_of_episodes}
-        />
 
-        <GridCol span={1} />
+        <GridCol span={8}>
+          <Stack px={5} py={10}>
+            {backdrop_path && (
+              <Image
+                src={TMDB_Image_Helper(backdrop_path, "original")}
+                alt="no backdrop"
+              />
+            )}
+            <Space h="l" />
+            <Title>Summary</Title>
+            <Text pl={10}>{overview}</Text>
+          </Stack>
+          <Title>Cast</Title>
+          <Space h="l" />
+          <CastGrid cast={credits?.cast} />
+        </GridCol>
+
+        <GridCol span={4}>
+          <TMDBDetails
+            id={0}
+            title={name}
+            genres={genres}
+            poster_path={poster_path}
+            companies={production_company}
+            updatePath="shows"
+          >
+            <TVSubDetails
+              networks={networks ? networks : []}
+              number_of_episodes={number_of_episodes}
+              number_of_seasons={number_of_seasons}
+              first_air_date={first_air_date}
+              last_air_date={last_air_date}
+            />
+          </TMDBDetails>
+        </GridCol>
+
+        {reviews?.results && (
+          <GridCol span={10}>
+            <Reviews reviews={reviews?.results} />
+          </GridCol>
+        )}
       </Grid>
     </Container>
   );
 };
 
 export default TVDetailsPage;
+
+const TVSubDetails = ({
+  networks,
+  first_air_date,
+  last_air_date,
+  number_of_seasons,
+  number_of_episodes,
+}: {
+  number_of_episodes: number;
+  number_of_seasons: number;
+  first_air_date: string;
+  last_air_date: string;
+  networks: TVNetwork[];
+}) => {
+  return (
+    <Stack>
+      <Group>
+        {networks.map((network: TVNetwork) => (
+          <Image
+            key={network.id}
+            src={
+              network.logo_path && TMDB_Image_Helper(network.logo_path, "w92")
+            }
+            alt={network.name}
+          />
+        ))}
+      </Group>
+      <Text>First Aired {first_air_date}</Text>
+      <Text>Last Aired {last_air_date}</Text>
+      <Text>Number of Seasons {number_of_seasons}</Text>
+      <Text>Total Episodes {number_of_episodes}</Text>
+    </Stack>
+  );
+};

@@ -1,7 +1,7 @@
 "use client";
 import { Review } from "@/lib/entities/TMDB";
-import { Button, Grid, Group } from "@mantine/core";
-import { ShowReview } from "./Review/ShowReview";
+import { Button, Grid, Group, Space, Stack, Title } from "@mantine/core";
+import { ShowReview } from "./ShowReview";
 import { useState } from "react";
 import { orderBy } from "lodash";
 
@@ -53,60 +53,65 @@ export function Reviews({ reviews }: { reviews: Review[] }) {
   console.log(sortOption);
   console.log(" Visible ? " + hideUnrated);
   return (
-    <Grid gutter={"lg"}>
-      <Grid.Col span={10}>
-        <Group justify="space-evenly">
-          <Button
-            onClick={() =>
-              setSortOption({ option: "rating", order: sortOption.order })
-            }
-          >
-            Rating
-          </Button>
-          <Button
-            onClick={() =>
-              setSortOption({
-                option: "date",
-                order: sortOption.order,
-              })
-            }
-          >
-            Date
-          </Button>
-          <Button onClick={() => setHideUnrated(!hideUnrated)}>
-            {hideUnrated ? "Hide" : "Show"} Unrated Reviews
-          </Button>
-          <Button
-            onClick={() =>
-              setSortOption({
-                option: sortOption.option,
-                order: !sortOption.order,
-              })
-            }
-          >
-            {sortOption.order ? "Newest" : "Oldest"}
-          </Button>
-        </Group>
-      </Grid.Col>
-      <Grid.Col span={2} />
+    <Stack>
+      <Title>Reviews</Title>
+      <Space h="xl" />
 
-      {OrderReviews(reviews, sortOption.option, sortOption.order, hideUnrated)
-        .slice(0, limit)
-        .map((review: Review) => (
-          <ReviewRow key={review.id} review={review} />
-        ))}
-
-      <Grid.Col span={1} />
-      <Grid.Col span={10}>
-        {maxLimit > 5 && (
+      <Grid gutter={"lg"}>
+        <Grid.Col span={10}>
           <Group justify="space-evenly">
-            <Button onClick={() => setLimit(maxLimit)}>More </Button>
-            <Button onClick={() => setLimit(5)}>Less</Button>
+            <Button
+              onClick={() =>
+                setSortOption({ option: "rating", order: sortOption.order })
+              }
+            >
+              Rating
+            </Button>
+            <Button
+              onClick={() =>
+                setSortOption({
+                  option: "date",
+                  order: sortOption.order,
+                })
+              }
+            >
+              Date
+            </Button>
+            <Button onClick={() => setHideUnrated(!hideUnrated)}>
+              {hideUnrated ? "Hide" : "Show"} Unrated Reviews
+            </Button>
+            <Button
+              onClick={() =>
+                setSortOption({
+                  option: sortOption.option,
+                  order: !sortOption.order,
+                })
+              }
+            >
+              {sortOption.order ? "Newest" : "Oldest"}
+            </Button>
           </Group>
-        )}
-      </Grid.Col>
-      <Grid.Col span={1} />
-    </Grid>
+        </Grid.Col>
+        <Grid.Col span={2} />
+
+        {OrderReviews(reviews, sortOption.option, sortOption.order, hideUnrated)
+          .slice(0, limit)
+          .map((review: Review) => (
+            <ReviewRow key={review.id} review={review} />
+          ))}
+
+        <Grid.Col span={1} />
+        <Grid.Col span={10}>
+          {maxLimit > 5 && (
+            <Group justify="space-evenly">
+              <Button onClick={() => setLimit(maxLimit)}>More </Button>
+              <Button onClick={() => setLimit(5)}>Less</Button>
+            </Group>
+          )}
+        </Grid.Col>
+        <Grid.Col span={1} />
+      </Grid>
+    </Stack>
   );
 }
 

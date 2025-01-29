@@ -1,53 +1,37 @@
-import {
-  Cast,
-  ProductionCompany,
-  ReviewResponse,
-  TMDB_Genre,
-} from "@/lib/entities/TMDB";
-import { fetchDetails } from "@/utils/fetches/TMDB/fetchDetails";
+import { Movie } from "@/lib/entities/TMDB";
+import { isValidMovie } from "@/lib/entities/TMDB/Movies/Movie";
+import { TMDB_Fetch_Details } from "@/services/tmdb-api-client-v2";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
+
 import {
+  Box,
   Container,
   Grid,
   GridCol,
-  Group,
   Image,
-  SimpleGrid,
   Space,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
+import { notFound } from "next/navigation";
 import CastGrid from "../../_components/TMDB/Cast/CastGrid";
-import Reviews from "../../_components/TMDB/Reviews";
-import DetailsSection from "../_components/DetailsSection";
+import Reviews from "../../_components/TMDB/Review/Reviews";
+import TMDBDetails from "../../_components/TMDB/TMDBDetails";
 
 const append = "append_to_response=credits,reviews";
-interface MovieDetails {
-  id: number;
 
-  title: string;
-  original_title: string;
-
-  status: string;
-  release_date?: string;
-  runtime: number; //length in minutes
-
-  budget: number;
-  revenue: number;
-  production_companies: ProductionCompany[];
-
-  reviews: ReviewResponse;
-  credits: { cast: Cast[] };
-
-  overview: string;
-  imdb_id: string;
-  homepage: string;
-
-  backdrop_path: string;
-  poster_path: string;
-
-  genres: TMDB_Genre[];
+async function fetchDetails(id: number) {
+  const result = await TMDB_Fetch_Details<Movie>({
+    endpoint: `movie/${id}?${append}`,
+  });
+  const { success, data, error } = isValidMovie.safeParse(result);
+  if (success) {
+    return { ...data };
+  } else {
+    console.log(error);
+    throw notFound();
+  }
 }
 
 const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
@@ -64,103 +48,82 @@ const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
     genres,
     backdrop_path,
     poster_path,
-  } = await fetchDetails<MovieDetails>({
-    endpoint: "movie",
-    id: params.id,
-    append: append,
-  });
+  } = await fetchDetails(params.id);
 
   return (
     <Container size={"xl"}>
-      <Grid>
-        <GridCol span={12} bg="dark">
+      <Grid columns={12}>
+        <GridCol span={12}>
           <Title>{title}</Title>
         </GridCol>
-        <MainSection
-          backdrop_path={backdrop_path}
-          overview={overview}
-          companies={production_companies}
-        />
-        <DetailsSection
-          id={params.id}
-          title={title}
-          budget={budget}
-          release_date={release_date}
-          revenue={revenue}
-          poster_path={poster_path}
-          genres={genres}
-          runtime={runtime}
-        />
-
-        <GridCol span={10}>
+        <GridCol span={8}>
+          <Stack px={5} py={10}>
+            {backdrop_path && (
+              <Image
+                src={TMDB_Image_Helper(backdrop_path, "original")}
+                alt="no backdrop"
+              />
+            )}
+            <Space h="l" />
+            <Title>Summary</Title>
+            <Text pl={10}>{overview}</Text>
+          </Stack>
           <Title>Cast</Title>
+          <Space h="l" />
+          <CastGrid cast={credits?.cast} />
         </GridCol>
-        <CastSection cast={credits.cast} />
-        <GridCol span={1} />
-        <ReviewsSection reviews={reviews} />
+
+        <GridCol span={4}>
+          <TMDBDetails
+            id={params.id}
+            title={title}
+            poster_path={poster_path}
+            genres={genres}
+            companies={production_companies}
+            updatePath="movies"
+          >
+            <MovieSubDetails
+              release_date={release_date}
+              revenue={revenue}
+              runtime={runtime}
+              budget={budget}
+            />
+          </TMDBDetails>
+        </GridCol>
+
+        {reviews?.results && (
+          <GridCol span={10}>
+            <Reviews reviews={reviews?.results} />
+          </GridCol>
+        )}
       </Grid>
     </Container>
   );
 };
 
 export default MovieDetailsPage;
-
-function MainSection({
-  overview,
-  backdrop_path,
-  companies,
-}: {
-  backdrop_path: string;
-  overview: string;
-  companies: ProductionCompany[];
-}) {
+interface Props {
+  release_date: string;
+  runtime: number;
+  budget: number;
+  revenue: number;
+}
+const MovieSubDetails = ({ release_date, revenue, runtime, budget }: Props) => {
   return (
-    <GridCol span={8}>
-      <Stack px={5} py={10}>
-        <Image
-          src={TMDB_Image_Helper(backdrop_path, "original")}
-          alt="no backdrop"
-        />
-        <Space h="l" />
-        <Title>Summary</Title>
-        <Text pl={10}>{overview}</Text>
-        <Title>Produced By</Title>
-        <SimpleGrid cols={2}>
-          {companies.map((company: ProductionCompany) => (
-            <Group key={company.id}>
-              {company.logo_path && (
-                <Image
-                  src={TMDB_Image_Helper(company.logo_path, "w92")}
-                  alt="failed to load"
-                  bg={"white"}
-                  p={5}
-                  radius={"sm"}
-                />
-              )}
-              <Text size="md">{company.name}</Text>
-            </Group>
-          ))}
-        </SimpleGrid>
+    <Box>
+      <Text size="xl">Details</Text>
+      <Stack justify="space-evenly" pl={30} pt={10}>
+        <Box>
+          <Text size="md">
+            Release Date - {release_date ? release_date : "Not Yet Released"}
+          </Text>
+          <Text size="md">
+            Runtime - {Math.round(runtime / 60)}h {runtime % 60}m
+          </Text>
+          <Text size="md"> Revenue - {revenue} </Text>
+          <Text size="md">Budget {budget}</Text>
+        </Box>
       </Stack>
-    </GridCol>
+    </Box>
   );
-}
-
-function ReviewsSection({ reviews }: { reviews: ReviewResponse }) {
-  return (
-    <GridCol span={12}>
-      <Title>Reviews</Title>
-      <Space h="xl" />
-      <Reviews reviews={reviews.results} />
-    </GridCol>
-  );
-}
-
-function CastSection({ cast }: { cast: Cast[] }) {
-  return (
-    <GridCol span={10}>
-      <Space h="xl" />
-      <CastGrid cast={cast} />
-    </GridCol>
-  );
-}
+};

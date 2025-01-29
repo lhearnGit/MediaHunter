@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import { FloatingIndicator, UnstyledButton } from "@mantine/core";
-import classes from "./seasonsfloating.module.css";
+import classes from "./seasonsmenu.module.css";
 import { Season } from "@/lib/entities/TMDB";
-import SeasonDetails from "./SeasonDetails";
+
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { debounce } from "lodash";
 
@@ -64,9 +64,7 @@ export default function SeasonsMenu({ seasons }: { seasons: Season[] }) {
           className={classes.indicator}
         />
       </div>
-      <div>
-        <SeasonDetails season={seasons[active]} />
-      </div>
+      <div></div>
     </>
   );
 }

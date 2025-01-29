@@ -1,41 +1,30 @@
 import { Country } from "./Country";
-import { Movie } from "./Movie";
+import { Movie } from "./Movies/Movie";
 import { TMDB_Genre } from "./TMDB_Genre";
-import { TV } from "./TV";
-import { TMDB_Request } from "./TMDB_Request";
-import { TMDB_Response } from "./TMDB_Response";
-import {
-  Season,
-  Cast,
-  Episode,
-  Season_Details,
-  ShowDetails,
-  ShowStatus,
-  TvNetwork,
-} from "./Season";
+
+import { TMDB_Request } from "./API_Types/TMDB_Request";
+import { TMDB_Response } from "./API_Types/TMDB_Response";
+
+import { Production_Company } from "./ProductionCompany";
 import { Review, ReviewResponse } from "./Reviews";
-import { ProductionCompany } from "./ProductionCompany";
-import { WatchProvider, JustWatchProviders } from "./JustWatch";
 
 import { Poster } from "./Poster";
+import { Episode } from "./TV/Episode";
+import { Season } from "./TV/Season";
+import { Show } from "./TV/Show";
+import { Cast } from "./Cast";
 export type {
-  TV,
-  TMDB_Genre,
-  Movie,
-  Country,
-  TMDB_Request,
-  TMDB_Response,
-  Season,
   Cast,
+  Country,
   Episode,
-  Season_Details,
-  ProductionCompany,
+  Movie,
+  Poster,
+  Production_Company,
   Review,
   ReviewResponse,
-  ShowStatus,
-  ShowDetails,
-  TvNetwork,
-  WatchProvider,
-  JustWatchProviders,
-  Poster,
+  Season,
+  Show,
+  TMDB_Genre,
+  TMDB_Request,
+  TMDB_Response,
 };

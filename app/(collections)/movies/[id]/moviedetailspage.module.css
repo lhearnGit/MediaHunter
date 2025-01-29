@@ -1,0 +1,31 @@
+.wrapper {
+  max-width: 90%;
+  background-color: black;
+  margin: auto;
+  padding-bottom: calc(var(--mantine-spacing-xl) * 3);
+  padding-top: calc(var(--mantine-spacing-xl) * 3);
+}
+
+.title {
+  display: block;
+  text-align: center;
+}
+.header {
+  display: block;
+  padding-top: 10px;
+  text-align: left;
+  text-indent: 5%;
+}
+
+.subContent {
+  display: block;
+  margin-left: 8%;
+}
+
+.flexWrapper {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  padding: 5px;
+  margin: 3%;
+}

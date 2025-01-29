@@ -4,6 +4,8 @@ import PageHandler from "@/lib/ui/PageHandler";
 import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
+
+import classes from "./tvgallerypage.module.css";
 const TVGalleryPage = async ({
   searchParams,
 }: {
@@ -27,9 +29,10 @@ const TVGalleryPage = async ({
   const { total_pages, posters } = await fetchPosters("tv", searchString); //initial data
 
   return (
-    <div>
-      <h1>TV Gallery Page</h1>
-      <div>
+    <div className={classes.wrapper}>
+      <div>Param Container</div>
+      <h1 className={classes.heading}>Movies Gallery Page</h1>
+      <div className={classes.cardContainer}>
         {posters.map((poster: Poster) => (
           <ImageLink
             height={360}
