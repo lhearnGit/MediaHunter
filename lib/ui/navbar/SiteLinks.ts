@@ -12,9 +12,17 @@ export const gameSubLinks: PagePath[] = [
 ];
 export const movieSubLinks: PagePath[] = [
   { href: "/movies", label: "Home" }, //link back to parent first
-  { href: "/movies?option=recent", label: "Recent Releases" },
-  { href: "/movies?option=upcoming", label: "Upcoming Releases" },
+  { href: "/movies?new", label: "Recent Releases" },
+  { href: "/movies?trending", label: "Trending" },
+  { href: "/movies?popular", label: "Popular" },
   { href: "/movies/search", label: "Find Movies" },
+];
+export const tvSubLinks: PagePath[] = [
+  { href: "/tv", label: "Home" }, //link back to parent first
+  { href: "/tv?new", label: "Recent Releases" },
+  { href: "/tv?trending", label: "Trending" },
+  { href: "/tv?popular", label: "Popular" },
+  { href: "/tv/search", label: "Find Movies" },
 ];
 
 export const mainPages: PagePath[] = [

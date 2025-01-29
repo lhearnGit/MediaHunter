@@ -27,7 +27,13 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import classes from "./NavBar.module.css";
-import { gameSubLinks, mainPages, movieSubLinks, PagePath } from "./SiteLinks";
+import {
+  gameSubLinks,
+  mainPages,
+  movieSubLinks,
+  PagePath,
+  tvSubLinks,
+} from "./SiteLinks";
 
 const NavBar = () => {
   const { data, status } = useSession();
@@ -53,6 +59,9 @@ const NavBar = () => {
       }
       case "/movies": {
         return setSubNavLinks(movieSubLinks);
+      }
+      case "/tv": {
+        return setSubNavLinks(tvSubLinks);
       }
       default: {
         return setSubNavLinks(undefined);
