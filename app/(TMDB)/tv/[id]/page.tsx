@@ -17,9 +17,9 @@ import {
   Title,
 } from "@mantine/core";
 import { notFound } from "next/navigation";
-import CastGrid from "../../_components/TMDB/Cast/CastGrid";
-import Reviews from "../../_components/TMDB/Review/Reviews";
-import TMDBDetails from "../../_components/TMDB/TMDBDetails";
+import CastGrid from "../../_components/Cast/CastGrid";
+import Reviews from "../../_components/Review/Reviews";
+import TMDBDetails from "../../_components/TMDBDetails";
 
 const append = "append_to_response=aggregate_credits,reviews";
 async function fetchTVDetails(id: number) {

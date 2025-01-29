@@ -15,9 +15,9 @@ import {
   Title,
 } from "@mantine/core";
 import { notFound } from "next/navigation";
-import CastGrid from "../../_components/TMDB/Cast/CastGrid";
-import Reviews from "../../_components/TMDB/Review/Reviews";
-import TMDBDetails from "../../_components/TMDB/TMDBDetails";
+import CastGrid from "../../(TMDB)/_components/Cast/CastGrid";
+import Reviews from "../../(TMDB)/_components/Review/Reviews";
+import TMDBDetails from "../../(TMDB)/_components/TMDBDetails";
 
 const append = "append_to_response=credits,reviews";
 

@@ -15,7 +15,7 @@ const CastGrid = ({ cast }: { cast: Cast[] | undefined }) => {
         cols={{ base: 1, "300px": 2, "500px": 3, "800px": 4 }}
       >
         {cast.slice(0, limit).map((castMember: Cast) => (
-          <CastCard castMember={castMember} />
+          <CastCard key={castMember.id} castMember={castMember} />
         ))}
       </SimpleGrid>
       <Button
