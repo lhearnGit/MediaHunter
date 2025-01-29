@@ -10,8 +10,9 @@ import AuthProvider from "../providers/Provider";
 import Providers from "@/providers/QueryClientProvider";
 import classes from "./layout.module.css";
 export const metadata = {
-  title: "My Mantine app",
-  description: "I have followed setup instructions carefully",
+  title: "Media Hunter",
+  description:
+    "NextJS webapp to hunt for and track multiple types of media across medium",
 };
 
 export default function RootLayout({
