@@ -5,9 +5,9 @@ import { Button, Group, SimpleGrid, Text } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
-import MediaSummary from "../../_components/MediaSummary";
 
 import classes from "./BrowseGames.module.css";
+import MediaSummary from "../../_components/IGDB/MediaSummary";
 const BrowseGames = ({ games }: { games: Game[] }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -53,7 +53,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
               genres={genres}
               themes={themes}
               summary={summary}
-              rating={round(rating, 1)}
+              rating={rating && round(rating, 1)}
               rating_count={rating_count}
               platforms={platforms}
             />

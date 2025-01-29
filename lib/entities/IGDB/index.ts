@@ -6,7 +6,7 @@ import { Similar_Game } from "./Similar_Game";
 import { Game_Cover } from "./Cover";
 import { Artwork } from "./Artwork";
 import { Involved_Company } from "./Involved_Company";
-import { Game } from "./Games";
+import { Game } from "./Game";
 import { DLC } from "./DLC";
 export type {
   Game,

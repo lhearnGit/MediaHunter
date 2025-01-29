@@ -5,17 +5,56 @@ import {
   Involved_Company,
   DLC,
   Similar_Game,
+  Game,
+  Video,
+  ScreenShot,
 } from "@/lib/entities/IGDB";
+import { isValidGame } from "@/lib/entities/IGDB/Game";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 
 import StyledBadges from "@/lib/ui/StyledBadges";
-import { fetchGameDetails } from "@/utils/fetches/IGDB/fetchGameDetails";
+import VideoPlayer from "@/lib/ui/VideoPlayer/VideoPlayer";
+import {
+  IGDB_Fetch_Details,
+  IGDB_Request,
+} from "@/services/igdb-api-client-v2";
+import { GameDataFields } from "@/utils/fetches/IGDB/Queries/GameDataQueryFields";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
-import { Grid, GridCol, Group, Space, Stack, Text, Title } from "@mantine/core";
-import { round } from "lodash";
+import {
+  Container,
+  Grid,
+  GridCol,
+  Group,
+  SimpleGrid,
+  Space,
+  Stack,
+  Text,
+  Title,
+} from "@mantine/core";
+import { round, sum } from "lodash";
+import { createDynamicallyTrackedSearchParams } from "next/dist/client/components/search-params";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+async function fetchGameDetails(id: number) {
+  const request: IGDB_Request = {
+    endpoint: "games",
+    query: `${GameDataFields}
+      where id=${id};`,
+  };
+
+  const game = await IGDB_Fetch_Details<Game>(request);
+
+  console.log(game);
+  const { success, data, error } = isValidGame.safeParse(game);
+
+  if (success) {
+    console.log(success);
+    return data;
+  } else {
+    console.log(error);
+  }
+}
 
 const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
   const game = await fetchGameDetails(params.id);
@@ -38,85 +77,124 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
     dlcs,
   } = game;
   return (
-    <Grid>
-      <GridCol span={12}>
-        <Group justify="space-between">
-          <Title>{game.name}</Title>
-        </Group>
-        <Space h="xl" />
-      </GridCol>
-      <GridCol span={8}>
-        <Grid columns={8}>
-          <GridCol span={7}>
-            <Title mb={"md"}>Summary</Title>
-            <Text mb={10}>{summary}</Text>
-            {storyline != summary && storyline ? (
-              <Text>{storyline}</Text>
-            ) : (
-              <></>
-            )}
-            <br />
-          </GridCol>
-          <GridCol span={4}>
-            <GenresAndThemes genres={genres} themes={themes} />
-            <AvailablePlatforms platforms={platforms} />
-          </GridCol>
-        </Grid>
-        {dlcs && <DLCContent DLCSContents={dlcs} />}
-      </GridCol>
-      <GridCol offset={1} span={3}>
-        <Ratings
-          rating={rating}
-          rating_count={rating_count}
-          aggregated_rating={aggregated_rating}
-          aggregated_rating_count={aggregated_rating_count}
-        />
-        <ReleaseDates />
-        <Companies companies={companies} />
-      </GridCol>
+    <Container size={"xl"}>
+      <Grid columns={12}>
+        <GridCol span={12}>
+          <Title>{name}</Title>
+          <Space h="xl" />
+        </GridCol>
 
-      <GridCol span={12}>
-        {similar_games && <SimilarGames games={similar_games} />}
-      </GridCol>
-    </Grid>
+        <GridCol span={8}>
+          <About
+            summary={summary}
+            storyline={storyline}
+            genres={genres}
+            themes={themes}
+          />
+          <Media screenshots={screenshots} videos={videos} />
+        </GridCol>
+
+        <GridCol span={4}>
+          <AvailablePlatforms platforms={platforms} />
+
+          <DeveloperDetails companies={companies} />
+          <Ratings
+            rating={rating}
+            rating_count={rating_count}
+            aggregated_rating={aggregated_rating}
+            aggregated_rating_count={aggregated_rating_count}
+          />
+        </GridCol>
+        <GridCol span={8}>{dlcs && <DLCContent DLCSContents={dlcs} />}</GridCol>
+
+        <GridCol span={12}>
+          <Space h="xl" />
+          {similar_games && <SimilarGames games={similar_games} />}
+        </GridCol>
+      </Grid>
+    </Container>
   );
 };
 
 export default GamesDetailsPage;
 
-//          <GridCol span={4}>{videos && <VideoPlayer videos={videos} />}</GridCol>
+interface AboutProps {
+  genres: IGDB_Genre[] | undefined;
+  themes: Theme[] | undefined;
+  summary: string | undefined;
+  storyline: string | undefined;
+}
+const About = ({ genres, themes, summary, storyline }: AboutProps) => {
+  return (
+    <>
+      <Stack>
+        <Text size="lg">Genres & Themes</Text>
+        <Group>
+          {genres &&
+            genres.map((genre: IGDB_Genre) => (
+              <StyledBadges key={genre.id} label={genre.name} color="blue" />
+            ))}
+          {themes &&
+            themes.map((theme: Theme) => (
+              <StyledBadges key={theme.id} label={theme.name} color="blue" />
+            ))}
+        </Group>
+      </Stack>
+      <Space h={"xl"} />
+      <Title mb={"md"}>Summary</Title>
+      <Text mb={10}>{summary}</Text>
+      {storyline != summary && storyline ? <Text>{storyline}</Text> : <></>}
+    </>
+  );
+};
+interface MediaProps {
+  screenshots: ScreenShot[] | undefined;
+  videos: Video[] | undefined;
+}
+const Media = ({ screenshots, videos }: MediaProps) => {
+  return (
+    <Stack>
+      {screenshots && <Title>Screenshots</Title>}
+      {videos && (
+        <Stack>
+          <Title>Video</Title>
+          <VideoPlayer videos={videos} />
+        </Stack>
+      )}
+    </Stack>
+  );
+};
 
 const DLCContent = ({ DLCSContents }: { DLCSContents: DLC[] }) => {
   return (
     <Stack>
       <Text size="lg">DLC</Text>
-      <Grid columns={4}>
+      <SimpleGrid cols={4}>
         {DLCSContents.map(({ id, name, total_rating, cover }: DLC) => (
-          <GridCol key={id} span={1}>
-            <Stack>
-              <ImageLink
-                height={160}
-                poster={{
-                  id: id,
-                  name: name,
-                  imageUrl: cover?.url
-                    ? IGDB_Image_Helper(cover?.url, "720p")
-                    : "images/notfound.jpg",
-                }}
-                pathname="games/details"
+          <Stack key={id}>
+            <p>{name}</p>
+            <ImageLink
+              height={160}
+              poster={{
+                id: id,
+                name: name,
+                imageUrl: cover?.url
+                  ? IGDB_Image_Helper(cover?.url, "720p")
+                  : "/images/notfound.jpg",
+              }}
+              pathname="games/details"
+            />
+            {total_rating ? (
+              <StyledBadges
+                label={`Rating ${round(total_rating, 1)}`}
+                color=""
               />
-              {total_rating ? (
-                <StyledBadges
-                  label={`Rating ${round(total_rating, 1)}`}
-                  color=""
-                />
-              ) : (
-                <StyledBadges label={`No Rating Available`} color="" />
-              )}
-            </Stack>
-          </GridCol>
+            ) : (
+              <StyledBadges label={`No Rating Available`} color="" />
+            )}
+          </Stack>
         ))}
-      </Grid>
+      </SimpleGrid>
     </Stack>
   );
 };
@@ -124,8 +202,8 @@ const GenresAndThemes = ({
   genres,
   themes,
 }: {
-  genres: IGDB_Genre[];
-  themes: Theme[];
+  genres: IGDB_Genre[] | undefined;
+  themes: Theme[] | undefined;
 }) => {
   return (
     <Stack>
@@ -158,6 +236,7 @@ const AvailablePlatforms = ({ platforms }: { platforms: Platform[] }) => {
             />
           ))}
       </Group>
+      <Space h="xl" />
     </Stack>
   );
 };
@@ -197,23 +276,11 @@ const Ratings = ({
           <Text>No Critic Ratings</Text>
         )}
       </Group>
+      <Space h="xl" />
     </Stack>
   );
 };
 
-const ReleaseDates = () => {
-  const releases = [1, 2, 3, 4];
-  return (
-    <Stack>
-      <Text size="lg">Releases</Text>
-      <Group justify="space-between">
-        {releases.map((release: number) => (
-          <p key={release}>{release}</p>
-        ))}
-      </Group>
-    </Stack>
-  );
-};
 const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
   if (!games) return <></>;
   return (
@@ -239,7 +306,12 @@ const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
     </>
   );
 };
-const Companies = ({ companies }: { companies?: Involved_Company[] }) => {
+
+const DeveloperDetails = ({
+  companies,
+}: {
+  companies?: Involved_Company[];
+}) => {
   if (!companies)
     return (
       <Stack>
@@ -271,6 +343,7 @@ const Companies = ({ companies }: { companies?: Involved_Company[] }) => {
           </GridCol>
         ))}
       </Grid>
+      <Space h="xl" />
     </Stack>
   );
 };
