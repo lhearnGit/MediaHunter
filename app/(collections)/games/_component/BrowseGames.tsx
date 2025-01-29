@@ -7,7 +7,8 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 import classes from "./BrowseGames.module.css";
-import MediaSummary from "../../_components/IGDB/MediaSummary";
+import MediaSummary from "./MediaSummary";
+
 const BrowseGames = ({ games }: { games: Game[] }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();

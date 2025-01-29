@@ -1,7 +1,7 @@
 import classses from "./GameSearchContainer.module.css";
 import { fetchGenres } from "@/utils/fetches/IGDB/fetchGenres";
 import { fetchThemes } from "@/utils/fetches/IGDB/fetchThemes";
-import GameSearchForm from "../games/_component/SearchForm/GameSearchForm";
+import GameSearchForm from "./SearchForm/GameSearchForm";
 
 const GameSearchContainer = async () => {
   const genres = await fetchGenres();
