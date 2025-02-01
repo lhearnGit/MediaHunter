@@ -1,7 +1,7 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
-import { Button, Group, SimpleGrid, Text } from "@mantine/core";
+import { Button, Container, Group, SimpleGrid, Text } from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -28,8 +28,8 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
   useEffect(() => {}, [searchParams]);
 
   return (
-    <div className={classes.wrapper}>
-      <SimpleGrid cols={{ base: 1, xl: 3 }}>
+    <Container size={"xl"}>
+      <SimpleGrid cols={{ base: 1, xl: 2 }}>
         {games.map(
           ({
             id,
@@ -82,7 +82,7 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
           Next Page
         </Button>
       </Group>
-    </div>
+    </Container>
   );
 };
 

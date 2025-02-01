@@ -4,6 +4,9 @@ import BrowseGames from "./_component/BrowseGames";
 import classes from "./GamesHomePage.module.css";
 import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
 import { Game } from "@/lib/entities/IGDB/Game";
+import GameSearchContainer from "./_component/GameSearchContainer";
+import Link from "next/link";
+import { Title } from "@mantine/core";
 
 const GamesHome = async ({
   searchParams,
@@ -38,6 +41,9 @@ const GamesHome = async ({
 
   return (
     <div className={classes.wrapper}>
+      <Link href={"/games/search"} replace>
+        <Title>Search for Games</Title>
+      </Link>
       <h1 className={classes.header}>
         {option ? option : "Recently Released"} Games
       </h1>

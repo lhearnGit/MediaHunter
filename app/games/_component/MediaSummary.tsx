@@ -15,9 +15,9 @@ interface SummaryProps {
   themes: Theme[] | undefined;
   rating?: number;
   rating_count?: number;
-  summary: string;
+  summary?: string;
 
-  platforms: Platform[];
+  platforms?: Platform[];
 }
 
 const MediaSummary = ({
@@ -39,16 +39,18 @@ const MediaSummary = ({
         poster={{ id: id, imageUrl: image, name: title }}
       />
       <Stack className={classes.details}>
-        <Group>
-          <StyledBadges
-            label={rating ? `ratings ${rating_count}` : "no ratings"}
-            color={"green"}
-          />
-          <StyledBadges
-            label={rating ? `Player Score ${rating}` : `No Score`}
-            color={rating ? "green" : "red"}
-          />
-        </Group>
+        {rating && (
+          <Group>
+            <StyledBadges
+              label={rating ? `ratings ${rating_count}` : "no ratings"}
+              color={"green"}
+            />
+            <StyledBadges
+              label={rating ? `Player Score ${rating}` : `No Score`}
+              color={rating ? "green" : "red"}
+            />
+          </Group>
+        )}
         <Group className={classes.badges}>
           {themes &&
             themes.map((theme: Theme) => (

@@ -19,60 +19,11 @@ const query: IGDBQuery = {
 export function setQuery(
   page: number,
   options: string | null,
-  genre: string | null,
-  theme: string | null,
-  page_size?: number
+  genre?: string | null,
+  theme?: string | null,
+  page_size?: number,
+  where?: string
 ) {
-  /*const { success, data, error } = isValidIGDBQuery.safeParse(query);
-
-
-  let g = data?.genres;
-  let t = data?.themes;
-  let o = data?.queryOption;
-  let pf = data?.platform_family;
-  let p = data?.platforms;
-
-  let tcondition = "";
-  let gcondition = "";
-  let pcondition = "";
-  let pfcondition = "";
-
-  let where = "where ";
-
-  if (p) {
-    pcondition = ` platforms.id = ${
-      Array.isArray(p) ? `(${ArrayToCSV(p)})` : p
-    }`;
-  }
-  if (pf) {
-    pfcondition = ` platforms.platform_family = ${
-      Array.isArray(pf) ? `(${ArrayToCSV(pf)})` : `${pf}`
-    } `;
-  }
-  if (t) {
-    tcondition = Array.isArray(t)
-      ? `themes = [${ArrayToCSV(t)}]`
-      : `themes = ${t}`;
-  }
-  if (g) {
-    gcondition = Array.isArray(g)
-      ? `genres = [${ArrayToCSV(g)}]`
-      : `genres = ${g}`;
-  }
-
-  where +=
-    pcondition +
-    " & " +
-    pfcondition +
-    " & " +
-    tcondition +
-    " " +
-    o +
-    " " +
-    gcondition +
-    ";";
-  console.log(where);
-*/
   const paginationString = `
     limit ${page_size ? page_size : 25};
     offset ${page > 1 ? page * (page_size ? page_size : 25) : 0};`;
@@ -107,9 +58,8 @@ export function setQuery(
         ${fieldsString}
         sort rating_count desc;
         ${paginationString}
-        ${WhereFilter(genre, theme)}`;
+        ${where}`;
 
-        console.log(searchQuery);
         return searchQuery;
       } else return RecentQuery;
     }

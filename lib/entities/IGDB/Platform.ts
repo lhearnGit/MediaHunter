@@ -13,6 +13,7 @@ export const isValidPlatform = z.object({
   platform_family: z
     .object({
       id: z.number(),
+      slug: z.string(),
       name: z.string().or(z.undefined()),
     })
     .or(z.undefined()),
