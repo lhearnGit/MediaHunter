@@ -146,6 +146,7 @@ const MultiSearchableContainer = ({ GenresAndThemes, Platforms }: Props) => {
             color="red"
             mt={10}
             onClick={() => {
+              toggle();
               setValues([]);
             }}
           >
