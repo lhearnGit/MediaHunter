@@ -3,9 +3,10 @@ import { IGDB_Genre, Platform, Theme } from "@/lib/entities/IGDB";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { Group, Stack, Text } from "@mantine/core";
 
-import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import classes from "./MediaSummary.module.css";
 import PlatformIcons from "../../games/_component/PlatformIcons/PlatformIcons";
+import Link from "next/link";
+import Image from "next/image";
 
 interface SummaryProps {
   id: number;
@@ -33,24 +34,18 @@ const MediaSummary = ({
 }: SummaryProps) => {
   return (
     <Group className={classes.wrapper}>
-      <ImageLink
-        height={300}
-        pathname="games/details"
-        poster={{ id: id, imageUrl: image, name: title }}
-      />
+      <Stack>
+        <Link className={classes.link} key={id} href={`/game/details/${id}`}>
+          <Image
+            className={classes.image}
+            height={224}
+            width={148}
+            src={image ? image : "/images/notfound.jpg"}
+            alt={`${title} cover image`}
+          />
+        </Link>
+      </Stack>
       <Stack className={classes.details}>
-        {rating && (
-          <Group>
-            <StyledBadges
-              label={rating ? `ratings ${rating_count}` : "no ratings"}
-              color={"green"}
-            />
-            <StyledBadges
-              label={rating ? `Player Score ${rating}` : `No Score`}
-              color={rating ? "green" : "red"}
-            />
-          </Group>
-        )}
         <Group className={classes.badges}>
           {themes &&
             themes.map((theme: Theme) => (
@@ -61,18 +56,30 @@ const MediaSummary = ({
               <StyledBadges key={genre.id} label={genre.name} color="blue" />
             ))}
         </Group>
-        <Text mt={"lg"} lineClamp={4}>
-          {summary}
-        </Text>
-        <Group>
+        <Group mb={0}>
           {platforms &&
             platforms.map((platform: Platform) => (
               <PlatformIcons
-                showName={true}
+                showName={false}
                 key={platform.id}
                 platform={platform}
               />
             ))}
+        </Group>
+        <Text mt={"lg"} lineClamp={4}>
+          {summary}
+        </Text>
+        <Group>
+          {rating && (
+            <StyledBadges
+              label={rating ? `ratings ${rating_count}` : "no ratings"}
+              color={"green"}
+            />
+          )}
+          <StyledBadges
+            label={rating ? `Player Score ${rating}` : `No Score`}
+            color={rating ? "green" : "red"}
+          />
         </Group>
       </Stack>
     </Group>
