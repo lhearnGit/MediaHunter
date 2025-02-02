@@ -1,5 +1,5 @@
 import Poster from "@/lib/entities/Poster";
-import { Movie } from "@/lib/entities/TMDB/Movie";
+import { Movie } from "@/lib/entities/TMDB/Movies/Movie";
 import { TMDB_Fetch_Pages } from "@/services/tmdb-api-client-v2";
 import _ from "lodash";
 import { notFound } from "next/navigation";
