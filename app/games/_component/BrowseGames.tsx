@@ -6,7 +6,6 @@ import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
-import classes from "./BrowseGames.module.css";
 import MediaSummary from "./MediaSummary";
 
 const BrowseGames = ({ games }: { games: Game[] }) => {
