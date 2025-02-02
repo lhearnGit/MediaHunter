@@ -24,7 +24,7 @@ const ImageLink = ({
         height={height}
         width={width}
         src={poster.imageUrl ? poster.imageUrl : "/images/notfound.jpg"}
-        alt="/images/notfound.jpg"
+        alt={`${poster.name}`}
       />
     </Link>
   );
