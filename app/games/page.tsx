@@ -41,9 +41,6 @@ const GamesHome = async ({
 
   return (
     <div className={classes.wrapper}>
-      <Link href={"/games/search"} replace>
-        <Title>Search for Games</Title>
-      </Link>
       <h1 className={classes.header}>
         {option ? option : "Recently Released"} Games
       </h1>

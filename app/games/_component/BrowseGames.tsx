@@ -1,7 +1,14 @@
 "use client";
 import { Game } from "@/lib/entities/IGDB";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
-import { Button, Container, Group, SimpleGrid, Text } from "@mantine/core";
+import {
+  Button,
+  Container,
+  Group,
+  SimpleGrid,
+  Text,
+  Title,
+} from "@mantine/core";
 import { round } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -26,6 +33,12 @@ const BrowseGames = ({ games }: { games: Game[] }) => {
 
   useEffect(() => {}, [searchParams]);
 
+  if (games.length == 0)
+    return (
+      <Container size={"xl"}>
+        <Title size={"xl"}>No Results Found</Title>
+      </Container>
+    );
   return (
     <Container size={"xl"}>
       <SimpleGrid cols={{ base: 1, xl: 2 }}>
