@@ -58,7 +58,7 @@ const TMDBSearchContainer = ({ path, params }: Props) => {
 
   const DrawerContent = () => {
     return (
-      <Drawer opened={opened} onClose={close} title="Filter For Genres">
+      <Box>
         <Title className={classes.title}>Genres</Title>
         <SimpleGrid cols={3} maw={400} spacing={5} className={classes.grid}>
           {genres.map((item) => (
@@ -111,13 +111,13 @@ const TMDBSearchContainer = ({ path, params }: Props) => {
             Reset
           </Button>
         </Group>
-      </Drawer>
+      </Box>
     );
   };
 
   return (
     <>
-      <Drawer opened={opened} onClose={close} title="Filter Movies">
+      <Drawer opened={opened} onClose={close} title={`Filter ${path}`}>
         <DrawerContent />
       </Drawer>
       <Container size="xl" className={classes.containerPadding}>
