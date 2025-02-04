@@ -30,6 +30,7 @@ const MoviesSearchPage = async ({
   searchParams: { [key: string]: string | undefined };
 }) => {
   const searchString = new URLSearchParams();
+  console.log(searchString.toString());
   for (const [key, value] of Object.entries(searchParams)) {
     value
       ? searchString.has(key)
@@ -57,8 +58,8 @@ const MoviesSearchPage = async ({
 
   return (
     <div>
-      <TMDBSearchContainer endpoint="movies" params={params} />
-      <TMDBGallery posters={posters} />
+      <TMDBSearchContainer path="movies" params={params} />
+      <TMDBGallery posters={posters} pathname="movies" />
       <PageHandler
         numPages={total_pages && total_pages > 500 ? 500 : total_pages} //tmdb pages args cannot exceed page 500
       />
