@@ -1,9 +1,20 @@
 "use client";
 import { Param } from "@/app/games/_component/SearchForm/Multi/MultiSearchable";
 import { ArrayToCSV } from "@/utils/helpers/stringFns";
-import { Button, Container, Group, SimpleGrid } from "@mantine/core";
+import {
+  Box,
+  Button,
+  Container,
+  Drawer,
+  Group,
+  SimpleGrid,
+  Title,
+  UnstyledButton,
+} from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import classes from "./TMDBSearchContainer.module.css";
 
 interface Props {
   path: "movies" | "tv";
@@ -14,9 +25,12 @@ const TMDBSearchContainer = ({ path, params }: Props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  console.log(`${pathname}?${searchParams.toString()}`);
-
   const [withValues, setWithValues] = useState<Param[]>([]);
+
+  const [opened, { open, close }] = useDisclosure(false);
+
+  const genres = params.filter((param) => param.key == "genres");
+  const countries = params.filter((param) => param.key == "countries");
 
   const handleIncludeValue = (val: Param) => {
     setWithValues((current) =>
@@ -42,57 +56,76 @@ const TMDBSearchContainer = ({ path, params }: Props) => {
     return router.push(`${pathname}?${searchQuery.toString()}`);
   };
 
-  const ParamBtns = (items: Param[]) => {
+  const DrawerContent = () => {
     return (
-      <SimpleGrid cols={3} maw={500}>
-        {items &&
-          items.map((item: Param) => (
-            <Button
+      <Drawer opened={opened} onClose={close} title="Filter For Genres">
+        <Title className={classes.title}>Genres</Title>
+        <SimpleGrid cols={3} maw={400} spacing={5} className={classes.grid}>
+          {genres.map((item) => (
+            <UnstyledButton
+              className={classes.button}
+              size="compact-md"
               onClick={() => handleIncludeValue(item)}
               key={item.id}
-              bg={withValues.includes(item) ? "green" : ""}
+              bg={withValues.includes(item) ? "gray" : ""}
             >
               {item.name}
-            </Button>
+            </UnstyledButton>
           ))}
-      </SimpleGrid>
+        </SimpleGrid>
+        <Box>
+          <Title>Countries</Title>
+          <SimpleGrid cols={3} maw={400} className={classes.grid} spacing={5}>
+            {countries.map((item) => (
+              <UnstyledButton
+                className={classes.button}
+                size="compact-md"
+                onClick={() => handleIncludeValue(item)}
+                key={item.id}
+                bg={withValues.includes(item) ? "gray" : ""}
+              >
+                {item.name}
+              </UnstyledButton>
+            ))}
+          </SimpleGrid>
+        </Box>
+        <br />
+        <Group justify="end">
+          <Button
+            my={10}
+            onClick={() => {
+              close();
+              handleSubmit();
+            }}
+          >
+            Submit
+          </Button>
+          <Button
+            bg={"red"}
+            my={10}
+            onClick={() => {
+              setWithValues([]);
+              router.replace(`${pathname}`);
+            }}
+          >
+            Reset
+          </Button>
+        </Group>
+      </Drawer>
     );
   };
 
-  const genreBtns = ParamBtns(params.filter((param) => param.key == "genres"));
-  const countryBtns = ParamBtns(
-    params.filter((param) => param.key == "countries")
-  );
-
   return (
-    <Container size="xl">
-      <h2>Search for {path}</h2>
-      <Group>
-        <div>
-          <h2>Genres</h2>
-          {genreBtns}
-        </div>
-        <div>
-          <h2>Countries</h2>
-          {countryBtns}
-        </div>
-      </Group>
-      <Group>
-        <Button my={10} onClick={handleSubmit}>
-          Submit
-        </Button>
-        <Button
-          bg={"red"}
-          my={10}
-          onClick={() => {
-            setWithValues([]);
-            router.replace(`${pathname}`);
-          }}
-        >
-          Reset
-        </Button>
-      </Group>
-    </Container>
+    <>
+      <Drawer opened={opened} onClose={close} title="Filter Movies">
+        <DrawerContent />
+      </Drawer>
+      <Container size="xl" className={classes.containerPadding}>
+        <UnstyledButton fz={48} className={classes.drawerButton} onClick={open}>
+          Search for Genres
+        </UnstyledButton>
+      </Container>
+    </>
   );
 };
 

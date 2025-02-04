@@ -1,10 +1,8 @@
 import Poster from "@/lib/entities/Poster";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
-import React from "react";
 
-import classes from "./tmdbgallery.module.css";
-import { Container } from "@mantine/core";
+import { Container, SimpleGrid } from "@mantine/core";
 const TMDBGallery = ({
   posters,
   pathname,
@@ -14,8 +12,8 @@ const TMDBGallery = ({
 }) => {
   if (posters.length == 0) return <p> No Results </p>;
   return (
-    <Container size={"xl"}>
-      <div className={classes.cardContainer}>
+    <Container size={"lg"} py={20}>
+      <SimpleGrid cols={{ base: 2, sm: 3, md: 5 }}>
         {posters.map((poster: Poster) => (
           <ImageLink
             height={240}
@@ -29,7 +27,7 @@ const TMDBGallery = ({
             key={poster.id}
           />
         ))}
-      </div>
+      </SimpleGrid>
     </Container>
   );
 };
