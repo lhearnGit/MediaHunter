@@ -11,7 +11,7 @@ import { useState } from "react";
 import { ParamPill } from "./ParamPill";
 
 export type Param = {
-  id: number;
+  id: number | string;
   key: string;
   name: string;
 };
