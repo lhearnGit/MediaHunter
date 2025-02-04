@@ -5,7 +5,13 @@ import React from "react";
 
 import classes from "./tmdbgallery.module.css";
 import { Container } from "@mantine/core";
-const TMDBGallery = ({ posters }: { posters: Poster[] }) => {
+const TMDBGallery = ({
+  posters,
+  pathname,
+}: {
+  posters: Poster[];
+  pathname: "tv" | "movies";
+}) => {
   if (posters.length == 0) return <p> No Results </p>;
   return (
     <Container size={"xl"}>
@@ -13,7 +19,7 @@ const TMDBGallery = ({ posters }: { posters: Poster[] }) => {
         {posters.map((poster: Poster) => (
           <ImageLink
             height={240}
-            pathname="movies"
+            pathname={pathname}
             poster={{
               ...poster,
               imageUrl: poster.imageUrl
