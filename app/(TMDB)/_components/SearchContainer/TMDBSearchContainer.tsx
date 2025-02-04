@@ -122,7 +122,7 @@ const TMDBSearchContainer = ({ path, params }: Props) => {
       </Drawer>
       <Container size="xl" className={classes.containerPadding}>
         <UnstyledButton fz={48} className={classes.drawerButton} onClick={open}>
-          Search for Genres
+          Search for {path == "tv" ? path.toLocaleUpperCase() + " Shows" : path}
         </UnstyledButton>
       </Container>
     </>
