@@ -9,6 +9,7 @@ import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
 import classes from "./moviespage.module.css";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
+import TMDBGallery from "../_components/TMDBGallery/TMDBGallery";
 const MoviesGalleryPage = async ({
   searchParams,
 }: {
@@ -37,21 +38,7 @@ const MoviesGalleryPage = async ({
     <div className={classes.wrapper}>
       <div>Param Container</div>
       <h1 className={classes.heading}>Movies Gallery Page</h1>
-      <div className={classes.cardContainer}>
-        {posters.map((poster: Poster) => (
-          <ImageLink
-            height={360}
-            pathname="movies"
-            poster={{
-              ...poster,
-              imageUrl: poster.imageUrl
-                ? TMDB_Image_Helper(poster.imageUrl, "original")
-                : "/images/notfound.jpg",
-            }}
-            key={poster.id}
-          />
-        ))}
-      </div>
+      <TMDBGallery pathname="movies" posters={posters} />
       <PageHandler
         numPages={total_pages && total_pages > 500 ? 500 : total_pages} //tmdb pages args cannot exceed page 500
       />
