@@ -1,16 +1,16 @@
-export function PipeSeparatedString(OrString: string[]) {
+export function PipeSeparatedString(ArrayOfStrings: string[]) {
   let PipeSeparatedString = ``;
-  OrString.forEach((id) => {
-    if (PipeSeparatedString.length > 0) PipeSeparatedString += `|${id}`;
-    else PipeSeparatedString += `${id}`;
+  ArrayOfStrings.forEach((item) => {
+    if (PipeSeparatedString.length > 0) PipeSeparatedString += `|${item}`;
+    else PipeSeparatedString += `${item}`;
   });
   return PipeSeparatedString;
 }
-export function ArrayToCSV(OrString: string[]) {
+export function ArrayToCSV(ArrayOfStrings: string[]) {
   let CSVString = ``;
-  OrString.forEach((id) => {
-    if (CSVString.length > 0) CSVString += `,${id}`;
-    else CSVString += `${id}`;
+  ArrayOfStrings.forEach((item) => {
+    if (CSVString.length > 0) CSVString += `,${item}`;
+    else CSVString += `${item}`;
   });
   return CSVString;
 }
