@@ -5,14 +5,15 @@ import React from "react";
 import classes from "./ImageLink.module.css";
 const ImageLink = ({
   height,
+  width,
   poster,
   pathname,
 }: {
-  height: 160 | 360 | number;
+  height: number;
+  width: number;
   poster: Poster;
   pathname: "games/details" | "movies" | "tv";
 }) => {
-  const width = height * (2 / 3);
   return (
     <Link
       className={classes.link}
