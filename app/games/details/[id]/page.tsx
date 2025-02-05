@@ -53,6 +53,7 @@ async function fetchGameDetails(id: number) {
 
   if (success) {
     console.log(success);
+    console.log(game.platforms);
     return data;
   } else {
     console.log(error);
@@ -182,7 +183,8 @@ const DLCContent = ({ DLCSContents }: { DLCSContents: DLC[] }) => {
           <Stack key={id}>
             <p>{name}</p>
             <ImageLink
-              height={160}
+              height={196}
+              width={144}
               poster={{
                 id: id,
                 name: name,
@@ -297,7 +299,8 @@ const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
       <Group>
         {games.map(({ id, cover }: Similar_Game) => (
           <ImageLink
-            height={160}
+            height={196}
+            width={144}
             poster={{
               id: id,
               name: "similargame",
