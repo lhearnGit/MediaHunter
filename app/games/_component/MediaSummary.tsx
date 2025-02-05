@@ -35,7 +35,7 @@ const MediaSummary = ({
   return (
     <Group className={classes.wrapper}>
       <Stack>
-        <Link className={classes.link} key={id} href={`/game/details/${id}`}>
+        <Link className={classes.link} key={id} href={`/games/details/${id}`}>
           <Image
             className={classes.image}
             height={224}
