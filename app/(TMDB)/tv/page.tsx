@@ -29,10 +29,9 @@ const TVGalleryPage = async ({
   return (
     <div className={classes.wrapper}>
       <div>Param Container</div>
-      <h1 className={classes.heading}>Movies Gallery Page</h1>
-      <div className={classes.cardContainer}>
-        <TMDBGallery posters={posters} pathname="tv" />
-      </div>
+      <h1 className={classes.heading}>TV Gallery Page</h1>
+      <TMDBGallery posters={posters} pathname="tv" />
+
       <PageHandler numPages={total_pages} />
     </div>
   );
