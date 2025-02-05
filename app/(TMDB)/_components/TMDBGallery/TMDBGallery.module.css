@@ -1,0 +1,10 @@
+.image {
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px black;
+}
+
+.link {
+  display: contents;
+  display: inline;
+  margin: 5px;
+}
