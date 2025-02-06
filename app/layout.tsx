@@ -23,12 +23,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <ColorSchemeScript />
+        <ColorSchemeScript forceColorScheme="dark" />
       </head>
       <body>
         <Providers>
           <AuthProvider>
-            <MantineProvider defaultColorScheme="dark" theme={theme}>
+            <MantineProvider forceColorScheme="dark" theme={theme}>
               <NavBar />
               <div className={classes.container}>{children}</div>
               <Footer />
