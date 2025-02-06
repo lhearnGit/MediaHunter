@@ -97,7 +97,7 @@ export async function IGDB_Fetch_Details<T>(request: IGDB_Request) {
     return response[0]; //IGDB always returns an array.
   } catch (error) {
     console.error(error);
-    return notFound();
+    return undefined;
   }
 }
 
