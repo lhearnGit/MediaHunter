@@ -1,11 +1,13 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import NextAuth, { Session, User } from "next-auth";
+import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
+import type { Provider } from "next-auth/providers";
 
 const prisma = new PrismaClient();
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  pages: { signIn: "/signin" },
   session: { strategy: "jwt" },
 
   providers: [
@@ -28,3 +30,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
   },
 });
+const providers: Provider[] = [Google];
+export const providerMap = providers
+  .map((provider) => {
+    if (typeof provider === "function") {
+      const providerData = provider();
+      return { id: providerData.id, name: providerData.name };
+    } else {
+      return { id: provider.id, name: provider.name };
+    }
+  })
+  .filter((provider) => provider.id !== "credentials");
