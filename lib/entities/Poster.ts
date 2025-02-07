@@ -1,14 +1,8 @@
 import { z } from "zod";
 
-export default interface Poster {
-  id: number;
-  name: string;
-  imageUrl: string | undefined;
-}
-
 export const isValidPoster = z.object({
   id: z.number().int("is not an integer").gt(0, "cannot be negative"),
-  name: z.string().optional(),
+  name: z.string(),
   imageUrl: z.string().or(z.undefined()),
 });
-export type zPoster = z.infer<typeof isValidPoster>;
+export type Poster = z.infer<typeof isValidPoster>;
