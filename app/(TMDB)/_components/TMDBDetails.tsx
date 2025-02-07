@@ -1,6 +1,7 @@
 "use client";
+import AddToUserList from "@/app/games/details/[id]/_components/AddToUserList";
 import { Production_Company, TMDB_Genre } from "@/lib/entities/TMDB";
-import useUpdateCollection from "@/lib/hooks/profile/useUpdateCollection";
+import useUpdateCollection from "@/lib/hooks/profile/useUpdateUserCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import {
@@ -22,6 +23,7 @@ interface Props {
   companies?: Production_Company[];
   children: ReactNode;
   updatePath: "movies" | "shows";
+  userId: string | undefined;
 }
 
 export default function TMDBDetails({
@@ -32,12 +34,8 @@ export default function TMDBDetails({
   companies,
   children,
   updatePath,
+  userId,
 }: Props) {
-  const updateCollection = useUpdateCollection(
-    "66d73678a5ae02f237ead4d9",
-    `${updatePath}`
-  );
-
   return (
     <Stack bg={"dark"} px={5} py={10}>
       {poster_path && (
@@ -47,20 +45,13 @@ export default function TMDBDetails({
           alt="no img"
         />
       )}
-      <button
-        onClick={() => {
-          updateCollection.mutate({
-            addTo: false,
-            data: {
-              id: Number(id),
-              url: poster_path ? poster_path : "notfound.jpg",
-              name: title,
-            },
-          });
-        }}
-      >
-        Add To Collection
-      </button>
+      <AddToUserList
+        endpoint={updatePath}
+        id={id}
+        imageUrl={poster_path}
+        name={title}
+        userId={userId}
+      />
       <Box>
         <Text size="lg">Genres</Text>
         <Group>
