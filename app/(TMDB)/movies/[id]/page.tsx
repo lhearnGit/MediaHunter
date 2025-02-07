@@ -18,6 +18,7 @@ import { notFound } from "next/navigation";
 import CastGrid from "../../_components/Cast/CastGrid";
 import Reviews from "../../_components/Review/Reviews";
 import TMDBDetails from "../../_components/TMDBDetails";
+import { auth } from "@/auth";
 
 const append = "append_to_response=credits,reviews";
 
@@ -35,6 +36,8 @@ async function fetchDetails(id: number) {
 }
 
 const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
+  const session = await auth();
+
   const {
     title,
     overview,
@@ -75,6 +78,7 @@ const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
 
         <GridCol span={4}>
           <TMDBDetails
+            userId={session?.user.id}
             id={params.id}
             title={title}
             poster_path={poster_path}

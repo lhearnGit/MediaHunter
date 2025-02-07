@@ -20,6 +20,7 @@ import { notFound } from "next/navigation";
 import CastGrid from "../../_components/Cast/CastGrid";
 import Reviews from "../../_components/Review/Reviews";
 import TMDBDetails from "../../_components/TMDBDetails";
+import { auth } from "@/auth";
 
 const append = "append_to_response=aggregate_credits,reviews";
 async function fetchTVDetails(id: number) {
@@ -48,6 +49,7 @@ const fetchSeason = async (id: number) => {
   } else throw notFound();
 };
 const TVDetailsPage = async ({ params }: { params: { id: number } }) => {
+  const session = await auth();
   const {
     name,
     overview,
@@ -93,11 +95,12 @@ const TVDetailsPage = async ({ params }: { params: { id: number } }) => {
 
         <GridCol span={4}>
           <TMDBDetails
-            id={0}
+            id={params.id}
             title={name}
             genres={genres}
             poster_path={poster_path}
             companies={production_company}
+            userId={session?.user.id}
             updatePath="shows"
           >
             <TVSubDetails

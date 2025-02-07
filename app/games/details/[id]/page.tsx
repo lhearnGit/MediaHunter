@@ -1,44 +1,37 @@
-import {
-  DLC,
-  Game,
-  IGDB_Genre,
-  Involved_Company,
-  Platform,
-  Similar_Game,
-  Theme,
-} from "@/lib/entities/IGDB";
+import { auth } from "@/auth";
+import { Game, IGDB_Genre, Theme } from "@/lib/entities/IGDB";
 import { isValidGame } from "@/lib/entities/IGDB/Game";
-import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 
+import { GameDataFields } from "@/fetches/IGDB/Queries/GameDataQueryFields";
+import { fetchUserCollection } from "@/fetches/Server/fetchUserCollection";
 import StyledBadges from "@/lib/ui/StyledBadges";
 import {
   IGDB_Fetch_Details,
   IGDB_Request,
 } from "@/services/igdb-api-client-v2";
-import { GameDataFields } from "@/utils/fetches/IGDB/Queries/GameDataQueryFields";
 import IGDB_Image_Helper from "@/utils/helpers/IGDB_Image_Helper";
 import {
   Container,
   Grid,
   GridCol,
   Group,
-  SimpleGrid,
   Space,
   Stack,
   Text,
   Title,
 } from "@mantine/core";
-import { round } from "lodash";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import {
+  AboutDevelopers,
+  AboutGame,
+  AvailableDLC,
+  OnPlatforms,
+  ScreenshotsAndVideo,
+  SimilarGames,
+} from "./_components";
+import AddToUserList from "./_components/AddToUserList";
 
-const VideoPlayer = dynamic(() => import("@/lib/ui/VideoPlayer/VideoPlayer"), {
-  ssr: false,
-});
-const Gallery = dynamic(() => import("@/lib/ui/Gallery/Gallery"), {
-  ssr: false,
-});
 async function fetchGameDetails(id: number) {
   const request: IGDB_Request = {
     endpoint: "games",
@@ -53,7 +46,7 @@ async function fetchGameDetails(id: number) {
 
   if (success) {
     console.log(success);
-    console.log(game.platforms);
+
     return data;
   } else {
     console.log(error);
@@ -63,6 +56,9 @@ async function fetchGameDetails(id: number) {
 const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
   const game = await fetchGameDetails(params.id);
   if (!game) return notFound();
+
+  const session = await auth();
+
   const {
     name,
     summary,
@@ -85,31 +81,29 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
     <Container size={"xl"}>
       <Grid columns={12}>
         <GridCol span={12}>
-          <Title>{name}</Title>
+          <Group justify="space-between">
+            <Title>{name}</Title>
+            {session && (
+              <AddToUserList
+                id={params.id}
+                name={name}
+                imageUrl={cover?.url}
+                userId={session.user.id}
+                endpoint="games"
+              />
+            )}
+          </Group>
           <Space h="xl" />
         </GridCol>
 
         <GridCol span={8}>
-          <About
+          <AboutGame
             summary={summary}
             storyline={storyline}
             genres={genres}
             themes={themes}
           />
-          <Stack>
-            {screenshots && (
-              <>
-                <Title>Screenshots</Title>
-                <Gallery images={screenshots} />
-              </>
-            )}
-            {videos && (
-              <>
-                <Title>Video</Title>
-                <VideoPlayer videos={videos} />
-              </>
-            )}
-          </Stack>
+          <ScreenshotsAndVideo screenshots={screenshots} videos={videos} />
         </GridCol>
 
         <GridCol span={4}>
@@ -121,9 +115,9 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
               alt="?"
             />
           )}
-          {platforms && <AvailablePlatforms platforms={platforms} />}
+          {platforms && <OnPlatforms platforms={platforms} />}
 
-          <DeveloperDetails companies={companies} />
+          <AboutDevelopers companies={companies} />
           <Ratings
             rating={rating}
             rating_count={rating_count}
@@ -131,7 +125,9 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
             aggregated_rating_count={aggregated_rating_count}
           />
         </GridCol>
-        <GridCol span={8}>{dlcs && <DLCContent DLCSContents={dlcs} />}</GridCol>
+        <GridCol span={8}>
+          {dlcs && <AvailableDLC DLCSContents={dlcs} />}
+        </GridCol>
 
         <GridCol span={12}>
           <Space h="xl" />
@@ -144,70 +140,6 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
 
 export default GamesDetailsPage;
 
-interface AboutProps {
-  genres: IGDB_Genre[] | undefined;
-  themes: Theme[] | undefined;
-  summary: string | undefined;
-  storyline: string | undefined;
-}
-const About = ({ genres, themes, summary, storyline }: AboutProps) => {
-  return (
-    <>
-      <Stack>
-        <Text size="lg">Genres & Themes</Text>
-        <Group>
-          {genres &&
-            genres.map((genre: IGDB_Genre) => (
-              <StyledBadges key={genre.id} label={genre.name} color="blue" />
-            ))}
-          {themes &&
-            themes.map((theme: Theme) => (
-              <StyledBadges key={theme.id} label={theme.name} color="blue" />
-            ))}
-        </Group>
-      </Stack>
-      <Space h={"xl"} />
-      <Title mb={"md"}>Summary</Title>
-      <Text mb={10}>{summary}</Text>
-      {storyline != summary && storyline ? <Text>{storyline}</Text> : <></>}
-    </>
-  );
-};
-
-const DLCContent = ({ DLCSContents }: { DLCSContents: DLC[] }) => {
-  return (
-    <Stack>
-      <Text size="lg">DLC</Text>
-      <SimpleGrid cols={4}>
-        {DLCSContents.map(({ id, name, total_rating, cover }: DLC) => (
-          <Stack key={id}>
-            <p>{name}</p>
-            <ImageLink
-              height={196}
-              width={144}
-              poster={{
-                id: id,
-                name: name,
-                imageUrl: cover?.url
-                  ? IGDB_Image_Helper(cover?.url, "720p")
-                  : "/images/notfound.jpg",
-              }}
-              pathname="games/details"
-            />
-            {total_rating ? (
-              <StyledBadges
-                label={`Rating ${round(total_rating, 1)}`}
-                color=""
-              />
-            ) : (
-              <StyledBadges label={`No Rating Available`} color="" />
-            )}
-          </Stack>
-        ))}
-      </SimpleGrid>
-    </Stack>
-  );
-};
 const GenresAndThemes = ({
   genres,
   themes,
@@ -228,25 +160,6 @@ const GenresAndThemes = ({
             <StyledBadges key={theme.id} label={theme.name} color="blue" />
           ))}
       </Group>
-    </Stack>
-  );
-};
-
-const AvailablePlatforms = ({ platforms }: { platforms: Platform[] }) => {
-  return (
-    <Stack>
-      <Text size="lg">Playable On</Text>
-      <Group>
-        {platforms &&
-          platforms.map((platform: Platform) => (
-            <StyledBadges
-              key={platform.id}
-              label={platform.name}
-              color="blue"
-            />
-          ))}
-      </Group>
-      <Space h="xl" />
     </Stack>
   );
 };
@@ -286,72 +199,6 @@ const Ratings = ({
           <Text>No Critic Ratings</Text>
         )}
       </Group>
-      <Space h="xl" />
-    </Stack>
-  );
-};
-
-const SimilarGames = ({ games }: { games: Similar_Game[] }) => {
-  if (!games) return <></>;
-  return (
-    <>
-      <Title mb={"lg"}>Similar Games</Title>
-      <Group>
-        {games.map(({ id, cover }: Similar_Game) => (
-          <ImageLink
-            height={196}
-            width={144}
-            poster={{
-              id: id,
-              name: "similargame",
-              imageUrl: cover?.url
-                ? IGDB_Image_Helper(cover?.url, "720p")
-                : "/images/notfound.jpg",
-            }}
-            pathname="games/details"
-          />
-        ))}
-      </Group>
-    </>
-  );
-};
-
-const DeveloperDetails = ({
-  companies,
-}: {
-  companies?: Involved_Company[];
-}) => {
-  if (!companies)
-    return (
-      <Stack>
-        <Text size="lg">Publishing & Developers Info Unavailable</Text>
-      </Stack>
-    );
-  return (
-    <Stack>
-      <Text size="lg">Publishing & Developers</Text>
-      <Grid columns={4}>
-        {companies.map(({ id, company, publisher }: Involved_Company) => (
-          <GridCol key={id} span={2}>
-            <Stack>
-              <Text>
-                {publisher ? "Developer " : " Publisher "} {company.name}
-              </Text>
-              <Image
-                height={64}
-                width={64}
-                src={
-                  company.logo?.url
-                    ? IGDB_Image_Helper(company.logo.url, "1080p")
-                    : "/images/notfound.jpg"
-                }
-                className="bg-inherit"
-                alt="No Image found"
-              />
-            </Stack>
-          </GridCol>
-        ))}
-      </Grid>
       <Space h="xl" />
     </Stack>
   );
