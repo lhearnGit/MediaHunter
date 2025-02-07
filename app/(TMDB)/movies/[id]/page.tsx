@@ -81,7 +81,9 @@ const MovieDetailsPage = async ({ params }: { params: { id: number } }) => {
             userId={session?.user.id}
             id={params.id}
             title={title}
-            poster_path={poster_path}
+            poster_path={
+              poster_path ? TMDB_Image_Helper(poster_path) : undefined
+            }
             genres={genres}
             companies={production_companies}
             updatePath="movies"

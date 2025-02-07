@@ -98,7 +98,9 @@ const TVDetailsPage = async ({ params }: { params: { id: number } }) => {
             id={params.id}
             title={name}
             genres={genres}
-            poster_path={poster_path}
+            poster_path={
+              poster_path ? TMDB_Image_Helper(poster_path) : undefined
+            }
             companies={production_company}
             userId={session?.user.id}
             updatePath="shows"
