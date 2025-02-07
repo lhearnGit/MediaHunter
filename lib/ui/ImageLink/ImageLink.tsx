@@ -1,8 +1,8 @@
-import Poster from "@/lib/entities/Poster";
 import Link from "next/link";
 import Image from "next/image";
 import React from "react";
 import classes from "./ImageLink.module.css";
+import { Poster } from "@/lib/entities/Poster";
 const ImageLink = ({
   height,
   width,
