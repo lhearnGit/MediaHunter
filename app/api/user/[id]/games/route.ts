@@ -4,6 +4,7 @@ const prisma = new PrismaClient();
 
 import { Game } from "@/lib/entities/IGDB";
 import { NextRequest, NextResponse } from "next/server";
+import { Poster } from "@/lib/entities/Poster";
 
 //Get all the game ids for a user, then fetch them from IGDB
 export async function GET(
@@ -78,34 +79,21 @@ the component that triggers this action will not be generated
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id: string } } //validate ID Params in middleware
+  { params }: { params: { id: string } }
 ) {
-  const body = await req.json();
-  const { data: game, addTo } = body; //aliasing data:game for clarity
-  console.log(addTo);
-
   const user = await prisma.user.findFirst({
     where: { id: params.id },
     select: { recent_GameIDs: true, id: true },
   });
   if (!user) return NextResponse.json({ status: 404 });
-  if (!addTo) {
-    //if addTo is false, remove the game from the list
-    console.log("removing...");
-    //removes a game
-    await prisma.user.update({
-      where: { id: params.id },
-      data: {
-        games: {
-          disconnect: { id: game.id },
-        },
-      },
-    });
 
-    return NextResponse.json({
-      status: 200,
-    });
-  } else {
+  const body: { data: Poster; addTo: Boolean } = await req.json();
+
+  const { id: gameId, name, imageUrl } = body.data;
+  const addTo = body.addTo;
+  console.log(addTo);
+
+  async function connectOrCreateGame() {
     await prisma.user
       .update({
         where: {
@@ -114,24 +102,73 @@ export async function PATCH(
         data: {
           games: {
             connectOrCreate: {
-              where: { id: game.id }, //connect to this game
+              where: { id: gameId }, //connect to this game
               create: {
                 //or create this game if not stored
-                id: game.id,
-                name: game.name,
-                imageUrl: game.url,
+                id: gameId,
+                name,
+                imageUrl,
               },
             },
           },
         },
       })
-      .then(async () => {
+      .then(async (user) => {
         //after a game is connected OR created, update the recent list.
         await updateRecents({
           userId: user.id,
           recent_GameIDs: user.recent_GameIDs,
-          gameId: game.id,
+          gameId: gameId,
         });
+      });
+  }
+
+  if (!addTo) {
+    //if addTo is false, remove the game from the list
+    console.log("removing...");
+    //removes a game
+    await prisma.user.update({
+      where: { id: params.id },
+      data: {
+        games: {
+          disconnect: { id: gameId },
+        },
+      },
+    });
+
+    return NextResponse.json({
+      status: 200,
+    });
+  } else {
+    await prisma.games
+      .findFirst({
+        where: { id: gameId },
+        select: { id: true, imageUrl: true, name: true },
+      })
+      .then(async (game) => {
+        if (game === null) {
+          //if there is no movie
+          await connectOrCreateGame();
+          return NextResponse.json({ status: 200 });
+        } else {
+          // if there is a movie
+          if (game.imageUrl != imageUrl || game.name != name) {
+            //imageURL may change if a different url pattern is used.
+            //ID is highly unlikely to ever change, would be extremely breaking on data source side
+            //name may change for untitled games or possible spelling or application handling of names, such as capitalization
+            await prisma.games
+              .update({
+                //first update the games
+                where: { id: gameId },
+                data: { id: gameId, imageUrl, name },
+                select: { id: true, imageUrl: true, name: true },
+              })
+              .then(async () => {
+                //then take the newly updated record, and add connect or create it
+              });
+            await connectOrCreateGame();
+          }
+        }
       });
     return NextResponse.json({ status: 200 });
   }
