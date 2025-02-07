@@ -12,7 +12,6 @@ export async function fetchPosters(category: "tv" | "movie", params?: string) {
       endpoint: endpoint,
     }
   );
-  console.log(endpoint);
 
   if (!results) throw notFound();
 
