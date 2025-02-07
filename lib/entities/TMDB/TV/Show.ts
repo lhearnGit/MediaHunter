@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { isValidSeason } from "./Season";
-import { isValidCountry } from "../Country";
 import { isValidProductionCompany } from "../ProductionCompany";
 import { isValidTMDBGenre } from "../TMDB_Genre";
 import { isValidTVNetwork } from "./TvNetwork";
@@ -22,7 +21,7 @@ export const isValidShow = z.object({
   number_of_seasons: z.number().int("must be an integer").default(0),
   status: z.string(),
   first_air_date: z.string(),
-  next_episode_to_air: isValidEpisode.or(z.string()), //TMDB says this should return a string, but testing showed object response
+  next_episode_to_air: isValidEpisode.or(z.string()).or(z.null()), //TMDB says this should return a string, but testing showed object response
   last_air_date: z.string(),
   in_production: z.boolean().default(true),
 
