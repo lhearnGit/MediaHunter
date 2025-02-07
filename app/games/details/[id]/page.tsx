@@ -77,6 +77,8 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
     similar_games,
     dlcs,
   } = game;
+
+  console.log(cover?.url);
   return (
     <Container size={"xl"}>
       <Grid columns={12}>
@@ -87,7 +89,11 @@ const GamesDetailsPage = async ({ params }: { params: { id: number } }) => {
               <AddToUserList
                 id={params.id}
                 name={name}
-                imageUrl={cover?.url}
+                imageUrl={
+                  cover?.url
+                    ? IGDB_Image_Helper(cover?.url, "cover_big")
+                    : undefined
+                }
                 userId={session.user.id}
                 endpoint="games"
               />
