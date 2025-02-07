@@ -1,5 +1,5 @@
 import PageHandler from "@/lib/ui/PageHandler";
-import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
+import { fetchPosters } from "@/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
 
 import TMDBGallery from "../_components/TMDBGallery/TMDBGallery";

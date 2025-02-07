@@ -3,13 +3,13 @@ import TMDBSearchContainer from "../../_components/SearchContainer/TMDBSearchCon
 import {
   fetch_TMDB_Countries,
   fetch_TMDB_Genres,
-} from "@/utils/fetches/TMDB/fetchConfigs";
+} from "@/fetches/TMDB/fetchConfigs";
 import { z } from "zod";
 import { Param } from "@/app/games/_component/SearchForm/Multi/MultiSearchable";
 import { Country, TMDB_Genre } from "@/lib/entities/TMDB";
 import PageHandler from "@/lib/ui/PageHandler";
 import TMDBGallery from "../../_components/TMDBGallery/TMDBGallery";
-import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
+import { fetchPosters } from "@/fetches/TMDB/fetchPosters";
 
 export const isValidTMDBSearchOptions = z.object({
   with_genres: z.string().optional(),

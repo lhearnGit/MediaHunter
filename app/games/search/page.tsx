@@ -2,7 +2,7 @@ import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
 
 import { Game } from "@/lib/entities/IGDB";
 
-import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
+import { setQuery } from "@/fetches/IGDB/Queries/GameHomeQueries";
 import { z } from "zod";
 import BrowseGames from "../_component/BrowseGames";
 import GameSearchContainer from "../_component/GameSearchContainer";

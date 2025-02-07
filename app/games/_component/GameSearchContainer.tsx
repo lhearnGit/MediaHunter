@@ -1,6 +1,6 @@
-import { fetchGenres } from "@/utils/fetches/IGDB/fetchGenres";
-import { fetchPlatforms } from "@/utils/fetches/IGDB/fetchPlatforms";
-import { fetchThemes } from "@/utils/fetches/IGDB/fetchThemes";
+import { fetchGenres } from "@/fetches/IGDB/fetchGenres";
+import { fetchPlatforms } from "@/fetches/IGDB/fetchPlatforms";
+import { fetchThemes } from "@/fetches/IGDB/fetchThemes";
 import { sortBy } from "lodash";
 import { Suspense } from "react";
 import { Param } from "./SearchForm/Multi/MultiSearchable";

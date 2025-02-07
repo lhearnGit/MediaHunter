@@ -1,12 +1,9 @@
+import { Game } from "@/lib/entities/IGDB/Game";
 import { IGDB_Fetch } from "@/services/igdb-api-client-v2";
+import { setQuery } from "@/fetches/IGDB/Queries/GameHomeQueries";
 import { isValidUrlParam } from "@/utils/zodSchemas/UrlSchema";
 import BrowseGames from "./_component/BrowseGames";
 import classes from "./GamesHomePage.module.css";
-import { setQuery } from "@/utils/fetches/IGDB/Queries/GameHomeQueries";
-import { Game } from "@/lib/entities/IGDB/Game";
-import GameSearchContainer from "./_component/GameSearchContainer";
-import Link from "next/link";
-import { Title } from "@mantine/core";
 
 const GamesHome = async ({
   searchParams,

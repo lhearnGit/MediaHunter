@@ -1,15 +1,12 @@
-import Poster from "@/lib/entities/Poster";
-import ImageLink from "@/lib/ui/ImageLink/ImageLink";
 import PageHandler from "@/lib/ui/PageHandler";
 /*import {
   fetch_TMDB_Countries,
   fetch_TMDB_Genres,
 } from "@/utils/fetches/TMDB/fetchConfigs";*/
-import { fetchPosters } from "@/utils/fetches/TMDB/fetchPosters";
+import { fetchPosters } from "@/fetches/TMDB/fetchPosters";
 import { Build_Search_String } from "@/utils/helpers/TMDB_Search_Helper";
-import classes from "./moviespage.module.css";
-import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
 import TMDBGallery from "../_components/TMDBGallery/TMDBGallery";
+import classes from "./moviespage.module.css";
 const MoviesGalleryPage = async ({
   searchParams,
 }: {
