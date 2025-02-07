@@ -4,11 +4,11 @@ import { SimpleGrid, Container, Title, Text } from "@mantine/core";
 import Link from "next/link";
 import { UserCollection } from "@/lib/hooks/profile/useGetUserCollection";
 import { fetchUserCollection } from "@/fetches/Server/fetchUserCollection";
-interface ContentProps {
+interface SubPage {
   href: string;
   heading: string;
 }
-const contents: ContentProps[] = [
+const SubPages: SubPage[] = [
   { heading: "Profile Settings", href: "profile" },
   { heading: "Games", href: "games" },
   { heading: "Movies", href: "movies" },
@@ -34,7 +34,7 @@ const UserDashboard = async () => {
           maw={800}
           ta={"left"}
         >
-          {contents.map(({ heading, href }: ContentProps) => (
+          {SubPages.map(({ heading, href }: SubPage) => (
             <Link href={`/user/${href}`} key={href}>
               <Title ta={"left"}>{heading}</Title>
             </Link>

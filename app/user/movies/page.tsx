@@ -4,34 +4,37 @@ import { fetchUserCollection } from "@/fetches/Server/fetchUserCollection";
 import { Poster } from "@/lib/entities/Poster";
 import { UserCollection } from "@/lib/hooks/profile/useGetUserCollection";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
-import { SimpleGrid, Space, Stack, Title } from "@mantine/core";
+import { TMDB_Image_Helper } from "@/utils/helpers/TMDB_Image_Helper";
+import { Title, Space, Stack, SimpleGrid } from "@mantine/core";
+import React from "react";
 
-const UserShowsPage = async () => {
+const UserMoviesPage = async () => {
   const session = await auth();
   if (!session)
-    return SignInPage({ searchParams: { callbackUrl: "/user/games" } });
+    return SignInPage({ searchParams: { callbackUrl: "/user/movies" } });
 
   const collection: UserCollection | null = await fetchUserCollection();
   if (!collection)
     return (
       <div>
-        <p>find some shows</p>
+        <p>find some movies</p>
       </div>
     );
-  const { tvShows: shows } = collection;
-  console.debug(shows);
+  const { movies } = collection;
+  console.debug(movies);
+
   return (
     <>
-      <Title>User Shows Page</Title>
+      <Title>User Movies Page</Title>
       <Space h="xl" />
       <Stack>
         <SimpleGrid cols={{ base: 2, sm: 3, md: 5 }}>
-          {shows &&
-            shows.map((show: Poster) => (
+          {movies &&
+            movies.map((movieposter: Poster) => (
               <ImageLink
-                key={show.id}
-                pathname={"tv"}
-                poster={show}
+                key={movieposter.id}
+                pathname={"movies"}
+                poster={movieposter}
                 height={264}
                 width={196}
               />
@@ -42,4 +45,4 @@ const UserShowsPage = async () => {
   );
 };
 
-export default UserShowsPage;
+export default UserMoviesPage;

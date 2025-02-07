@@ -4,9 +4,10 @@ import { fetchUserCollection } from "@/fetches/Server/fetchUserCollection";
 import { Poster } from "@/lib/entities/Poster";
 import { UserCollection } from "@/lib/hooks/profile/useGetUserCollection";
 import ImageLink from "@/lib/ui/ImageLink/ImageLink";
-import { SimpleGrid, Space, Stack, Title } from "@mantine/core";
+import { Title, Space, Stack, SimpleGrid } from "@mantine/core";
+import React from "react";
 
-const UserShowsPage = async () => {
+const UserGamesPage = async () => {
   const session = await auth();
   if (!session)
     return SignInPage({ searchParams: { callbackUrl: "/user/games" } });
@@ -15,23 +16,24 @@ const UserShowsPage = async () => {
   if (!collection)
     return (
       <div>
-        <p>find some shows</p>
+        <p>find some games</p>
       </div>
     );
-  const { tvShows: shows } = collection;
-  console.debug(shows);
+  const { games } = collection;
+  console.debug(games);
+
   return (
     <>
-      <Title>User Shows Page</Title>
+      <Title>User Games Page</Title>
       <Space h="xl" />
       <Stack>
         <SimpleGrid cols={{ base: 2, sm: 3, md: 5 }}>
-          {shows &&
-            shows.map((show: Poster) => (
+          {games &&
+            games.map((game: Poster) => (
               <ImageLink
-                key={show.id}
-                pathname={"tv"}
-                poster={show}
+                key={game.id}
+                pathname={"games/details"}
+                poster={game}
                 height={264}
                 width={196}
               />
@@ -42,4 +44,4 @@ const UserShowsPage = async () => {
   );
 };
 
-export default UserShowsPage;
+export default UserGamesPage;
