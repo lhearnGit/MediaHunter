@@ -1,25 +1,25 @@
 import { auth } from "@/auth";
-import { UserCollections } from "@/lib/hooks/profile/useGetUserCollection";
 import SignInPage from "../signin/page";
 import { SimpleGrid, Container, Title, Text } from "@mantine/core";
 import Link from "next/link";
+import { UserCollection } from "@/lib/hooks/profile/useGetUserCollection";
+import { fetchUserCollection } from "@/fetches/Server/fetchUserCollection";
 interface ContentProps {
-  content: string;
+  href: string;
   heading: string;
 }
 const contents: ContentProps[] = [
-  { heading: "Profile Settings", content: "123" },
-  { heading: "Games", content: "321" },
-  { heading: "Movies", content: "422" },
-  { heading: "TV Shows", content: "555" },
+  { heading: "Profile Settings", href: "profile" },
+  { heading: "Games", href: "games" },
+  { heading: "Movies", href: "movies" },
+  { heading: "TV Shows", href: "shows" },
 ];
 const UserDashboard = async () => {
   const session = await auth();
   if (!session) return SignInPage({ searchParams: { callbackUrl: "/user" } });
-  const profile: UserCollections = await fetch(
-    `${process.env.SERVER_ROOT}/api/user/${session.user.id}`
-  ).then((res) => res.json());
+  const collection: UserCollection | null = await fetchUserCollection();
 
+  console.debug(collection);
   return (
     <div>
       <Container size={"xl"} my={40}>
@@ -34,8 +34,10 @@ const UserDashboard = async () => {
           maw={800}
           ta={"left"}
         >
-          {contents.map(({ heading, content }: ContentProps) => (
-            <ContentSection key={heading} heading={heading} content={content} />
+          {contents.map(({ heading, href }: ContentProps) => (
+            <Link href={`/user/${href}`} key={href}>
+              <Title ta={"left"}>{heading}</Title>
+            </Link>
           ))}
         </SimpleGrid>
       </Container>
@@ -44,12 +46,3 @@ const UserDashboard = async () => {
 };
 
 export default UserDashboard;
-
-const ContentSection = ({ heading, content }: ContentProps) => {
-  return (
-    <Link href={"/user/shows"}>
-      <Title ta={"left"}>{heading}</Title>
-      <Text>{content}</Text>
-    </Link>
-  );
-};
