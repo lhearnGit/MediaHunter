@@ -38,13 +38,7 @@ export default function TMDBDetails({
 }: Props) {
   return (
     <Stack bg={"dark"} px={5} py={10}>
-      {poster_path && (
-        <Image
-          radius="sm"
-          src={TMDB_Image_Helper(poster_path, "w780")}
-          alt="no img"
-        />
-      )}
+      {poster_path && <Image radius="sm" src={poster_path} alt="no img" />}
       <AddToUserList
         endpoint={updatePath}
         id={id}
