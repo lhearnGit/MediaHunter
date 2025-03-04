@@ -2,14 +2,18 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 # Summary 
 
-This application is essentially a full re-write of the proto-type that is semi-live as of 3/4/2025
+This application is essentially re-iteration of the proto-type I developed as my first attempt at any full-stack application.
 
 https://trackanything-bpum5n9dz-lucas-hearns-projects.vercel.app
 
-Due to how this version handled requests, and IGDB and Accounts were handled, these sections will no longer function.
+Due to how this version handled requests, User Accounts and Games will no longer function, as I was no-longer monitoring or actively working on that project, access was removed.
 
-Movies and Shows are still available, however UI/UX is extremely rough.
+Movies and Shows are still available as the tokens have not changed, however UI/UX is essentially a mock-up.
 
+I am to have a rough-working version within the next Month or Two, However,
+
+I am also in the process of developing a simple LLM among other new responsiblities development has slowed.
+https://github.com/lhearnGit/LLM
 
 # Status Update - As of 3 / 4 / 2025 
 
@@ -33,9 +37,13 @@ Validation -
   
 
 
-# Configurating the ENV
+# Setup & Configurating the .env
 
-create a .env in the application root with the following
+These instructions are by no means comprehensive on the process of deploying this application locally, and have not been fully tested. 
+This is a summary of key information required for this application
+
+1. Create an .env file at the project root
+2. Set all of the .env values from the following steps, read the associated documentation in its entirety beforehand.
 
 ## Authentication
 
