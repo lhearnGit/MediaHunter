@@ -15,7 +15,7 @@ Movies and Shows are still available, however UI/UX is extremely rough.
 
 
 ## Security 
-User Authorization to actions is still under-development, application is not ready for public interaction.
+User Authorization to actions is still under-development, as such this application is not ready for public interaction, and should not be allowed to interact with any PII.
 
 
 ## Potential Causes for Errors
